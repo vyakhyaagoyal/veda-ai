@@ -7,11 +7,11 @@ const DashboardDesktop = () => {
   return (
     <div className="flex h-screen p-4 bg-[#F9F9F9] antialiased text-[#2D2D2D] overflow-hidden">
       {/* Sidebar - Fixed Width */}
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       {/* Right Side Content Area */}
       <div className="flex-1 flex flex-col min-w-0 p-2">
-        <Topbar />
+        {/* <Topbar /> */}
         
         {/* Content Area with Scroll */}
         <div className="flex-1 overflow-y-auto">

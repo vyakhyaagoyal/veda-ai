@@ -1,91 +1,101 @@
-import React from "react";
+"use client";
+
 import Image from "next/image";
-import {
-  Users,
-  FileText,
-  Settings,
-  LayoutGrid,
-  ChartPie,
-  Book 
-} from "lucide-react";
+import Link from "next/link";
+import { Settings } from "lucide-react";
+import { usePathname } from "next/navigation";
+
+import { navigationItems } from "@/lib/navigation";
+import { useUserStore } from "@/store/user.store";
 
 const Sidebar = () => {
-  const navItems = [
-    { icon: LayoutGrid, label: "Home", active: false },
-    { icon: Users, label: "My Groups", active: false },
-    { icon: FileText, label: "Assignments", active: true },
-    { icon: Book , label: "AI Teacher's Toolkit", active: false },
-    { icon: ChartPie, label: "My Library", active: false },
-  ];
+  const pathname = usePathname();
+
+  const user = useUserStore((state) => state.user);
 
   return (
-    <aside className="w-[290px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col p-6 sticky top-0">
+    <aside className="w-[290px] h-screen bg-white rounded-[32px] shadow-sm border border-zinc-200/70 flex flex-col p-6 sticky top-0">
       {/* Logo */}
-      <div className="flex items-center mb-7">
+      <div className="flex items-center mb-6">
         <Image
           src="/veda-ai-logo.svg"
           alt="VedaAI Logo"
-          width={60}
-          height={60}
-          className="mt-5 w-20 h-20"
+          width={72}
+          height={72}
+          className="w-[72px] h-[72px]"
         />
-        <span className="text-[2rem] font-bold text-[#2D2D2D] tracking-tight">
+
+        <span className="text-[2rem] font-bold tracking-tight text-[#2D2D2D] mb-5">
           VedaAI
         </span>
       </div>
 
-      {/* Create Button */}
-      <div className="w-full p-[3px] rounded-full bg-gradient-to-b from-[#FF7950] to-[#C0350A] mb-8">
-        <button className="w-full bg-[#2D2D2D] hover:bg-black text-white rounded-full py-2.5 px-6 flex items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden">
-          <Image src="/star-icon.svg" alt="star" height={20} width={20} />
-
-          <span className="font-light tracking-tight">Create Assignment</span>
-        </button>
+      {/* Create Assignment */}
+      <div className="mb-10">
+        <div className="p-[3px] rounded-full bg-gradient-to-b from-[#FF7A50] to-[#C1350A]">
+          <Link href="/assignments/create">
+            <button className="w-full cursor-pointer bg-[#2D2D2D] hover:bg-black transition-all duration-300 text-white rounded-full py-3 px-6 flex items-center justify-center gap-2 font-medium">
+              <Image src="/star-icon.svg" alt="star" width={18} height={18} />
+              Create Assignment
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1">
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href="#"
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-              item.active
-                ? "bg-[#F2F2F2] text-[#2D2D2D] font-semibold"
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-            }`}
-          >
-            <item.icon size={20} strokeWidth={item.active ? 2.5 : 2} />
-            <span className="text-[15px]">{item.label}</span>
-          </a>
-        ))}
+      <nav className="flex-1 space-y-2">
+        {navigationItems.map((item) => {
+          const isActive = pathname === item.href;
+
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-[#F3F3F3] text-[#2D2D2D] font-semibold"
+                  : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700"
+              }`}
+            >
+              <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+
+              <span className="text-[15px]">{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
 
-      {/* Footer / Profile */}
-      <div className="mt-auto pt-6 space-y-2">
-        <a
-          href="#"
-          className="flex items-center gap-3 px-4 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+      {/* Footer */}
+      <div className="mt-auto">
+        <Link
+          href="/settings"
+          className="flex items-center gap-3 px-4 py-3 text-zinc-500 hover:text-zinc-700 transition-colors"
         >
           <Settings size={20} />
-          <span className="text-[15px]">Settings</span>
-        </a>
 
-        <div className="bg-[#F2F2F2] p-4 rounded-2xl flex items-center gap-3 border border-gray-100 shadow-sm">
-          <div className="w-12 h-12 rounded-full overflow-hidden bg-orange-100 border-2 border-white shadow-sm flex-shrink-0">
-            <img
-              src="/avatar.png"
-              alt="School logo"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="min-w-0">
-            <p className="font-bold text-[#2D2D2D] text-[13px] truncate leading-tight">
-              Delhi Public School
-            </p>
-            <p className="text-gray-500 text-[11px] truncate">
-              Bokaro Steel City
-            </p>
+          <span className="text-[15px]">Settings</span>
+        </Link>
+
+        {/* School Card */}
+        <div className="mt-3 bg-[#F4F4F4] rounded-2xl p-4 border border-zinc-200/50">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full overflow-hidden">
+              <Image
+                src={user?.avatar || "/avatar.png"}
+                alt="School"
+                width={48}
+                height={48}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div>
+              <h4 className="font-bold text-sm text-[#2D2D2D]">
+                {user?.school.name}
+              </h4>
+
+              <p className="text-xs text-zinc-500">{user?.school.city}</p>
+            </div>
           </div>
         </div>
       </div>

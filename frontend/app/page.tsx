@@ -1,4 +1,4 @@
-import DashboardDesktop from "@/components/layout/dashboard-desktop";
+import DashboardDesktop from "@/app/dashboard/page";
 
 export default function Home() {
   return (

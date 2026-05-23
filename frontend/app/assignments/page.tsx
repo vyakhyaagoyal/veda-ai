@@ -108,7 +108,7 @@ const MainContent = () => {
   };
 
   return (
-    <main className="flex-1 bg-[#F9F9F9] p-8 pb-12">
+    <main className="flex flex-col h-full bg-[#F9F9F9] p-8 pb-12 overflow-hidden">
       <div className="mb-4">
         <div className="flex items-center gap-2 text-gray-400">
           {/* Green Dot */}
@@ -150,61 +150,66 @@ const MainContent = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        {assignments.map((assignment) => (
-          <div
-            key={assignment.id}
-            className="group relative rounded-[32px] bg-white px-6 py-2 shadow-sm border border-gray-100 hover:-translate-y-1 hover:shadow-md transition-all duration-300"
-          >
-            <div className="flex items-start justify-between gap-4 my-3">
-              <h3 className="text-2xl font-extrabold text-[#2D2D2D] mb-6 group-hover:text-[#EA580C] transition-colors leading-tight">
-                {assignment.title}
-              </h3>
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto pr-2 pb-4">
+        <div className="grid grid-cols-2 gap-3">
+          {assignments.map((assignment) => (
+            <div
+              key={assignment.id}
+              className="group relative rounded-[32px] bg-white px-6 py-2 shadow-sm border border-gray-100 hover:-translate-y-1 hover:shadow-md transition-all duration-300"
+            >
+              <div className="flex items-start justify-between gap-4 my-3">
+                <h3 className="text-2xl font-extrabold text-[#2D2D2D] mb-6 group-hover:text-[#EA580C] transition-colors leading-tight">
+                  {assignment.title}
+                </h3>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-300 hover:text-gray-500">
-                    <MoreVertical size={20} />
-                  </button>
-                </DropdownMenuTrigger>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-300 hover:text-gray-500">
+                      <MoreVertical size={20} />
+                    </button>
+                  </DropdownMenuTrigger>
 
-                <DropdownMenuContent
-                  align="end"
-                  className="w-48 p-2 rounded-2xl border-gray-100 shadow-xl"
-                >
-                  <DropdownMenuItem className="flex items-center gap-2 p-3 rounded-xl cursor-pointer focus:bg-gray-50">
-                    <ExternalLink size={16} />
-                    <span className="font-semibold text-sm">
-                      View Assignment
-                    </span>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    onClick={() => deleteAssignment(assignment.id)}
-                    className="flex items-center gap-2 p-3 rounded-xl cursor-pointer focus:bg-red-50 text-red-600 focus:text-red-600"
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-48 p-2 rounded-2xl border-gray-100 shadow-xl"
                   >
-                    <Trash2 size={16} />
-                    <span className="font-semibold text-sm">Delete</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                    <DropdownMenuItem className="flex items-center gap-2 p-3 rounded-xl cursor-pointer focus:bg-gray-50">
+                      <ExternalLink size={16} />
+                      <span className="font-semibold text-sm">
+                        View Assignment
+                      </span>
+                    </DropdownMenuItem>
 
-            <div>
-              <div className="h-px w-full bg-white mb-6" />
-              <div className="flex justify-between items-center text-[13px] font-bold">
-                <div className="text-gray-400">
-                  Assigned on :
-                  <span className="text-gray-600">{assignment.assignedOn}</span>
-                </div>
-                <div className="text-gray-400">
-                  Due :
-                  <span className="text-gray-600">{assignment.dueDate}</span>
+                    <DropdownMenuItem
+                      onClick={() => deleteAssignment(assignment.id)}
+                      className="flex items-center gap-2 p-3 rounded-xl cursor-pointer focus:bg-red-50 text-red-600 focus:text-red-600"
+                    >
+                      <Trash2 size={16} />
+                      <span className="font-semibold text-sm">Delete</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <div>
+                <div className="h-px w-full bg-white mb-6" />
+                <div className="flex justify-between items-center text-[13px] font-bold">
+                  <div className="text-gray-400">
+                    Assigned on :
+                    <span className="text-gray-600">
+                      {assignment.assignedOn}
+                    </span>
+                  </div>
+                  <div className="text-gray-400">
+                    Due :
+                    <span className="text-gray-600">{assignment.dueDate}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Floating Action Button */}

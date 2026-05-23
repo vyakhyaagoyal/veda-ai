@@ -1,5 +1,25 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useMemo } from "react";
+import { useRouter }
+  from "next/navigation";
+
+import { useCreateAssignmentStore }
+  from "@/store/create-assignment.store";
+
+import { validateAssignment }
+  from "@/lib/validators/create-assignment.validator";
+
+  import { Calendar } from "@/components/ui/calendar";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { format } from "date-fns";
+
 import {
   ArrowLeft,
   Plus,
@@ -17,6 +37,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { useRef } from "react";
+import { generationService } from "@/services/generation.service";
 
 // --- Types ---
 interface QuestionRow {
@@ -36,19 +59,65 @@ const QUESTION_TYPES = [
 ];
 
 const CreateAssignment = () => {
-  // --- State ---
-  const [dueDate, setDueDate] = useState("");
-  const [additionalInfo, setAdditionalInfo] = useState("");
-  const [rows, setRows] = useState<QuestionRow[]>([
-    { id: "1", type: "Multiple Choice Questions", count: 4, marks: 1 },
-    { id: "2", type: "Short Questions", count: 3, marks: 2 },
-    { id: "3", type: "Diagram/Graph-Based Questions", count: 5, marks: 5 },
-    { id: "4", type: "Numerical Problems", count: 5, marks: 5 },
-  ]);
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isListening, setIsListening] =
+  React.useState(false);
 
-  // --- Derived State (Totals) ---
-  const totalQuestions = rows.reduce((acc, row) => acc + row.count, 0);
-  const totalMarks = rows.reduce((acc, row) => acc + row.count * row.marks, 0);
+  const startListening = () => {
+  if (
+    !(
+      "webkitSpeechRecognition" in
+      window
+    )
+  ) {
+    alert(
+      "Speech recognition is not supported in this browser."
+    );
+
+    return;
+  }
+
+  const SpeechRecognition =
+    (
+      window as any
+    ).webkitSpeechRecognition;
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.continuous = true;
+
+  recognition.interimResults = true;
+
+  recognition.lang = "en-US";
+
+  recognition.start();
+
+  setIsListening(true);
+
+  recognition.onresult = (
+    event: any
+  ) => {
+    const transcript =
+      Array.from(event.results)
+        .map(
+          (result: any) =>
+            result[0].transcript
+        )
+        .join("");
+
+    setAdditionalInfo(transcript);
+  };
+
+  recognition.onerror = () => {
+    setIsListening(false);
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
+};
 
   // --- Handlers ---
   const addRow = () => {
@@ -89,7 +158,109 @@ const CreateAssignment = () => {
     );
   };
 
-  const [step, setStep] = useState(1);
+  const router = useRouter();
+
+const {
+  dueDate,
+  setDueDate,
+
+  additionalInfo,
+  setAdditionalInfo,
+
+  rows,
+  setRows,
+
+  uploadedFile,
+  setUploadedFile,
+
+  loading,
+  setLoading,
+
+   progress,
+  setProgress,
+} = useCreateAssignmentStore();
+
+  const handleGenerate =
+  async () => {
+    const error =
+      validateAssignment({
+        dueDate,
+        rows,
+      });
+
+    if (error) {
+      alert(error);
+
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setProgress(3);
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        "dueDate",
+        dueDate
+      );
+
+      formData.append(
+        "additionalInfo",
+        additionalInfo
+      );
+
+      formData.append(
+        "rows",
+        JSON.stringify(rows)
+      );
+
+      if (uploadedFile) {
+        formData.append(
+          "file",
+          uploadedFile
+        );
+      }
+
+      const response =
+        await generationService.createAssignment(
+          formData
+        );
+
+        setProgress(4);
+
+      router.push(
+        `/assignments/${response.assignmentId}`
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+
+  };
+
+  // --- Derived State (Totals) ---
+  const totalQuestions = useMemo(
+  () =>
+    rows.reduce(
+      (acc, row) =>
+        acc + row.count,
+      0
+    ),
+  [rows]
+);
+  const totalMarks = useMemo(
+  () =>
+    rows.reduce(
+      (acc, row) =>
+        acc +
+        row.count * row.marks,
+      0
+    ),
+  [rows]
+);
 
   return (
     <div className="min-h-screen bg-[#F3F4F6]/30 text-[#2D2D2D] p-2 lg:p-2">
@@ -107,26 +278,66 @@ const CreateAssignment = () => {
         <p className="text-gray-400 text-sm mb-6">
           Set up a new assignment for your students
         </p>
+      </header>
 
-        </header>
+      {/* Progress Bar */}
+<div className="max-w-4xl mx-auto mb-10">
+  <div className="flex items-center gap-3">
+    {[1, 2, 3, 4].map((item) => (
+      <div
+        key={item}
+        className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+          progress >= item
+            ? "bg-[#2D2D2D]"
+            : "bg-gray-200"
+        }`}
+      />
+    ))}
+  </div>
 
-        {/* Progress Bar */}
-        <div className="flex items-center justify-center gap-3 max-w-4xl p-2 mx-auto mb-8">
-          {/* Step 1 */}
-          <div
-            className={`flex-1 h-1 rounded-full transition-all duration-300 ${
-              step >= 1 ? "bg-gray-600" : "bg-gray-200"
-            }`}
-          />
+  {/* Labels */}
+  <div className="flex justify-between mt-3 text-xs font-medium text-gray-400 px-1">
+    <span
+      className={
+        progress >= 1
+          ? "text-[#2D2D2D]"
+          : ""
+      }
+    >
+      Details
+    </span>
 
-          {/* Step 2 */}
-          <div
-            className={`flex-1 h-1 rounded-full transition-all duration-300 ${
-              step >= 2 ? "bg-gray-600" : "bg-gray-200"
-            }`}
-          />
-        </div>
-      
+    <span
+      className={
+        progress >= 2
+          ? "text-[#2D2D2D]"
+          : ""
+      }
+    >
+      Upload
+    </span>
+
+    <span
+      className={
+        progress >= 3
+          ? "text-[#2D2D2D]"
+          : ""
+      }
+    >
+      Generating
+    </span>
+
+    <span
+      className={
+        progress >= 4
+          ? "text-[#2D2D2D]"
+          : ""
+      }
+    >
+      Complete
+    </span>
+  </div>
+</div>
 
       {/* Main Form Card */}
       <main className="max-w-4xl mx-auto bg-[#F3F4F6]/90 rounded-[40px] shadow-sm border-4 border-white p-6 lg:p-10 mb-8">
@@ -148,16 +359,35 @@ const CreateAssignment = () => {
           <p className="text-gray-500 text-light mb-6 uppercase tracking-wider">
             JPEG, PNG, upto 10MB
           </p>
-          <button className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100">
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.txt,.doc,.docx"
+            hidden
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+
+              if (file) {
+                setUploadedFile(file);
+                setProgress(2);
+              }
+            }}
+          />
+
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
+          >
             Browse Files
-          </button>
+          </div>
         </div>
         <p className="text-center text-gray-500 text-lg font-medium mb-12">
           Upload images of your preferred document/image
         </p>
 
         {/* Due Date */}
-        <div className="mb-12">
+        {/* <div className="mb-12">
           <label className="block text-sm font-bold mb-3">Due Date</label>
           <div className="relative max-w-full">
             <input
@@ -175,7 +405,74 @@ const CreateAssignment = () => {
               width={30}
             />
           </div>
-        </div>
+        </div> */}
+
+        {/* Due Date */}
+<div className="mb-12">
+  <label className="block text-sm font-bold mb-3">
+    Due Date
+  </label>
+
+  <Popover>
+    <PopoverTrigger asChild>
+      <button
+        className={`w-full flex items-center justify-between border-2 border-gray-200 rounded-full px-6 py-4 bg-white hover:border-gray-300 transition-all ${
+          dueDate
+            ? "text-black"
+            : "text-gray-400"
+        }`}
+      >
+        <span className="font-medium">
+          {dueDate
+            ? format(
+                new Date(dueDate),
+                "PPP"
+              )
+            : "Select due date"}
+        </span>
+
+<Image
+          src="/calendar-icon.svg"
+          alt="Calendar"
+          height={25}
+          width={25}
+        />
+      </button>
+    </PopoverTrigger>
+
+    <PopoverContent
+      className="w-auto p-0 rounded-3xl border-none shadow-2xl"
+      align="start"
+    >
+      <Calendar
+        mode="single"
+        selected={
+          dueDate
+            ? new Date(dueDate)
+            : undefined
+        }
+        onSelect={(date) => {
+          if (date) {
+            setDueDate(
+              date.toISOString()
+            );
+          }
+        }}
+        disabled={(date) =>
+          date <
+          new Date(
+            new Date().setHours(
+              0,
+              0,
+              0,
+              0
+            )
+          )
+        }
+      />
+    </PopoverContent>
+  </Popover>
+</div>
 
         {/* Questions Section */}
         <div className="mb-6">
@@ -212,7 +509,7 @@ const CreateAssignment = () => {
 
                         <DropdownMenuContent
                           align="start"
-                          className="w-[250px] rounded-2xl p-2"
+                          className="w-62.5 rounded-2xl p-2"
                         >
                           {QUESTION_TYPES.map((t) => (
                             <DropdownMenuItem
@@ -316,9 +613,29 @@ const CreateAssignment = () => {
               onChange={(e) => setAdditionalInfo(e.target.value)}
               className="w-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-[32px] p-6 focus:outline-none focus:ring-2 focus:ring-[#2D2D2D]/5 font-medium text-gray-600 resize-none"
             />
-            <button className="absolute right-8 bottom-8 p-3 bg-white rounded-full border border-gray-100 text-gray-400 hover:text-[#2D2D2D] transition-colors">
-              <Mic size={20} className="text-black" />
-            </button>
+            <button
+  onClick={startListening}
+  type="button"
+  className={`absolute right-8 bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
+    isListening
+      ? "scale-110 bg-red-50"
+      : ""
+  }`}
+>
+  <Mic
+    size={20}
+    className={
+      isListening
+        ? "text-red-500"
+        : "text-black"
+    }
+  />
+</button>
+{/* {isListening && (
+  <p className="text-sm text-red-500 mt-3 font-medium animate-pulse">
+    Listening...
+  </p>
+)} */}
           </div>
         </div>
       </main>
@@ -326,22 +643,35 @@ const CreateAssignment = () => {
       {/* Navigation Buttons */}
       <div className="max-w-5xl mx-auto flex justify-between items-center px-4">
         <button
-          onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
+          onClick={() =>
+  router.back()
+}
           className="flex items-center gap-3 px-8 py-3.5 bg-white border border-gray-100 rounded-full font-bold text-sm shadow-sm hover:bg-gray-50 transition-all"
         >
           <ArrowLeft size={18} />
           Previous
         </button>
         <button
-          onClick={() => setStep((prev) => Math.min(prev + 1, 2))}
-          className="flex items-center gap-3 px-8 py-3.5 bg-[#111827] text-white rounded-full font-bold text-sm shadow-lg hover:bg-black transition-all group"
-        >
-          Next
-          <ArrowRight
-            size={18}
-            className="group-hover:translate-x-1 transition-transform"
-          />
-        </button>
+  onClick={handleGenerate}
+  disabled={loading}
+  className="flex items-center gap-3 px-8 py-3.5 bg-[#111827] text-white rounded-full font-bold text-sm shadow-lg hover:bg-black transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  {loading ? (
+    <>
+      Generating...
+    </>
+  ) : (
+    <>
+      Next
+
+      <ArrowRight
+        size={18}
+        className="group-hover:translate-x-1 transition-transform"
+      />
+    </>
+  )}
+</button>
+          
       </div>
     </div>
   );

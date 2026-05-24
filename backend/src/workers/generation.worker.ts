@@ -10,6 +10,9 @@ import { generatePaper } from "../services/ai.service";
 
 import { getIO } from "../sockets/socket";
 
+import { Notification }
+  from "../models/Notification";
+
 new Worker(
   "assignment-generation",
 
@@ -90,6 +93,18 @@ new Worker(
 
       assignment.status =
         "completed";
+
+        await Notification.create({
+  title:
+    "Assignment Generated",
+
+  message: `${assignment.title} has been generated successfully.`,
+
+  type: "success",
+
+  assignmentId:
+    assignment._id,
+});
 
       await assignment.save();
 

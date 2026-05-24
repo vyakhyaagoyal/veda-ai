@@ -13,6 +13,9 @@ import { generationQueue }
   import { parseUploadedFile }
   from "../services/file-parser.service";
 
+  import { Notification }
+  from "../models/Notification";
+
   export const downloadPDF =
   async (
     req: Request,
@@ -94,6 +97,7 @@ console.log(req.file);
 
       const assignment =
   await Assignment.create({
+    
     dueDate,
 teacherName,
     additionalInfo,
@@ -108,6 +112,17 @@ teacherName,
     uploadedFileUrl:
   req.file?.originalname || "",
   });
+  await Notification.create({
+  title:
+    "Assignment Created",
+
+  message: `Assignment due on ${dueDate}`,
+
+  type: "info",
+
+  assignmentId:
+    assignment._id,
+});
 
       await generationQueue.add(
   "generate-paper",

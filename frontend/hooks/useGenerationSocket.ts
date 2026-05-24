@@ -42,6 +42,8 @@ export const useGenerationSocket =
         }
       );
 
+      
+
       socket.on(
         "generation-complete",
         (data) => {

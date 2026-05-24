@@ -26,7 +26,11 @@ initSocket(server);
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://veda-ai-murex-seven.vercel.app",
+    ],
+
     credentials: true,
   })
 );

@@ -2,20 +2,40 @@ import mongoose, {
   Schema,
 } from "mongoose";
 
+
 const QuestionSchema =
   new Schema({
-    question: String,
+   question: {
+  type: String,
+  required: true,
+},
 
-    difficulty: String,
+difficulty: {
+  type: String,
+  enum: [
+    "easy",
+    "medium",
+    "hard",
+  ],
+},
 
-    marks: Number,
+marks: {
+  type: Number,
+  required: true,
+},
   });
 
 const SectionSchema =
   new Schema({
-    title: String,
+    title: {
+  type: String,
+  required: true,
+},
 
-    instruction: String,
+instruction: {
+  type: String,
+  required: true,
+},
 
     questions: [
       QuestionSchema,
@@ -30,6 +50,7 @@ const AssignmentSchema =
       additionalInfo: String,
 
       uploadedFileUrl: String,
+      sourceContent: String,
 
       questionConfig: [
         {
@@ -55,15 +76,23 @@ const AssignmentSchema =
       },
 
       generatedPaper: {
-        sections: [
-          SectionSchema,
-        ],
-      },
+  type: {
+    sections: [
+      SectionSchema,
+    ],
+  },
+
+  default: undefined,
+},
     },
     {
       timestamps: true,
     }
   );
+
+  AssignmentSchema.index({
+  createdAt: -1,
+});
 
 export const Assignment =
   mongoose.model(

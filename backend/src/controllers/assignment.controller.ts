@@ -7,7 +7,51 @@ import { Assignment }
 import { generationQueue }
   from "../queues/generation.queue";
 
+  import { generatePDF }
+  from "../services/pdf.service";
+
+  import { parseUploadedFile }
+  from "../services/file-parser.service";
+
+  export const downloadPDF =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      const assignment =
+        await Assignment.findById(
+          req.params.id
+        );
+
+      if (
+        !assignment ||
+        !assignment.generatedPaper
+      ) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+          });
+      }
+
+      generatePDF(
+        assignment,
+        res
+      );
+    } catch (error) {
+      console.error(error);
+
+      res
+        .status(500)
+        .json({
+          success: false,
+        });
+    }
+  };
+
 export const createAssignment =
+
   async (
     req: Request,
     res: Response
@@ -19,25 +63,60 @@ export const createAssignment =
         rows,
       } = req.body;
 
+      const sourceContent =
+  req.file
+    ? await parseUploadedFile(
+        req.file
+      )
+    : "";
+
+    if (!rows) {
+  return res
+    .status(400)
+    .json({
+      success: false,
+      message:
+        "Question configuration required",
+    });
+}
+
       const assignment =
-        await Assignment.create({
-          dueDate,
+  await Assignment.create({
+    dueDate,
 
-          additionalInfo,
+    additionalInfo,
 
-          questionConfig:
-            JSON.parse(rows),
+    sourceContent,
 
-          status: "queued",
-        });
+    questionConfig:
+      JSON.parse(rows),
+
+    status: "queued",
+
+    uploadedFileUrl:
+  req.file?.originalname || "",
+  });
 
       await generationQueue.add(
-        "generate-paper",
-        {
-          assignmentId:
-            assignment._id,
-        }
-      );
+  "generate-paper",
+  {
+    assignmentId:
+      assignment._id,
+  },
+  {
+    attempts: 3,
+
+    backoff: {
+      type: "exponential",
+
+      delay: 2000,
+    },
+
+    removeOnComplete: 50,
+
+    removeOnFail: 20,
+  }
+);
 
       return res.json({
         success: true,
@@ -81,8 +160,7 @@ export const createAssignment =
       assignment.status =
         "queued";
 
-      assignment.generatedPaper =
-        undefined;
+      assignment.generatedPaper = undefined;
 
       await assignment.save();
 
@@ -132,9 +210,19 @@ export const getAssignmentById =
     res: Response
   ) => {
     const assignment =
-      await Assignment.findById(
-        req.params.id
-      );
+  await Assignment.findById(
+    req.params.id
+  );
+
+if (!assignment) {
+  return res
+    .status(404)
+    .json({
+      success: false,
+      message:
+        "Assignment not found",
+    });
+}
 
     res.json({
       success: true,

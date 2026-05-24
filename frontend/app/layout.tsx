@@ -5,6 +5,8 @@ import "./globals.css";
 
 import Sidebar from "@/components/layout/sidebar";
 import Topbar from "@/components//layout/topbar";
+import { Toaster }
+  from "sonner";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -26,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${bricolage.className} antialiased bg-[#F9F9F9] text-[#2D2D2D]`}
       >
+        <Toaster richColors />
         <div className="flex h-screen overflow-hidden">
           {/* Sidebar */}
           <div className="p-4">

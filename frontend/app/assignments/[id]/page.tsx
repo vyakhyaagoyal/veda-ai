@@ -39,7 +39,7 @@ const QuestionPaper = () => {
   const assignmentId = params.id as string;
 
   const [assignment, setAssignment] = useState<any>(null);
-
+const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchAssignment = async () => {
@@ -59,10 +59,16 @@ const QuestionPaper = () => {
   }, []);
 
   useGenerationSocket({
-    assignmentId,
+  assignmentId,
 
-    onComplete: fetchAssignment,
-  });
+  onComplete: fetchAssignment,
+
+  onFailed: () => {
+    setError(
+      "Generation failed"
+    );
+  },
+});
 
   if (loading || !assignment) {
     return (
@@ -84,7 +90,65 @@ const QuestionPaper = () => {
     );
   }
 
+  if (
+  assignment.status ===
+  "queued"
+) {
   return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
+      <Loader2 className="animate-spin mb-6" />
+
+      <h2 className="text-3xl font-bold">
+        Queued for Generation
+      </h2>
+
+      <p className="text-zinc-500 mt-4">
+        Waiting for worker...
+      </p>
+    </div>
+  );
+}
+
+if (
+  assignment.status ===
+  "generating"
+) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
+      <Loader2 className="animate-spin mb-6" />
+
+      <h2 className="text-3xl font-bold">
+        Generating Question Paper
+      </h2>
+
+      <p className="text-zinc-500 mt-4">
+        AI is preparing your
+        assessment...
+      </p>
+    </div>
+  );
+}
+
+if (
+  assignment.status ===
+  "failed"
+) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
+      <h2 className="text-3xl font-bold text-red-500">
+        Generation Failed
+      </h2>
+
+      <p className="text-zinc-500 mt-4">
+        Please regenerate the
+        assignment.
+      </p>
+    </div>
+  );
+}
+
+  return (
+    
     <div className="min-h-screen bg-[#F3F4F6]/50 font-sans text-[#2D2D2D]">
       <div className="max-w-8xl mx-auto rounded-2xl bg-black/60">
         <main className="w-full mx-auto py-4 px-4">
@@ -96,6 +160,7 @@ const QuestionPaper = () => {
                 CBSE Grade 8 Science classes on the NCERT chapters:
               </p>
             </div>
+            
             <button
               onClick={() =>
                 window.open(

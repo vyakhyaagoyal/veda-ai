@@ -9,6 +9,7 @@ import { validateAssignment } from "@/lib/validators/create-assignment.validator
 
 import { Calendar } from "@/components/ui/calendar";
 
+
 import {
   Popover,
   PopoverContent,
@@ -37,6 +38,7 @@ import {
 
 import { useRef } from "react";
 import { generationService } from "@/services/generation.service";
+import { toast } from "sonner";
 
 // --- Types ---
 interface QuestionRow {
@@ -63,7 +65,7 @@ const CreateAssignment = () => {
 
   const startListening = () => {
     if (!("webkitSpeechRecognition" in window)) {
-      alert("Speech recognition is not supported in this browser.");
+      toast.error("Speech recognition is not supported in this browser.");
 
       return;
     }
@@ -322,7 +324,7 @@ const CreateAssignment = () => {
             ref={fileInputRef}
             type="file"
             multiple
-            accept=".pdf,.txt,.doc,.docx"
+            accept=".pdf,.txt,.png,.jpg,.jpeg"
             hidden
             onChange={(e) => {
               const files = Array.from(e.target.files || []);

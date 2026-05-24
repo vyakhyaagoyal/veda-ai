@@ -52,8 +52,14 @@ Format:
         }
       );
 
-    return JSON.parse(
-      completion.choices[0]
-        .message.content || "{}"
-    );
+   try {
+  return JSON.parse(
+    completion.choices[0]
+      .message.content || "{}"
+  );
+} catch {
+  return {
+    sections: [],
+  };
+}
   };

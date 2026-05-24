@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect }
-  from "react";
+import { useEffect } from "react";
 
 import { useSocketStore }
   from "@/store/socket.store";
@@ -10,16 +9,20 @@ export const useGenerationSocket =
   ({
     assignmentId,
     onComplete,
+    onFailed,
   }: {
     assignmentId: string;
 
     onComplete: () => void;
+
+    onFailed: () => void;
   }) => {
     const {
       socket,
       connect,
     } = useSocketStore();
 
+    // connect once
     useEffect(() => {
       if (!socket) {
         connect();
@@ -31,19 +34,34 @@ export const useGenerationSocket =
 
       socket.on(
         "generation-progress",
-        (data: any) => {
-          console.log(data);
+        (data) => {
+          console.log(
+            "Generating:",
+            data
+          );
         }
       );
 
       socket.on(
         "generation-complete",
-        (data: any) => {
+        (data) => {
           if (
             data.assignmentId ===
             assignmentId
           ) {
             onComplete();
+          }
+        }
+      );
+
+      socket.on(
+        "generation-failed",
+        (data) => {
+          if (
+            data.assignmentId ===
+            assignmentId
+          ) {
+            onFailed();
           }
         }
       );
@@ -55,6 +73,10 @@ export const useGenerationSocket =
 
         socket.off(
           "generation-complete"
+        );
+
+        socket.off(
+          "generation-failed"
         );
       };
     }, [socket]);

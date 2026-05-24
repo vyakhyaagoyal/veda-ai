@@ -112,6 +112,11 @@ new Worker(
         assignmentId,
         {
           status: "failed",
+
+failureReason:
+  error instanceof Error
+    ? error.message
+    : "Unknown error",
         }
       );
 

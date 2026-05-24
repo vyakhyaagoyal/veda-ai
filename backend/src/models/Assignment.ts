@@ -42,6 +42,24 @@ instruction: {
     ],
   });
 
+  const QuestionConfigSchema =
+  new Schema({
+    type: {
+      type: String,
+      required: true,
+    },
+
+    count: {
+      type: Number,
+      required: true,
+    },
+
+    marks: {
+      type: Number,
+      required: true,
+    },
+  });
+
 const AssignmentSchema =
   new Schema(
     {
@@ -51,16 +69,11 @@ const AssignmentSchema =
 
       uploadedFileUrl: String,
       sourceContent: String,
+      
 
       questionConfig: [
-        {
-          type: String,
-
-          count: Number,
-
-          marks: Number,
-        },
-      ],
+  QuestionConfigSchema,
+],
 
       status: {
         type: String,
@@ -74,6 +87,8 @@ const AssignmentSchema =
 
         default: "queued",
       },
+
+      failureReason: String,
 
       generatedPaper: {
   type: {

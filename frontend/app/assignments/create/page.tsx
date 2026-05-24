@@ -201,9 +201,15 @@ const CreateAssignment = () => {
       setProgress(4);
 
       router.push(`/assignments/${response.assignmentId}`);
-    } catch (error) {
-      console.error(error);
-    } finally {
+    } catch (error: any) {
+  console.error(error);
+
+  toast.error(
+    error?.response?.data
+      ?.message ||
+      "Failed to generate assignment"
+  );
+} finally {
       setLoading(false);
     }
   };

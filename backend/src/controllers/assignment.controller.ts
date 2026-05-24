@@ -124,15 +124,36 @@ export const createAssignment =
         assignmentId:
           assignment._id,
       });
-    } catch (error) {
-      console.error(error);
+    } 
+    catch (error: any) {
+  console.error(error);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-        });
-    }
+  // -----------------------------
+  // OCR FAILURE
+  // -----------------------------
+  if (
+    error.message ===
+    "OCR_UNREADABLE"
+  ) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+
+        message:
+          "Could not extract readable content from uploaded image. Please upload a clearer image or PDF.",
+      });
+  }
+
+  return res
+    .status(500)
+    .json({
+      success: false,
+
+      message:
+        "Something went wrong while creating assignment.",
+    });
+}
   };
 
   export const regenerateAssignment =

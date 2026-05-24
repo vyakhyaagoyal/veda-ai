@@ -31,28 +31,51 @@ export const parseUploadedFile =
 
     // ---------------- IMAGES ----------------
     if (
-      [
-        "image/png",
-        "image/jpeg",
-        "image/jpg",
-      ].includes(file.mimetype)
-    ) {
-      const {
-        data: { text },
-      } =
-        await Tesseract.recognize(
-          file.buffer,
-          "eng"
-        );
+  [
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+  ].includes(file.mimetype)
+) {
+  const {
+    data: { text },
+  } =
+    await Tesseract.recognize(
+      file.buffer,
+      "eng"
+    );
 
-        
+  const cleanedText =
+    text
+      .replace(/\s+/g, " ")
+      .trim();
 
-      return text.slice(
-        0,
-        12000
-      );
-      
-    }
+  // -----------------------------
+  // OCR VALIDATION
+  // -----------------------------
+  const alphaChars =
+  cleanedText.match(/[a-zA-Z]/g)
+    ?.length || 0;
+
+const readabilityScore =
+  alphaChars /
+  cleanedText.length;
+
+const isUnreadable =
+  cleanedText.length < 50 ||
+  readabilityScore < 0.3;
+
+  if (isUnreadable) {
+    throw new Error(
+      "OCR_UNREADABLE"
+    );
+  }
+
+  return cleanedText.slice(
+    0,
+    12000
+  );
+}
 
     return "";
   };

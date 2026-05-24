@@ -30,7 +30,7 @@ const Topbar = () => {
   const router = useRouter();
 
   const pathname = usePathname();
-  const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000");
+  const socket = io(process.env.NEXT_PUBLIC_API_URL || "https://veda-ai-production-39b3.up.railway.app/");
   const { user, logout } = useUserStore();
 
   const pageTitleMap: Record<string, string> = {
@@ -166,7 +166,7 @@ const Topbar = () => {
             <button className="flex items-center gap-3 pl-5 border-l border-zinc-200 cursor-pointer">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-200">
                 <Image
-                  src={user?.avatar || "/avatar.png"}
+                  src={user?.avatar || "/Avatar.png"}
                   alt="User"
                   width={40}
                   height={40}

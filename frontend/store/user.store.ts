@@ -22,7 +22,7 @@ export const useUserStore = create<UserStore>((set) => ({
   user: {
     name: "John Doe",
     role: "Teacher",
-    avatar: "/avatar.png",
+    avatar: "/Avatar.png",
     school: {
       name: "Delhi Public School",
       city: "Bokaro Steel City",

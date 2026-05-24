@@ -1,6 +1,4 @@
 import React from 'react';
-// import Sidebar from './sidebar';
-// import Topbar from './topbar';
 import MainContent from '../../components/assignments/assignments-dashboard';
 
 const DashboardDesktop = () => {

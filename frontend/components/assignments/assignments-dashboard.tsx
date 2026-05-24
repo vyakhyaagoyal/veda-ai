@@ -4,26 +4,19 @@ import React, { useEffect, useMemo } from "react";
 import AssignmentsZero from "@/components/assignments/assignments-zero";
 import {
   Plus,
-  MoreVertical,
   Search,
   Filter,
-  Trash2,
-  ExternalLink,
   Loader2,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
-import Sidebar from "@/components/layout/sidebar";
-
-import Topbar from "@/components/layout/topbar";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 
 import { assignmentService } from "@/services/assignment.service";
 
@@ -62,15 +55,15 @@ export default function Page() {
   }, []);
 
   // DELETE
-  const handleDelete = async (id: string) => {
-    try {
-      removeAssignment(id);
+  // const handleDelete = async (id: string) => {
+  //   try {
+  //     removeAssignment(id);
 
-      await assignmentService.deleteAssignment(id);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     await assignmentService.deleteAssignment(id);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   // SEARCH
   const filteredAssignments = useMemo(() => {
@@ -87,7 +80,7 @@ export default function Page() {
         <main className="flex-1 flex flex-col overflow-hidden bg-[#F9F9F9] p-2">
   {loading ? (
     <div className="flex items-center justify-center h-full">
-      <Loader2 className="animate-spin text-zinc-400" />
+      <Loader2 className="animate-spin text-black" />
     </div>
   ) : !assignments?.length ? (
     <AssignmentsZero

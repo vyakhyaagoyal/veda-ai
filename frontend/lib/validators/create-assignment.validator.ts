@@ -1,31 +1,72 @@
 import { QuestionRow }
   from "@/store/create-assignment.store";
 
-export const validateAssignment =
-  ({
-    dueDate,
-    rows,
-  }: {
-    dueDate: string;
-    rows: QuestionRow[];
-  }) => {
-    if (!dueDate) {
-      return "Due date is required";
+export const validateAssignment = ({
+  dueDate,
+  rows,
+  additionalInfo,
+  uploadedFiles,
+}: {
+  dueDate: string;
+
+  rows: QuestionRow[];
+
+  additionalInfo: string;
+
+  uploadedFiles: File[];
+}) => {
+
+  const errors: string[] = [];
+
+  // Due Date
+  if (!dueDate?.trim()) {
+    errors.push("Due date should not be empty");
+  }
+
+  // Uploaded Files
+  if (!uploadedFiles.length) {
+    errors.push(
+      "Please upload at least one document/image"
+    );
+  }
+
+  // Additional Info
+  if (!additionalInfo?.trim()) {
+    errors.push(
+      "Additional information should not be empty"
+    );
+  }
+
+  // Rows
+  if (!rows.length) {
+    errors.push(
+      "Add at least one question type"
+    );
+  }
+
+  for (const row of rows) {
+
+    // Question Type
+    if (!row.type?.trim()) {
+      errors.push(
+        "Question type should not be empty"
+      );
     }
 
-    if (!rows.length) {
-      return "Add at least one question type";
+    // Question Count
+    if (row.count <= 0) {
+      errors.push(
+        `${row.type} question count must be greater than 0`
+      );
     }
 
-    for (const row of rows) {
-      if (row.count <= 0) {
-        return "Question count must be greater than 0";
-      }
-
-      if (row.marks <= 0) {
-        return "Marks must be greater than 0";
-      }
+    // Marks
+    if (row.marks <= 0) {
+      errors.push(
+        `${row.type} marks must be greater than 0`
+      );
     }
+  }
 
-    return null;
-  };
+  return errors;
+};

@@ -56,6 +56,59 @@ export const createAssignment =
     }
   };
 
+  export const regenerateAssignment =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      const assignment =
+        await Assignment.findById(
+          req.params.id
+        );
+
+      if (!assignment) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message:
+              "Assignment not found",
+          });
+      }
+
+      // Reset assignment
+      assignment.status =
+        "queued";
+
+      assignment.generatedPaper =
+        undefined;
+
+      await assignment.save();
+
+      // Add queue job again
+      await generationQueue.add(
+        "generate-paper",
+        {
+          assignmentId:
+            assignment._id,
+        }
+      );
+
+      return res.json({
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+        });
+    }
+  };
+
 export const getAssignments =
   async (
     req: Request,

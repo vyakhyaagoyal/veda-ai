@@ -1,16 +1,13 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { useRouter }
-  from "next/navigation";
+import { useRouter } from "next/navigation";
 
-import { useCreateAssignmentStore }
-  from "@/store/create-assignment.store";
+import { useCreateAssignmentStore } from "@/store/create-assignment.store";
 
-import { validateAssignment }
-  from "@/lib/validators/create-assignment.validator";
+import { validateAssignment } from "@/lib/validators/create-assignment.validator";
 
-  import { Calendar } from "@/components/ui/calendar";
+import { Calendar } from "@/components/ui/calendar";
 
 import {
   Popover,
@@ -59,65 +56,48 @@ const QUESTION_TYPES = [
 ];
 
 const CreateAssignment = () => {
-  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isListening, setIsListening] = useState(false);
-const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [validationError, setValidationError] = useState("");
 
   const startListening = () => {
-  if (
-    !(
-      "webkitSpeechRecognition" in
-      window
-    )
-  ) {
-    alert(
-      "Speech recognition is not supported in this browser."
-    );
+    if (!("webkitSpeechRecognition" in window)) {
+      alert("Speech recognition is not supported in this browser.");
 
-    return;
-  }
+      return;
+    }
 
-  const SpeechRecognition =
-    (
-      window as any
-    ).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).webkitSpeechRecognition;
 
-  const recognition =
-    new SpeechRecognition();
+    const recognition = new SpeechRecognition();
 
-  recognition.continuous = true;
+    recognition.continuous = true;
 
-  recognition.interimResults = true;
+    recognition.interimResults = true;
 
-  recognition.lang = "en-US";
+    recognition.lang = "en-US";
 
-  recognition.start();
+    recognition.start();
 
-  setIsListening(true);
+    setIsListening(true);
 
-  recognition.onresult = (
-    event: any
-  ) => {
-    const transcript =
-      Array.from(event.results)
-        .map(
-          (result: any) =>
-            result[0].transcript
-        )
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0].transcript)
         .join("");
 
-    setAdditionalInfo(transcript);
-  };
+      setAdditionalInfo(transcript);
+    };
 
-  recognition.onerror = () => {
-    setIsListening(false);
-  };
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
 
-  recognition.onend = () => {
-    setIsListening(false);
+    recognition.onend = () => {
+      setIsListening(false);
+    };
   };
-};
 
   // --- Handlers ---
   const addRow = () => {
@@ -160,109 +140,102 @@ const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const router = useRouter();
 
-const {
+  const {
+    dueDate,
+    setDueDate,
+
+    additionalInfo,
+    setAdditionalInfo,
+
+    rows,
+    setRows,
+
+    uploadedFile,
+    setUploadedFile,
+
+    loading,
+    setLoading,
+
+    progress,
+    setProgress,
+  } = useCreateAssignmentStore();
+
+  const handleGenerate = async () => {
+    const errors = validateAssignment({
   dueDate,
-  setDueDate,
-
-  additionalInfo,
-  setAdditionalInfo,
-
   rows,
-  setRows,
+  additionalInfo,
+  uploadedFiles,
+});
 
-  uploadedFile,
-  setUploadedFile,
+   if (errors.length > 0) {
+  setValidationError(errors.join(", "));
 
-  loading,
-  setLoading,
+  setTimeout(() => {
+    setValidationError("");
+  }, 3000);
 
-   progress,
-  setProgress,
-} = useCreateAssignmentStore();
-
-  const handleGenerate =
-  async () => {
-    const error =
-      validateAssignment({
-        dueDate,
-        rows,
-      });
-
-    if (error) {
-      alert(error);
-
-      return;
-    }
+  return;
+}
 
     try {
       setLoading(true);
       setProgress(3);
 
-      const formData =
-        new FormData();
+      const formData = new FormData();
 
-      formData.append(
-        "dueDate",
-        dueDate
-      );
+      formData.append("dueDate", dueDate);
 
-      formData.append(
-        "additionalInfo",
-        additionalInfo
-      );
+      formData.append("additionalInfo", additionalInfo);
 
-      formData.append(
-        "rows",
-        JSON.stringify(rows)
-      );
+      formData.append("rows", JSON.stringify(rows));
 
       if (uploadedFile) {
-        formData.append(
-          "file",
-          uploadedFile
-        );
+        formData.append("files", uploadedFile);
       }
 
-      const response =
-        await generationService.createAssignment(
-          formData
-        );
+      const response = await generationService.createAssignment(formData);
 
-        setProgress(4);
+      setProgress(4);
 
-      router.push(
-        `/assignments/${response.assignmentId}`
-      );
+      router.push(`/assignments/${response.assignmentId}`);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-
   };
 
   // --- Derived State (Totals) ---
   const totalQuestions = useMemo(
-  () =>
-    rows.reduce(
-      (acc, row) =>
-        acc + row.count,
-      0
-    ),
-  [rows]
-);
+    () => rows.reduce((acc, row) => acc + row.count, 0),
+    [rows],
+  );
   const totalMarks = useMemo(
-  () =>
-    rows.reduce(
-      (acc, row) =>
-        acc +
-        row.count * row.marks,
-      0
-    ),
-  [rows]
-);
+    () => rows.reduce((acc, row) => acc + row.count * row.marks, 0),
+    [rows],
+  );
 
   return (
+    <>
+    {validationError && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+    
+    <div className="bg-black text-white px-8 py-4 rounded-2xl shadow-2xl text-sm font-semibold animate-in fade-in zoom-in duration-200">
+      <div className="space-y-2">
+  {validationError
+    .split(",")
+    .map((error, index) => (
+      <p key={index}>
+        • {error}
+      </p>
+    ))}
+</div>
+    </div>
+
+  </div>
+)}
+
     <div className="min-h-screen bg-[#F3F4F6]/30 text-[#2D2D2D] p-2 lg:p-2">
       {/* Header */}
       <header className="max-w-6xl mx-auto mb-8">
@@ -281,63 +254,33 @@ const {
       </header>
 
       {/* Progress Bar */}
-<div className="max-w-4xl mx-auto mb-10">
-  <div className="flex items-center gap-3">
-    {[1, 2, 3, 4].map((item) => (
-      <div
-        key={item}
-        className={`h-1 flex-1 rounded-full transition-all duration-500 ${
-          progress >= item
-            ? "bg-[#2D2D2D]"
-            : "bg-gray-200"
-        }`}
-      />
-    ))}
-  </div>
+      <div className="max-w-4xl mx-auto mb-10">
+        <div className="flex items-center gap-3">
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                progress >= item ? "bg-[#2D2D2D]" : "bg-gray-200"
+              }`}
+            />
+          ))}
+        </div>
 
-  {/* Labels */}
-  <div className="flex justify-between mt-3 text-xs font-medium text-gray-400 px-1">
-    <span
-      className={
-        progress >= 1
-          ? "text-[#2D2D2D]"
-          : ""
-      }
-    >
-      Details
-    </span>
+        {/* Labels */}
+        <div className="flex justify-between mt-3 text-xs font-medium text-gray-400 px-1">
+          <span className={progress >= 1 ? "text-[#2D2D2D]" : ""}>Details</span>
 
-    <span
-      className={
-        progress >= 2
-          ? "text-[#2D2D2D]"
-          : ""
-      }
-    >
-      Upload
-    </span>
+          <span className={progress >= 2 ? "text-[#2D2D2D]" : ""}>Upload</span>
 
-    <span
-      className={
-        progress >= 3
-          ? "text-[#2D2D2D]"
-          : ""
-      }
-    >
-      Generating
-    </span>
+          <span className={progress >= 3 ? "text-[#2D2D2D]" : ""}>
+            Generating
+          </span>
 
-    <span
-      className={
-        progress >= 4
-          ? "text-[#2D2D2D]"
-          : ""
-      }
-    >
-      Complete
-    </span>
-  </div>
-</div>
+          <span className={progress >= 4 ? "text-[#2D2D2D]" : ""}>
+            Complete
+          </span>
+        </div>
+      </div>
 
       {/* Main Form Card */}
       <main className="max-w-4xl mx-auto bg-[#F3F4F6]/90 rounded-[40px] shadow-sm border-4 border-white p-6 lg:p-10 mb-8">
@@ -349,153 +292,132 @@ const {
         </div>
 
         {/* Upload Zone */}
-<div
-  onDragOver={(e) => e.preventDefault()}
-  onDrop={(e) => {
-    e.preventDefault();
+        <div
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
 
-    const files = Array.from(e.dataTransfer.files);
+            const files = Array.from(e.dataTransfer.files);
 
-    if (files.length > 0) {
-      setUploadedFiles((prev) => [...prev, ...files]);
-      setProgress(2);
-    }
-  }}
-  className="border-2 border-dashed border-gray-300 bg-white rounded-[32px] p-7 mb-5 flex flex-col items-center justify-center text-center group hover:border-gray-300 transition-colors cursor-pointer"
->
-  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-    <CloudUpload className="text-black" size={30} />
-  </div>
+            if (files.length > 0) {
+              setUploadedFiles((prev) => [...prev, ...files]);
+              setProgress(2);
+            }
+          }}
+          className="border-2 border-dashed border-gray-300 bg-white rounded-[32px] p-7 mb-5 flex flex-col items-center justify-center text-center group hover:border-gray-300 transition-colors cursor-pointer"
+        >
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <CloudUpload className="text-black" size={30} />
+          </div>
 
-  <p className="text-lg font-semibold mb-1">
-    Choose a file or drag & drop it here
-  </p>
+          <p className="text-lg font-semibold mb-1">
+            Choose a file or drag & drop it here
+          </p>
 
-  <p className="text-gray-500 text-light mb-6 uppercase tracking-wider">
-    JPEG, PNG, upto 10MB
-  </p>
+          <p className="text-gray-500 text-light mb-6 uppercase tracking-wider">
+            JPEG, PNG, upto 10MB
+          </p>
 
-  <input
-    ref={fileInputRef}
-    type="file"
-    multiple
-    accept=".pdf,.txt,.doc,.docx"
-    hidden
-    onChange={(e) => {
-      const files = Array.from(e.target.files || []);
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept=".pdf,.txt,.doc,.docx"
+            hidden
+            onChange={(e) => {
+              const files = Array.from(e.target.files || []);
 
-      if (files.length > 0) {
-        setUploadedFiles((prev) => [...prev, ...files]);
-        setProgress(2);
-      }
-    }}
-  />
+              if (files.length > 0) {
+                setUploadedFiles((prev) => [...prev, ...files]);
+                setProgress(2);
+              }
+            }}
+          />
 
-  <div
-    onClick={() => fileInputRef.current?.click()}
-    className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
-  >
-    {uploadedFiles.length > 0 ? "Browse More" : "Browse Files"}
-  </div>
-</div>
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
+          >
+            {uploadedFiles.length > 0 ? "Browse More" : "Browse Files"}
+          </div>
+        </div>
 
-<p className="text-center text-gray-500 text-lg font-medium mb-5">
-  Upload images of your preferred document/image
-</p>
-
-{/* Uploaded Files */}
-{uploadedFiles.length > 0 && (
-  <div className="space-y-3 mb-8">
-    {uploadedFiles.map((file, index) => (
-      <div
-        key={index}
-        className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl px-5 py-3 mb-2"
-      >
-        <p className="text-sm text-gray-600 font-medium truncate">
-          {file.name}
+        <p className="text-center text-gray-500 text-lg font-medium mb-5">
+          Upload images of your preferred document/image
         </p>
 
-        <button
-          onClick={() => {
-            setUploadedFiles((prev) =>
-              prev.filter((_, i) => i !== index)
-            );
-          }}
-          className="ml-4 text-gray-400 hover:text-red-500 transition-colors"
-        >
-          <X size={18} className="cursor-pointer"/>
-        </button>
-      </div>
-    ))}
-  </div>
-)}
+        {/* Uploaded Files */}
+        {uploadedFiles.length > 0 && (
+          <div className="space-y-3 mb-8">
+            {uploadedFiles.map((file, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl px-5 py-3 mb-2"
+              >
+                <p className="text-sm text-gray-600 font-medium truncate">
+                  {file.name}
+                </p>
+
+                <button
+                  onClick={() => {
+                    setUploadedFiles((prev) =>
+                      prev.filter((_, i) => i !== index),
+                    );
+                  }}
+                  className="ml-4 text-gray-400 hover:text-red-500 transition-colors"
+                >
+                  <X size={18} className="cursor-pointer" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Due Date */}
-<div className="mb-12">
-  <label className="block text-sm font-bold mb-3">
-    Due Date
-  </label>
+        <div className="mb-12">
+          <label className="block text-sm font-bold mb-3">Due Date</label>
 
-  <Popover>
-    <PopoverTrigger asChild>
-      <button
-        className={`w-full flex items-center justify-between border-2 border-gray-200 rounded-full px-6 py-4 bg-white hover:border-gray-300 transition-all ${
-          dueDate
-            ? "text-black"
-            : "text-gray-400"
-        }`}
-      >
-        <span className="font-medium">
-          {dueDate
-            ? format(
-                new Date(dueDate),
-                "PPP"
-              )
-            : "Select due date"}
-        </span>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className={`w-full flex items-center justify-between border-2 border-gray-200 rounded-full px-6 py-4 bg-white hover:border-gray-300 transition-all ${
+                  dueDate ? "text-black" : "text-gray-400"
+                }`}
+              >
+                <span className="font-medium">
+                  {dueDate
+                    ? format(new Date(dueDate), "PPP")
+                    : "Select due date"}
+                </span>
 
-<Image
-          src="/calendar-icon.svg"
-          alt="Calendar"
-          height={25}
-          width={25}
-        />
-      </button>
-    </PopoverTrigger>
+                <Image
+                  src="/calendar-icon.svg"
+                  alt="Calendar"
+                  height={25}
+                  width={25}
+                />
+              </button>
+            </PopoverTrigger>
 
-    <PopoverContent
-      className="w-auto p-0 rounded-3xl border-none shadow-2xl"
-      align="start"
-    >
-      <Calendar
-        mode="single"
-        selected={
-          dueDate
-            ? new Date(dueDate)
-            : undefined
-        }
-        onSelect={(date) => {
-          if (date) {
-            setDueDate(
-              date.toISOString()
-            );
-          }
-        }}
-        disabled={(date) =>
-          date <
-          new Date(
-            new Date().setHours(
-              0,
-              0,
-              0,
-              0
-            )
-          )
-        }
-      />
-    </PopoverContent>
-  </Popover>
-</div>
+            <PopoverContent
+              className="w-auto p-0 rounded-3xl border-none shadow-2xl"
+              align="start"
+            >
+              <Calendar
+                mode="single"
+                selected={dueDate ? new Date(dueDate) : undefined}
+                onSelect={(date) => {
+                  if (date) {
+                    setDueDate(date.toISOString());
+                  }
+                }}
+                disabled={(date) =>
+                  date < new Date(new Date().setHours(0, 0, 0, 0))
+                }
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
 
         {/* Questions Section */}
         <div className="mb-6">
@@ -602,7 +524,7 @@ const {
 
           <button
             onClick={addRow}
-            className="flex items-center gap-2 px-1 text-sm font-bold text-[#2D2D2D] hover:bg-gray-50 rounded-2xl transition-colors"
+            className="flex cursor-pointer items-center gap-2 px-1 text-sm font-bold text-[#2D2D2D] hover:bg-gray-50 rounded-2xl transition-colors"
           >
             <div className="w-10 h-10 bg-[#2D2D2D] rounded-full flex items-center justify-center text-white">
               <Plus size={20} strokeWidth={3} />
@@ -637,24 +559,18 @@ const {
               className="w-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-[32px] p-6 focus:outline-none focus:ring-2 focus:ring-[#2D2D2D]/5 font-medium text-gray-600 resize-none"
             />
             <button
-  onClick={startListening}
-  type="button"
-  className={`absolute right-8 bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
-    isListening
-      ? "scale-110 bg-red-50"
-      : ""
-  }`}
->
-  <Mic
-    size={20}
-    className={
-      isListening
-        ? "text-red-500"
-        : "text-black"
-    }
-  />
-</button>
-{/* {isListening && (
+              onClick={startListening}
+              type="button"
+              className={`absolute right-8 bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
+                isListening ? "scale-110 bg-red-50" : ""
+              }`}
+            >
+              <Mic
+                size={20}
+                className={isListening ? "text-red-500" : "text-black"}
+              />
+            </button>
+            {/* {isListening && (
   <p className="text-sm text-red-500 mt-3 font-medium animate-pulse">
     Listening...
   </p>
@@ -666,37 +582,32 @@ const {
       {/* Navigation Buttons */}
       <div className="max-w-5xl mx-auto flex justify-between items-center px-4">
         <button
-          onClick={() =>
-  router.back()
-}
-          className="flex items-center gap-3 px-8 py-3.5 bg-white border border-gray-100 rounded-full font-bold text-sm shadow-sm hover:bg-gray-50 transition-all"
+          onClick={() => router.back()}
+          className="flex cursor-pointer items-center gap-3 px-8 py-3.5 bg-white border border-gray-100 rounded-full font-bold text-sm shadow-sm hover:bg-gray-50 transition-all"
         >
           <ArrowLeft size={18} />
           Previous
         </button>
         <button
-  onClick={handleGenerate}
-  disabled={loading}
-  className="flex items-center gap-3 px-8 py-3.5 bg-[#111827] text-white rounded-full font-bold text-sm shadow-lg hover:bg-black transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
->
-  {loading ? (
-    <>
-      Generating...
-    </>
-  ) : (
-    <>
-      Next
-
-      <ArrowRight
-        size={18}
-        className="group-hover:translate-x-1 transition-transform"
-      />
-    </>
-  )}
-</button>
-          
+          onClick={handleGenerate}
+          disabled={loading}
+          className="flex cursor-pointer items-center gap-3 px-8 py-3.5 bg-[#111827] text-white rounded-full font-bold text-sm shadow-lg hover:bg-black transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? (
+            <>Generating...</>
+          ) : (
+            <>
+              Next
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </>
+          )}
+        </button>
       </div>
     </div>
+    </>
   );
 };
 

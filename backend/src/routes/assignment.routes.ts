@@ -3,6 +3,7 @@ import express from "express";
 import {
   createAssignment,
   getAssignments,
+  regenerateAssignment,
   getAssignmentById,
 } from "../controllers/assignment.controller";
 
@@ -14,8 +15,13 @@ const router =
 
 router.post(
   "/create",
-  upload.single("file"),
+  upload.array("files",50), //50 is max limit for number of files
   createAssignment
+);
+
+router.post(
+  "/:id/regenerate",
+  regenerateAssignment
 );
 
 router.get(

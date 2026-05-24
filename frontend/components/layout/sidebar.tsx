@@ -16,26 +16,35 @@ const Sidebar = () => {
   return (
     <aside className="w-[290px] h-screen bg-white rounded-[32px] shadow-sm border border-zinc-200/70 flex flex-col p-6 sticky top-0">
       {/* Logo */}
-      <div className="flex items-center mb-6">
-        <Image
-          src="/veda-ai-logo.svg"
-          alt="VedaAI Logo"
-          width={72}
-          height={72}
-          className="w-[72px] h-[72px]"
-        />
+      <Link href="/">
+        <div className="flex items-center mb-6">
+          <Image
+            src="/veda-ai-logo.svg"
+            alt="VedaAI Logo"
+            width={72}
+            height={72}
+            loading="eager"
+            className="w-[72px] h-[72px]"
+          />
 
-        <span className="text-[2rem] font-bold tracking-tight text-[#2D2D2D] mb-5">
-          VedaAI
-        </span>
-      </div>
+          <span className="text-[2rem] font-bold tracking-tight text-[#2D2D2D] mb-5">
+            VedaAI
+          </span>
+        </div>
+      </Link>
 
       {/* Create Assignment */}
       <div className="mb-10">
         <div className="p-[3px] rounded-full bg-gradient-to-b from-[#FF7A50] to-[#C1350A]">
           <Link href="/assignments/create">
             <button className="w-full cursor-pointer bg-[#2D2D2D] hover:bg-black transition-all duration-300 text-white rounded-full py-3 px-6 flex items-center justify-center gap-2 font-medium">
-              <Image src="/star-icon.svg" alt="star" width={18} height={18} />
+              <Image
+                src="/star-icon.svg"
+                alt="star"
+                width={18}
+                height={18}
+                className="w-auto h-auto"
+              />
               Create Assignment
             </button>
           </Link>

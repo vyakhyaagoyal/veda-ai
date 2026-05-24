@@ -1,18 +1,10 @@
-import axios from "@/lib/axios";
+import api from "@/lib/axios";
 
 export const assignmentService = {
   async getAssignments() {
     const response =
-      await axios.get("/assignments");
+      await api.get("/assignments");
 
     return response.data.data;
-  },
-
-  async deleteAssignment(
-    id: string
-  ) {
-    return axios.delete(
-      `/assignments/${id}`
-    );
   },
 };

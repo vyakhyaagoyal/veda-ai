@@ -19,7 +19,7 @@ const MainContent = (
           {/* Mocking the complex illustration from the screenshot with layered SVGs */}
           <div className="relative w-60 h-60 flex items-center justify-center">
              
-            <Image src="/illustrations.svg" alt="No Assignments" width={256} height={256} />
+            <Image src="/illustrations.svg" alt="No Assignments" width={256} height={256} loading="eager"/>
           </div>
         </div>
 

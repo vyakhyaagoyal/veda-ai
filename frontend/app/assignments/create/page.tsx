@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter }
   from "next/navigation";
 
@@ -61,8 +61,8 @@ const QUESTION_TYPES = [
 const CreateAssignment = () => {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isListening, setIsListening] =
-  React.useState(false);
+  const [isListening, setIsListening] = useState(false);
+const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const startListening = () => {
   if (
@@ -349,63 +349,86 @@ const {
         </div>
 
         {/* Upload Zone */}
-        <div className="border-2 border-dashed border-gray-300 bg-white rounded-[32px] p-7 mb-5 flex flex-col items-center justify-center text-center group hover:border-gray-300 transition-colors cursor-pointer">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <CloudUpload className="text-black" size={30} />
-          </div>
-          <p className="text-lg font-semibold mb-1">
-            Choose a file or drag & drop it here
-          </p>
-          <p className="text-gray-500 text-light mb-6 uppercase tracking-wider">
-            JPEG, PNG, upto 10MB
-          </p>
+<div
+  onDragOver={(e) => e.preventDefault()}
+  onDrop={(e) => {
+    e.preventDefault();
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,.txt,.doc,.docx"
-            hidden
-            onChange={(e) => {
-              const file = e.target.files?.[0];
+    const files = Array.from(e.dataTransfer.files);
 
-              if (file) {
-                setUploadedFile(file);
-                setProgress(2);
-              }
-            }}
-          />
+    if (files.length > 0) {
+      setUploadedFiles((prev) => [...prev, ...files]);
+      setProgress(2);
+    }
+  }}
+  className="border-2 border-dashed border-gray-300 bg-white rounded-[32px] p-7 mb-5 flex flex-col items-center justify-center text-center group hover:border-gray-300 transition-colors cursor-pointer"
+>
+  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+    <CloudUpload className="text-black" size={30} />
+  </div>
 
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
-          >
-            Browse Files
-          </div>
-        </div>
-        <p className="text-center text-gray-500 text-lg font-medium mb-12">
-          Upload images of your preferred document/image
+  <p className="text-lg font-semibold mb-1">
+    Choose a file or drag & drop it here
+  </p>
+
+  <p className="text-gray-500 text-light mb-6 uppercase tracking-wider">
+    JPEG, PNG, upto 10MB
+  </p>
+
+  <input
+    ref={fileInputRef}
+    type="file"
+    multiple
+    accept=".pdf,.txt,.doc,.docx"
+    hidden
+    onChange={(e) => {
+      const files = Array.from(e.target.files || []);
+
+      if (files.length > 0) {
+        setUploadedFiles((prev) => [...prev, ...files]);
+        setProgress(2);
+      }
+    }}
+  />
+
+  <div
+    onClick={() => fileInputRef.current?.click()}
+    className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
+  >
+    {uploadedFiles.length > 0 ? "Browse More" : "Browse Files"}
+  </div>
+</div>
+
+<p className="text-center text-gray-500 text-lg font-medium mb-5">
+  Upload images of your preferred document/image
+</p>
+
+{/* Uploaded Files */}
+{uploadedFiles.length > 0 && (
+  <div className="space-y-3 mb-8">
+    {uploadedFiles.map((file, index) => (
+      <div
+        key={index}
+        className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl px-5 py-3 mb-2"
+      >
+        <p className="text-sm text-gray-600 font-medium truncate">
+          {file.name}
         </p>
 
-        {/* Due Date */}
-        {/* <div className="mb-12">
-          <label className="block text-sm font-bold mb-3">Due Date</label>
-          <div className="relative max-w-full">
-            <input
-              type="text"
-              placeholder="DD-MM-YYYY"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full border-2 border-gray-200 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#2D2D2D]/5 font-medium text-gray-600"
-            />
-            <Image
-              src="/calendar-icon.svg"
-              alt="Calendar"
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400"
-              height={30}
-              width={30}
-            />
-          </div>
-        </div> */}
+        <button
+          onClick={() => {
+            setUploadedFiles((prev) =>
+              prev.filter((_, i) => i !== index)
+            );
+          }}
+          className="ml-4 text-gray-400 hover:text-red-500 transition-colors"
+        >
+          <X size={18} className="cursor-pointer"/>
+        </button>
+      </div>
+    ))}
+  </div>
+)}
 
         {/* Due Date */}
 <div className="mb-12">

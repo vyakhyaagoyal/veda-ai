@@ -80,7 +80,8 @@ export const generatePaper =
     try {
       const model =
         genAI.getGenerativeModel({
-          model: "gemini-1.5-flash",
+          model:
+            "gemini-2.0-flash",
         });
 
       const result =
@@ -91,18 +92,33 @@ export const generatePaper =
       const response =
         result.response.text();
 
-      try {
-        return JSON.parse(response);
-      } catch {
-        return {
-          sections: [],
-        };
+      const cleaned =
+        response
+          .replace(/```json/g, "")
+          .replace(/```/g, "")
+          .trim();
+
+      const parsed =
+        JSON.parse(cleaned);
+
+      // -----------------------------
+      // VALIDATION
+      // -----------------------------
+      if (
+        !parsed.sections ||
+        !Array.isArray(
+          parsed.sections
+        )
+      ) {
+        throw new Error(
+          "Invalid AI response"
+        );
       }
+
+      return parsed;
     } catch (error) {
       console.error(error);
 
-      return {
-        sections: [],
-      };
+      throw error;
     }
   };

@@ -43,6 +43,7 @@ const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchAssignment = async () => {
+    setLoading(true);
     try {
       const data = await paperService.getAssignment(assignmentId);
 
@@ -74,18 +75,6 @@ const [error, setError] = useState("");
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F9F9F9]">
         <Loader2 className="animate-spin text-black" />
-      </div>
-    );
-  }
-
-  if (assignment.status === "generating") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
-        <Loader2 className="animate-spin text-black mb-6" />
-
-        <h2 className="text-3xl font-bold">Generating Question Paper</h2>
-
-        <p className="text-zinc-500 mt-4">AI is preparing your assessment...</p>
       </div>
     );
   }
@@ -140,9 +129,21 @@ if (
       </h2>
 
       <p className="text-zinc-500 mt-4">
-        Please regenerate the
-        assignment.
+       {assignment.failureReason ||
+  error ||
+  "Please regenerate the assignment."}
       </p>
+    </div>
+  );
+}
+
+if (
+  !assignment.generatedPaper
+    ?.sections?.length
+) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p>No questions generated.</p>
     </div>
   );
 }
@@ -175,9 +176,14 @@ if (
 
             <button
               onClick={async () => {
-                await paperService.regeneratePaper(assignmentId);
+                await paperService.regeneratePaper(
+  assignmentId
+);
 
-                fetchAssignment();
+setAssignment((prev: any) => ({
+  ...prev,
+  status: "queued",
+}));
               }}
               className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full font-semibold text-sm hover:bg-orange-600 transition-all"
             >
@@ -194,7 +200,7 @@ if (
                 Delhi Public School, Sector-4, Bokaro
               </h2>
               <h3 className="text-2xl font-bold text-gray-700 mb-1">
-                Subject: Science
+                {assignment.title}
               </h3>
               <h3 className="text-2xl font-bold text-gray-700 mb-1">
                 Class: 5th
@@ -242,7 +248,7 @@ if (
           </div> */}
 
             {/* Questions List */}
-            {/* <div className="space-y-3 mb-5 px-4">
+            <div className="space-y-3 mb-5 px-4">
               <div className="mb-6">
                 <h5 className="font-bold text-sm text-[#2D2D2D] mb-1">
                   Short Answer Questions
@@ -304,7 +310,7 @@ if (
                   </div>
                 ),
               )}
-            </div> */}
+            </div>
 
             <div className="mb-20 px-4">
               <span className="text-base font-bold tracking-tight">
@@ -319,10 +325,16 @@ if (
               </div>
 
               <div className="space-y-3">
+                {/* <p className="mt-2 text-sm text-zinc-600">
+  <span className="font-semibold">
+    Answer:
+  </span>{" "}
+  {question.answer}
+</p> */}
                 {assignment.generatedPaper?.sections?.flatMap(
   (section: any) => section.questions
 ).map((q: any, idx: number) => (
-                  <div key={q.id} className="flex gap-4">
+                  <div key={idx} className="flex gap-4">
                     <span className="font-light text-base text-black">
                       {idx + 1}.
                     </span>

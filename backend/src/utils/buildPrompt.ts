@@ -40,6 +40,10 @@ IMPORTANT RULES
 9. Follow the teacher instructions carefully.
 
 10. Return ONLY valid JSON.
+
+11. Generate a short professional assignment title based on the study material.
+
+12. Every question must include a short answer key.
 DO NOT return markdown.
 DO NOT wrap response in triple backticks.
 
@@ -66,15 +70,19 @@ OUTPUT FORMAT
 ==============================
 
 {
+"title": "Quiz on Photosynthesis",
   "sections": [
     {
       "title": "Section A",
       "instruction": "Attempt all questions",
       "questions": [
         {
-          "question": "What is photosynthesis?",
-          "difficulty": "easy",
-          "marks": 2
+          {
+  "question": "What is photosynthesis?",
+  "answer": "Process by which green plants make food using sunlight.",
+  "difficulty": "easy",
+  "marks": 2
+}
         }
       ]
     }

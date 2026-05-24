@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export interface Assignment {
+  createdAt: string | number | Date;
   _id: string;
   title: string;
   assignedOn: string;

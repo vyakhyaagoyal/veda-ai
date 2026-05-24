@@ -6,6 +6,7 @@ import {
   regenerateAssignment,
   getAssignmentById,
   downloadPDF,
+  deleteAssignment,
 } from "../controllers/assignment.controller";
 
 import { upload }
@@ -38,6 +39,11 @@ router.get(
 router.get(
   "/:id/pdf",
   downloadPDF
+);
+
+router.delete(
+  "/:id",
+  deleteAssignment
 );
 
 export default router;

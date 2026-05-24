@@ -75,11 +75,18 @@ new Worker(
           prompt
         );
 
+        assignment.title =
+  generatedPaper.title ||
+  "Untitled Assignment";
+
       // -----------------------------
       // SAVE GENERATED PAPER
       // -----------------------------
-      assignment.generatedPaper =
-        generatedPaper;
+      assignment.generatedPaper = {
+  sections:
+    generatedPaper.sections ||
+    [],
+};
 
       assignment.status =
         "completed";

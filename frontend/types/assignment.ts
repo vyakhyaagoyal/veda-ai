@@ -33,6 +33,8 @@ export interface Assignment {
 
   createdAt: string;
 
+updatedAt: string;
+
   status:
     | "draft"
     | "generating"

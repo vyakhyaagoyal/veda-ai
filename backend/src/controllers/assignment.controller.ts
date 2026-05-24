@@ -156,6 +156,30 @@ export const createAssignment =
 }
   };
 
+  export const deleteAssignment =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      await Assignment.findByIdAndDelete(
+        req.params.id
+      );
+
+      return res.json({
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+        });
+    }
+  };
+
   export const regenerateAssignment =
   async (
     req: Request,

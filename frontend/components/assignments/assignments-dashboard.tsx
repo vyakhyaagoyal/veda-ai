@@ -11,12 +11,12 @@ import {
 
 import { useRouter } from "next/navigation";
 
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import { assignmentService } from "@/services/assignment.service";
 
@@ -55,23 +55,25 @@ export default function Page() {
   }, []);
 
   // DELETE
-  // const handleDelete = async (id: string) => {
-  //   try {
-  //     removeAssignment(id);
+  const handleDelete = async (id: string) => {
+    try {
+      removeAssignment(id);
 
-  //     await assignmentService.deleteAssignment(id);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+      await assignmentService.deleteAssignment(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // SEARCH
   const filteredAssignments = useMemo(() => {
     if (!Array.isArray(assignments)) return [];
 
     return assignments.filter((assignment) =>
-      assignment.title.toLowerCase().includes(search.toLowerCase()),
-    );
+  (assignment.title || "")
+    .toLowerCase()
+    .includes(search.toLowerCase()),
+);
   }, [assignments, search]);
 
   return (
@@ -158,6 +160,71 @@ export default function Page() {
                   className="group bg-white rounded-[32px] p-6 border border-zinc-200/60 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300"
                 >
                   {/* CARD CONTENT */}
+                  <div className="flex flex-col h-full justify-between">
+  {/* TOP */}
+  <div className="flex items-start justify-between">
+    <h2 className="text-[32px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
+      {assignment.title ||
+        "Untitled Assignment"}
+    </h2>
+
+    <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <button className="text-zinc-400 hover:text-zinc-600 transition-colors">
+      ⋮
+    </button>
+  </DropdownMenuTrigger>
+
+  <DropdownMenuContent
+    align="end"
+    className="rounded-2xl border-none shadow-xl p-2"
+  >
+    <DropdownMenuItem
+      onClick={() =>
+        router.push(
+          `/assignments/${assignment._id}`
+        )
+      }
+      className="rounded-xl cursor-pointer"
+    >
+      View Assignment
+    </DropdownMenuItem>
+
+    <DropdownMenuItem
+      onClick={() =>
+        handleDelete(
+          assignment._id
+        )
+      }
+      className="rounded-xl text-red-500 cursor-pointer"
+    >
+      Delete
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+  </div>
+
+  {/* BOTTOM */}
+  <div className="flex items-center justify-between mt-10">
+    <div className="text-sm text-zinc-500">
+      <span className="font-semibold text-black">
+        Assigned on :
+      </span>{" "}
+      {new Date(
+        assignment.createdAt
+      ).toLocaleDateString()}
+    </div>
+
+    <div className="text-sm text-zinc-500">
+      <span className="font-semibold text-black">
+        Due :
+      </span>{" "}
+      {new Date(
+        assignment.dueDate
+      ).toLocaleDateString()}
+    </div>
+  </div>
+</div>
                 </div>
               )
             )}

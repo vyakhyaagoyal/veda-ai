@@ -10,6 +10,11 @@ const QuestionSchema =
   required: true,
 },
 
+answer: {
+  type: String,
+  required: true,
+},
+
 difficulty: {
   type: String,
   enum: [
@@ -63,6 +68,7 @@ instruction: {
 const AssignmentSchema =
   new Schema(
     {
+      title: String,
       dueDate: String,
 
       additionalInfo: String,

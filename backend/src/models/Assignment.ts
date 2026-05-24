@@ -18,9 +18,9 @@ answer: {
 difficulty: {
   type: String,
   enum: [
-    "easy",
-    "medium",
-    "hard",
+    "Easy",
+    "Moderate",
+    "Challenging",
   ],
 },
 
@@ -68,6 +68,10 @@ instruction: {
 const AssignmentSchema =
   new Schema(
     {
+      teacherName: {
+  type: String,
+  default: "Teacher",
+},
       title: String,
       dueDate: String,
 

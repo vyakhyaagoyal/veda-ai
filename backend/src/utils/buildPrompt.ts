@@ -23,9 +23,9 @@ IMPORTANT RULES
 - marks
 
 3. Difficulty must ONLY be:
-- easy
-- medium
-- hard
+- Easy
+- Moderate
+- Challenging
 
 4. Generate questions ONLY from the uploaded study material.
 

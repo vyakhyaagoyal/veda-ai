@@ -58,10 +58,12 @@ export const createAssignment =
   ) => {
     try {
       const {
-        dueDate,
-        additionalInfo,
-        rows,
-      } = req.body;
+  title,
+  dueDate,
+  additionalInfo,
+  rows,
+  teacherName,
+} = req.body;
 
       const sourceContent =
   req.file
@@ -83,7 +85,7 @@ export const createAssignment =
       const assignment =
   await Assignment.create({
     dueDate,
-
+teacherName,
     additionalInfo,
 
     sourceContent,

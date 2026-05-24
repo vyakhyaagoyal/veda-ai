@@ -163,7 +163,7 @@ export default function Page() {
                   <div className="flex flex-col h-full justify-between">
   {/* TOP */}
   <div className="flex items-start justify-between">
-    <h2 className="text-[32px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
+    <h2 className="text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
       {assignment.title ||
         "Untitled Assignment"}
     </h2>
@@ -176,9 +176,17 @@ export default function Page() {
   </DropdownMenuTrigger>
 
   <DropdownMenuContent
-    align="end"
-    className="rounded-2xl border-none shadow-xl p-2"
-  >
+  align="end"
+  className="
+    w-52
+    rounded-2xl
+    border
+    border-zinc-200
+    shadow-2xl
+    p-3
+    bg-white
+  "
+>
     <DropdownMenuItem
       onClick={() =>
         router.push(
@@ -240,7 +248,7 @@ export default function Page() {
               "/assignments/create"
             )
           }
-          className="bg-[#111111] hover:bg-black text-white px-8 py-3 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-300 hover:scale-[1.03]"
+          className="bg-[#111111] cursor-pointer hover:bg-black text-white px-8 py-3 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-300 hover:scale-[1.03]"
         >
           <Plus size={20} />
           Create Assignment

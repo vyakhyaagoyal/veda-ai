@@ -14,7 +14,7 @@ import { useGenerationSocket } from "@/hooks/useGenerationSocket";
 export interface Question {
   question: string;
 
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: "Easy" | "Moderate" | "Challenging";
 
   marks: number;
 
@@ -39,7 +39,7 @@ const QuestionPaper = () => {
   const assignmentId = params.id as string;
 
   const [assignment, setAssignment] = useState<any>(null);
-const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchAssignment = async () => {
@@ -60,16 +60,14 @@ const [error, setError] = useState("");
   }, []);
 
   useGenerationSocket({
-  assignmentId,
+    assignmentId,
 
-  onComplete: fetchAssignment,
+    onComplete: fetchAssignment,
 
-  onFailed: () => {
-    setError(
-      "Generation failed"
-    );
-  },
-});
+    onFailed: () => {
+      setError("Generation failed");
+    },
+  });
 
   if (loading || !assignment) {
     return (
@@ -79,77 +77,53 @@ const [error, setError] = useState("");
     );
   }
 
-  if (
-  assignment.status ===
-  "queued"
-) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
-      <Loader2 className="animate-spin mb-6" />
+  if (assignment.status === "queued") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
+        <Loader2 className="animate-spin mb-6" />
 
-      <h2 className="text-3xl font-bold">
-        Queued for Generation
-      </h2>
+        <h2 className="text-3xl font-bold">Queued for Generation</h2>
 
-      <p className="text-zinc-500 mt-4">
-        Waiting for worker...
-      </p>
-    </div>
-  );
-}
+        <p className="text-zinc-500 mt-4">Waiting for worker...</p>
+      </div>
+    );
+  }
 
-if (
-  assignment.status ===
-  "generating"
-) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
-      <Loader2 className="animate-spin mb-6" />
+  if (assignment.status === "generating") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
+        <Loader2 className="animate-spin mb-6" />
 
-      <h2 className="text-3xl font-bold">
-        Generating Question Paper
-      </h2>
+        <h2 className="text-3xl font-bold">Generating Question Paper</h2>
 
-      <p className="text-zinc-500 mt-4">
-        AI is preparing your
-        assessment...
-      </p>
-    </div>
-  );
-}
+        <p className="text-zinc-500 mt-4">AI is preparing your assessment...</p>
+      </div>
+    );
+  }
 
-if (
-  assignment.status ===
-  "failed"
-) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
-      <h2 className="text-3xl font-bold text-red-500">
-        Generation Failed
-      </h2>
+  if (assignment.status === "failed") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9]">
+        <h2 className="text-3xl font-bold text-red-500">Generation Failed</h2>
 
-      <p className="text-zinc-500 mt-4">
-       {assignment.failureReason ||
-  error ||
-  "Please regenerate the assignment."}
-      </p>
-    </div>
-  );
-}
+        <p className="text-zinc-500 mt-4">
+          {assignment.failureReason ||
+            error ||
+            "Please regenerate the assignment."}
+        </p>
+      </div>
+    );
+  }
 
-if (
-  !assignment.generatedPaper
-    ?.sections?.length
-) {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <p>No questions generated.</p>
-    </div>
-  );
-}
+  if (!assignment.generatedPaper?.sections?.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>No questions generated.</p>
+      </div>
+    );
+  }
 
   return (
-    
     <div className="min-h-screen bg-[#F3F4F6]/50 font-sans text-[#2D2D2D]">
       <div className="max-w-8xl mx-auto rounded-2xl bg-black/60">
         <main className="w-full mx-auto py-4 px-4">
@@ -157,39 +131,39 @@ if (
           <div className="flex flex-col bg-black/70 rounded-3xl p-6 mb-4 items-start justify-start shadow-lg">
             <div className="flex items-center gap-4">
               <p className="text-white/90 text-md mb-3 font-medium leading-relaxed">
-                Certainly, Lakshya! Here are customized Question Paper for your
-                CBSE Grade 8 Science classes on the NCERT chapters:
+                Certainly, {assignment.teacherName || "Teacher"}! Here are
+                customized Question Paper for your CBSE Grade 8 Science classes
+                on the NCERT chapters:
               </p>
             </div>
-            
-            <button
-              onClick={() =>
-                window.open(
-                  `${process.env.NEXT_PUBLIC_API_URL}/assignments/${assignmentId}/pdf`,
-                )
-              }
-              className="flex items-center gap-2 px-6 py-3 bg-white text-[#111827] rounded-full font-semibold text-sm hover:bg-gray-100 transition-all"
-            >
-              <Download size={18} />
-              Download as PDF
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() =>
+                  window.open(
+                    `${process.env.NEXT_PUBLIC_API_URL}/assignments/${assignmentId}/pdf`,
+                  )
+                }
+                className="flex cursor-pointer items-center gap-2 px-6 py-3 bg-white text-[#111827] rounded-full font-semibold text-sm hover:bg-gray-100 transition-all"
+              >
+                <Download size={18} />
+                Download as PDF
+              </button>
 
-            <button
-              onClick={async () => {
-                await paperService.regeneratePaper(
-  assignmentId
-);
+              <button
+                onClick={async () => {
+                  await paperService.regeneratePaper(assignmentId);
 
-setAssignment((prev: any) => ({
-  ...prev,
-  status: "queued",
-}));
-              }}
-              className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full font-semibold text-sm hover:bg-orange-600 transition-all"
-            >
-              <RotateCcw size={18} />
-              Regenerate
-            </button>
+                  setAssignment((prev: any) => ({
+                    ...prev,
+                    status: "queued",
+                  }));
+                }}
+                className="flex cursor-pointer items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full font-semibold text-sm hover:bg-orange-600 transition-all"
+              >
+                <RotateCcw size={18} />
+                Regenerate
+              </button>
+            </div>
           </div>
 
           {/* Paper Container */}
@@ -261,7 +235,6 @@ setAssignment((prev: any) => ({
               {assignment.generatedPaper?.sections?.map(
                 (section: any, sectionIndex: number) => (
                   <div key={sectionIndex} className="mb-14">
-                    
                     <div className="text-center mb-12">
                       <div className="inline-block pb-2 px-8">
                         <h4 className="text-2xl font-black tracking-tight">
@@ -276,7 +249,7 @@ setAssignment((prev: any) => ({
                       </h5>
                     </div>
 
-                    <div className="space-y-5">
+                    <div className="space-y-3">
                       {section.questions.map((q: any, idx: number) => (
                         <div key={idx} className="flex gap-4">
                           <span className="font-light text-lg text-black min-w-[24px]">
@@ -284,22 +257,16 @@ setAssignment((prev: any) => ({
                           </span>
 
                           <div className="flex-1">
-                            <div className="text-base leading-relaxed text-black font-light">
+                            <div className="text-base leading-tight text-black font-light">
                               <span
-                                className={`mr-2 px-2 py-1 rounded-full text-xs font-semibold ${
-                                  q.difficulty === "easy"
-                                    ? "bg-green-100 text-green-700"
-                                    : q.difficulty === "medium"
-                                      ? "bg-yellow-100 text-yellow-700"
-                                      : "bg-red-100 text-red-700"
-                                }`}
+                                className={` px-2 py-1 rounded-full text-base font-light}`}
                               >
-                                {q.difficulty}
+                                [{q.difficulty}]
                               </span>
 
                               {q.question}
 
-                              <span className="ml-3 font-semibold">
+                              <span className="ml-1 font-light">
                                 [{q.marks} Marks]
                               </span>
                             </div>
@@ -331,20 +298,20 @@ setAssignment((prev: any) => ({
   </span>{" "}
   {question.answer}
 </p> */}
-                {assignment.generatedPaper?.sections?.flatMap(
-  (section: any) => section.questions
-).map((q: any, idx: number) => (
-                  <div key={idx} className="flex gap-4">
-                    <span className="font-light text-base text-black">
-                      {idx + 1}.
-                    </span>
-                    <div className="flex-1">
-                      <p className="text-base font-light leading-relaxed text-black">
-                        {q.answer}
-                      </p>
+                {assignment.generatedPaper?.sections
+                  ?.flatMap((section: any) => section.questions)
+                  .map((q: any, idx: number) => (
+                    <div key={idx} className="flex gap-4">
+                      <span className="font-light text-base text-black">
+                        {idx + 1}.
+                      </span>
+                      <div className="flex-1">
+                        <p className="text-base font-light leading-relaxed text-black">
+                          {q.answer}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>

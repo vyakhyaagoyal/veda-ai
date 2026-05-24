@@ -64,33 +64,113 @@
 // }
 //   };
 
-import {
-  GoogleGenerativeAI,
-} from "@google/generative-ai";
+// import {
+//   GoogleGenerativeAI,
+// } from "@google/generative-ai";
 
-const genAI =
-  new GoogleGenerativeAI(
-    process.env.GEMINI_API_KEY!
-  );
+// const genAI =
+//   new GoogleGenerativeAI(
+//     process.env.GEMINI_API_KEY!
+//   );
+
+// export const generatePaper =
+//   async (
+//     prompt: string
+//   ) => {
+//     try {
+//       const model =
+//         genAI.getGenerativeModel({
+//           model:
+//             "gemini-2.0-flash",
+//         });
+
+//       const result =
+//         await model.generateContent(
+//           prompt
+//         );
+
+//       const response =
+//         result.response.text();
+
+//       const cleaned =
+//         response
+//           .replace(/```json/g, "")
+//           .replace(/```/g, "")
+//           .trim();
+
+//       const parsed =
+//         JSON.parse(cleaned);
+
+//       // -----------------------------
+//       // VALIDATION
+//       // -----------------------------
+//       if (
+//         !parsed.sections ||
+//         !Array.isArray(
+//           parsed.sections
+//         )
+//       ) {
+//         throw new Error(
+//           "Invalid AI response"
+//         );
+//       }
+
+//       return parsed;
+//     } catch (error) {
+//       console.error(error);
+
+//       throw error;
+//     }
+//   };
+
+import OpenAI from "openai";
+
+const groq = new OpenAI({
+  apiKey:
+    process.env.GROQ_API_KEY,
+
+  baseURL:
+    "https://api.groq.com/openai/v1",
+});
 
 export const generatePaper =
   async (
     prompt: string
   ) => {
     try {
-      const model =
-        genAI.getGenerativeModel({
-          model:
-            "gemini-2.0-flash",
-        });
+      const completion =
+        await groq.chat.completions.create(
+          {
+            model:
+              "llama-3.3-70b-versatile",
 
-      const result =
-        await model.generateContent(
-          prompt
+            messages: [
+              {
+                role: "system",
+
+                content: `
+You are an expert school teacher.
+
+Return ONLY valid JSON.
+Do not return markdown.
+Do not wrap response in backticks.
+`,
+              },
+
+              {
+                role: "user",
+
+                content: prompt,
+              },
+            ],
+
+            temperature: 0.7,
+          }
         );
 
       const response =
-        result.response.text();
+        completion.choices[0]
+          .message.content || "";
 
       const cleaned =
         response
@@ -101,14 +181,8 @@ export const generatePaper =
       const parsed =
         JSON.parse(cleaned);
 
-      // -----------------------------
-      // VALIDATION
-      // -----------------------------
       if (
-        !parsed.sections ||
-        !Array.isArray(
-          parsed.sections
-        )
+        !parsed.sections
       ) {
         throw new Error(
           "Invalid AI response"

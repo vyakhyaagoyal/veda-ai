@@ -24,29 +24,31 @@ export const generatePDF =
     doc.pipe(res);
 
     // School Name
-    doc
-      .fontSize(22)
-      .font("Helvetica-Bold")
-      .text(
-        "Delhi Public School",
-        {
-          align: "center",
-        }
-      );
-
-    doc.moveDown(0.5);
 
     doc
-      .fontSize(16)
-      .font("Helvetica")
-      .text(
-        "AI Generated Question Paper",
-        {
-          align: "center",
-        }
-      );
+  .fontSize(22)
+  .font("Helvetica-Bold")
+  .text(
+    assignment.title ||
+      "Question Paper",
+    {
+      align: "center",
+    }
+  );
 
-    doc.moveDown(2);
+doc.moveDown(0.5);
+
+doc
+  .fontSize(12)
+  .font("Helvetica")
+  .text(
+    "Delhi Public School, Sector-4, Bokaro",
+    {
+      align: "center",
+    }
+  );
+
+doc.moveDown(1);
 
     // Student Info
     doc

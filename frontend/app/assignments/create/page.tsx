@@ -186,6 +186,10 @@ const CreateAssignment = () => {
 
       const formData = new FormData();
 
+      formData.append(
+  "teacherName",
+  "John Doe"
+);
       formData.append("dueDate", dueDate);
 
       formData.append("additionalInfo", additionalInfo);

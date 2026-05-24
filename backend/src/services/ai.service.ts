@@ -138,8 +138,10 @@ export const generatePaper =
     prompt: string
   ) => {
     try {
-      const completion =
-        await groq.chat.completions.create(
+      console.log(prompt);
+
+const completion =
+  await groq.chat.completions.create(
           {
             model:
               "llama-3.3-70b-versatile",
@@ -181,6 +183,19 @@ Do not wrap response in backticks.
       const parsed =
         JSON.parse(cleaned);
 
+        parsed.sections.forEach(
+  (section: any) => {
+    section.questions.forEach(
+      (question: any) => {
+        question.difficulty =
+          question.difficulty
+            ?.toLowerCase()
+            ?.trim();
+      }
+    );
+  }
+);
+
       if (
         !parsed.sections
       ) {
@@ -192,7 +207,9 @@ Do not wrap response in backticks.
       return parsed;
     } catch (error) {
       console.error(error);
-
+      console.log(
+  "FALLBACK TRIGGERED"
+);
       throw error;
     }
   };

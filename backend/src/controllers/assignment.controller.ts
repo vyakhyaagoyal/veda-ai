@@ -65,12 +65,22 @@ export const createAssignment =
   teacherName,
 } = req.body;
 
+console.log(req.file);
+
       const sourceContent =
   req.file
     ? await parseUploadedFile(
         req.file
       )
     : "";
+
+    console.log(
+  "FINAL SOURCE CONTENT:",
+  sourceContent.slice(
+    0,
+    1000
+  )
+);
 
     if (!rows) {
   return res

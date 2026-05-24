@@ -18,9 +18,9 @@ answer: {
 difficulty: {
   type: String,
   enum: [
-    "Easy",
-    "Moderate",
-    "Challenging",
+    "easy",
+    "medium",
+    "hard",
   ],
 },
 

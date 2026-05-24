@@ -1,7 +1,7 @@
 export type Difficulty =
-  | "Easy"
-  | "Moderate"
-  | "Challenging";
+  | "easy"
+  | "medium"
+  | "hard";
 
 export interface Question {
   id: string;

@@ -23,9 +23,9 @@ IMPORTANT RULES
 - marks
 
 3. Difficulty must ONLY be:
-- Easy
-- Moderate
-- Challenging
+- easy
+- medium
+- hard
 
 4. Generate questions ONLY from the uploaded study material.
 
@@ -44,6 +44,12 @@ IMPORTANT RULES
 11. Generate a short professional assignment title based on the study material.
 
 12. Every question must include a short answer key.
+
+13. Questions must directly reference concepts, terminology, definitions, and examples from the uploaded material.
+
+14. Do NOT generate generic questions unrelated to the uploaded content.
+
+15. Prefer topic-specific terminology from the uploaded material.
 DO NOT return markdown.
 DO NOT wrap response in triple backticks.
 
@@ -77,11 +83,10 @@ OUTPUT FORMAT
       "instruction": "Attempt all questions",
       "questions": [
         {
-          {
-  "question": "What is photosynthesis?",
-  "answer": "Process by which green plants make food using sunlight.",
-  "difficulty": "easy",
-  "marks": 2
+          "question": "What is photosynthesis?",
+          "answer": "Process by which green plants make food using sunlight.",
+          "difficulty": "easy",
+          "marks": 2
 }
         }
       ]

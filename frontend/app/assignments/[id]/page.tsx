@@ -14,7 +14,7 @@ import { useGenerationSocket } from "@/hooks/useGenerationSocket";
 export interface Question {
   question: string;
 
-  difficulty: "Easy" | "Moderate" | "Challenging";
+  difficulty: "easy" | "medium" | "hard";
 
   marks: number;
 

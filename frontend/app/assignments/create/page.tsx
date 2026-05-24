@@ -152,9 +152,6 @@ const CreateAssignment = () => {
     rows,
     setRows,
 
-    uploadedFile,
-    setUploadedFile,
-
     loading,
     setLoading,
 
@@ -196,9 +193,12 @@ const CreateAssignment = () => {
 
       formData.append("rows", JSON.stringify(rows));
 
-      if (uploadedFile) {
-        formData.append("files", uploadedFile);
-      }
+      if (uploadedFiles.length > 0) {
+  formData.append(
+    "file",
+    uploadedFiles[0]
+  );
+}
 
       const response = await generationService.createAssignment(formData);
 

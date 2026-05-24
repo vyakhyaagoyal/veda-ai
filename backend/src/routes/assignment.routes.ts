@@ -17,7 +17,7 @@ const router =
 
 router.post(
   "/create",
-  upload.array("files",50), //50 is max limit for number of files
+  upload.single("file"),
   createAssignment
 );
 

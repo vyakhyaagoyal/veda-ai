@@ -62,6 +62,40 @@ const Topbar = () => {
     }
   };
 
+  const markAsRead = async (
+  id: string
+) => {
+  try {
+    await notificationService.markAsRead(
+      id
+    );
+
+    setNotifications((prev) =>
+      prev.map((notification) =>
+        notification._id === id
+          ? {
+              ...notification,
+              read: true,
+            }
+          : notification
+      )
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const clearAllNotifications =
+  async () => {
+    try {
+      await notificationService.clearAll();
+
+      setNotifications([]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchNotifications();
 
@@ -114,9 +148,38 @@ const Topbar = () => {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-96 rounded-2xl p-2">
-            <div className="px-3 py-2 border-b">
-              <h3 className="font-semibold">Notifications</h3>
-            </div>
+            <div
+  className="
+    px-4
+    py-3
+    border-b
+
+    flex
+    items-center
+    justify-between
+  "
+>
+  <h3 className="font-semibold">
+    Notifications
+  </h3>
+
+  {notifications.length > 0 && (
+    <button
+      onClick={
+        clearAllNotifications
+      }
+      className="
+        text-xs
+        font-medium
+        text-red-500
+        hover:text-red-600
+        transition-colors
+      "
+    >
+      Clear All
+    </button>
+  )}
+</div>
 
             <div className="max-h-[400px] overflow-y-auto">
               {notifications.length === 0 ? (
@@ -127,9 +190,15 @@ const Topbar = () => {
                 notifications.map((notification) => (
                   <button
                     key={notification._id}
-                    onClick={() =>
-                      router.push(`/assignments/${notification.assignmentId}`)
-                    }
+                    onClick={async () => {
+  await markAsRead(
+    notification._id
+  );
+
+  router.push(
+    `/assignments/${notification.assignmentId}`
+  );
+}}
                     className="
                 w-full
                 text-left

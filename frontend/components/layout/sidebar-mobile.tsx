@@ -188,16 +188,23 @@ max-w-[340px]
 
                   {notifications.length > 0 && (
                     <button
-                      onClick={clearAllNotifications}
-                      className="
-            text-xs
-            text-red-500
-            hover:text-red-600
-            flex
-            items-center
-            gap-1
-          "
-                    >
+  onClick={clearAllNotifications}
+  className="
+    flex
+    items-center
+    gap-1
+
+    text-[11px]
+    sm:text-xs
+
+    font-medium
+
+    text-red-500
+    hover:text-red-600
+
+    transition-colors
+  "
+>
                       <Trash2 size={12} />
                       Clear All
                     </button>

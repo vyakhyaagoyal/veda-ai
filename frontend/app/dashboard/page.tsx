@@ -1,14 +1,26 @@
-import React from 'react';
-import MainContent from '../../components/assignments/assignments-dashboard';
+import React from "react";
+
+import MainContent from "../../components/assignments/assignments-dashboard";
 
 const DashboardDesktop = () => {
   return (
-    <div className="flex h-screen bg-[#F9F9F9] antialiased text-[#2D2D2D] overflow-hidden">
+    <div
+      className="
+        w-full
+        min-h-screen
 
-      <div className="flex-1 flex flex-col min-w-0">
-        
+        bg-[#F9F9F9]
+
+        antialiased
+        text-[#2D2D2D]
+
+        overflow-x-hidden
+        overflow-y-auto
+      "
+    >
+      <div className="w-full min-w-0">
         {/* Content Area */}
-        <div className="flex-1">
+        <div className="w-full">
           <MainContent />
         </div>
       </div>
@@ -17,12 +29,3 @@ const DashboardDesktop = () => {
 };
 
 export default DashboardDesktop;
-
-/**
- * Tech Stack & Features Included:
- * - Next.js + TypeScript structure
- * - Tailwind CSS for pixel-perfect layout and styling
- * - Lucide-react for iconography
- * - Responsive flexbox architecture
- * - Hover and active states for interactive elements
- */

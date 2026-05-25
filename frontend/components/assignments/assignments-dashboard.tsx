@@ -282,7 +282,7 @@ export default function Page() {
               </div>
 
               {/* CONTENT */}
-              <div className="pr-2 pb-40">
+              <div className="pr-2 pb-20">
                 {filteredAssignments.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">

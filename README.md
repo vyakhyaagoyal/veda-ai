@@ -19,9 +19,9 @@ The platform is designed with a modern, premium UI and real-time architecture su
 
 ## 🌐 Live Demo
 
-Frontend: https://your-vercel-url.vercel.app
+Frontend: [https://your-vercel-url.vercel.app](https://veda-ai-murex-seven.vercel.app/)
 
-Backend API: https://your-railway-url.up.railway.app
+Backend API: [https://your-railway-url.up.railway.app](https://veda-ai-production-39b3.up.railway.app/)
 
 ---
 

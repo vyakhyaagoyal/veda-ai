@@ -1,5 +1,23 @@
 "use client";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import {
+  Trash2,
+} from "lucide-react";
+
+import {
+  useEffect,
+} from "react";
+
+import { notificationService
+ }
+from "@/services/notification.service";
+
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,25 +31,110 @@ import { useUserStore } from "@/store/user.store";
 
 const SidebarMobile = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [notifications, setNotifications] =
+  useState<any[]>([]);
   const user = useUserStore((state) => state.user);
   const pathname = usePathname();
+
+  useEffect(() => {
+  fetchNotifications();
+}, []);
+
+const fetchNotifications =
+  async () => {
+    try {
+      const data =
+        await notificationService.getNotifications();
+
+      setNotifications(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const clearAllNotifications =
+  async () => {
+    try {
+      await notificationService.clearAll();
+
+      setNotifications([]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+  if (isOpen) {
+    document.body.style.overflow =
+      "hidden";
+  } else {
+    document.body.style.overflow =
+      "auto";
+  }
+
+  return () => {
+    document.body.style.overflow =
+      "auto";
+  };
+}, [isOpen]);
 
   return (
     <>
       {/* ── Floating Topbar ── */}
-      <header className="md:hidden fixed top-4 left-4 right-4 z-[120]">
-        <div className="bg-white rounded-full px-3.5 py-2.5 flex items-center justify-between border border-zinc-200/70 shadow-sm">
+      <header
+  className="
+    md:hidden
+    fixed
+    top-3
+    sm:top-4
+    left-3
+    right-3
+    sm:left-4
+    sm:right-4
+    z-[120]
+  "
+>
+        <div
+  className="
+    bg-white
+    rounded-full
+    px-3
+    sm:px-4
+    py-2
+    sm:py-2.5
+    flex
+    items-center
+    justify-between
+    border
+    border-zinc-200/70
+    shadow-sm
+    backdrop-blur-xl
+  "
+>
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/veda-ai-logo.svg"
-              alt="VedaAI Logo"
-              width={34}
-              height={34}
-              className="w-[34px] h-[34px]"
-            />
-            <span className="text-[17px] font-bold tracking-tight text-[#2D2D2D]">
+  src="/veda-ai-logo.svg"
+  alt="VedaAI Logo"
+  width={34}
+  height={34}
+  className="
+    w-[28px]
+    h-[28px]
+    sm:w-[34px]
+    sm:h-[34px]
+  "
+/>
+           <span
+  className="
+    text-[15px]
+    sm:text-[17px]
+    font-bold
+    tracking-tight
+    text-[#2D2D2D]
+  "
+>
               VedaAI
             </span>
           </Link>
@@ -40,13 +143,129 @@ const SidebarMobile = () => {
           <div className="flex items-center gap-2.5">
 
             {/* Bell */}
-            <button
-              aria-label="Notifications"
-              className="relative p-1"
+            {/* Notifications */}
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <button
+      aria-label="Notifications"
+      className="relative p-1"
+    >
+      <Bell
+        size={20}
+        strokeWidth={1.8}
+        className="text-[#2D2D2D]"
+      />
+
+      {notifications.length >
+        0 && (
+        <span
+          className="
+            absolute
+            top-0.5
+            right-0.5
+            w-2
+            h-2
+            bg-[#E8441A]
+            rounded-full
+            border-[1.5px]
+            border-white
+          "
+        />
+      )}
+    </button>
+  </DropdownMenuTrigger>
+
+  <DropdownMenuContent
+    align="end"
+    className="
+      w-[92vw]
+max-w-[340px]
+      rounded-3xl
+      border-none
+      shadow-2xl
+      p-0
+      overflow-hidden
+      z-[200]
+    "
+  >
+    {/* Header */}
+    <div
+      className="
+        px-5
+        py-4
+        border-b
+        border-zinc-100
+        flex
+        items-center
+        justify-between
+      "
+    >
+      <h3 className="font-semibold text-[15px]">
+        Notifications
+      </h3>
+
+      {notifications.length >
+        0 && (
+        <button
+          onClick={
+            clearAllNotifications
+          }
+          className="
+            text-xs
+            text-red-500
+            hover:text-red-600
+            flex
+            items-center
+            gap-1
+          "
+        >
+          <Trash2 size={12} />
+          Clear All
+        </button>
+      )}
+    </div>
+
+    {/* Notifications */}
+    <div className="max-h-[340px] overflow-y-auto">
+      {notifications.length ===
+      0 ? (
+        <div className="px-5 py-10 text-center text-sm text-zinc-400">
+          No notifications yet
+        </div>
+      ) : (
+        notifications.map(
+          (notification) => (
+            <div
+              key={
+                notification._id
+              }
+              className="
+                px-5
+                py-4
+                border-b
+                border-zinc-100
+                hover:bg-zinc-50
+                transition-colors
+              "
             >
-              <Bell size={20} strokeWidth={1.8} className="text-[#2D2D2D]" />
-              <span className="absolute top-0.5 right-0.5 w-2 h-2 bg-[#E8441A] rounded-full border-[1.5px] border-white" />
-            </button>
+              <p className="text-sm font-medium text-[#2D2D2D]">
+                {
+                  notification.title
+                }
+              </p>
+
+              <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+                {
+                  notification.message
+                }
+              </p>
+            </div>
+          )
+        )
+      )}
+    </div>
+  </DropdownMenuContent>
+</DropdownMenu>
 
             {/* Avatar */}
             <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-200/70 flex-shrink-0">
@@ -87,8 +306,16 @@ const SidebarMobile = () => {
       <div
         className={`
           md:hidden fixed top-0 right-0 bottom-0 z-[140]
-          w-[78%] max-w-[300px]
-          bg-white flex flex-col p-6
+          w-[84%]
+xs:w-[80%]
+sm:w-[74%]
+max-w-[320px]
+          bg-white
+flex
+flex-col
+px-5
+pt-6
+pb-[max(24px,env(safe-area-inset-bottom))]
           rounded-l-[32px]
           transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]
           ${isOpen ? "translate-x-0" : "translate-x-full"}
@@ -138,7 +365,8 @@ const SidebarMobile = () => {
         {/* Navigation */}
         <nav className="flex-1 space-y-1">
           {navigationItems.map((item) => {
-            const isActive = false; // replace with usePathname() comparison
+            const isActive =
+  pathname === item.href;
 
             return (
               <Link
@@ -147,7 +375,8 @@ const SidebarMobile = () => {
                 onClick={() => setIsOpen(false)}
                 className={`
                   flex items-center gap-3 px-3.5 py-2.5 rounded-xl
-                  text-[13px] transition-all duration-200
+                  text-[12px]
+sm:text-[13px] transition-all duration-200
                   ${isActive
                     ? "bg-[#F3F3F3] text-[#2D2D2D] font-semibold"
                     : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700"
@@ -209,8 +438,10 @@ const SidebarMobile = () => {
 >
   <button
     className="
-      w-13 h-13
-      sm:w-14 sm:h-14
+      w-12
+h-12
+sm:w-14
+sm:h-14
       rounded-full
       bg-white
       shadow-[0_8px_30px_rgba(0,0,0,0.12)]
@@ -238,8 +469,8 @@ const SidebarMobile = () => {
     left-1/2
     -translate-x-1/2
     z-[60]
-    w-[94%]
-    max-w-[420px]
+    w-[calc(100%-16px)]
+max-w-[430px]
     px-1
   "
 >
@@ -250,8 +481,8 @@ const SidebarMobile = () => {
   sm:rounded-[28px]
   px-2
   sm:px-5
-  py-2.5
-  sm:py-3
+  py-2
+sm:py-3
   flex
   items-center
   justify-between
@@ -285,7 +516,8 @@ const SidebarMobile = () => {
 "
           >
             <item.icon
-              size={16}
+              size={14}
+              
               strokeWidth={
                 isActive ? 2.5 : 2
               }

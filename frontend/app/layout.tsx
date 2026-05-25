@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <ClickPopEffect />
         <Toaster richColors />
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex min-h-screen overflow-x-hidden">
           {/* Desktop Sidebar */}
           <div className="hidden lg:block p-4">
             <Sidebar />
@@ -53,15 +53,20 @@ export default function RootLayout({
             <main
   className="
     flex-1
+
     overflow-y-auto
+    overflow-x-hidden
 
     pt-[96px]
     lg:pt-0
 
     pb-[120px]
     lg:pb-0
+
+    min-h-screen
   "
->{children}</main>
+>
+  {children}</main>
           </div>
         </div>
       </body>

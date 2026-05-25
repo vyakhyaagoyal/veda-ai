@@ -18,4 +18,10 @@ export const notificationService =
       `/notifications/${id}/read`
     );
   },
+
+  async clearAll() {
+  await axios.delete(
+    "/notifications/clear-all"
+  );
+},
 };

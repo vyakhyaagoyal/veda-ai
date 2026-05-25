@@ -23,6 +23,28 @@ export const getNotifications =
     });
   };
 
+  export const clearAllNotifications =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      await Notification.deleteMany(
+        {}
+      );
+
+      res.json({
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        success: false,
+      });
+    }
+  };
+
 export const markAsRead =
   async (
     req: Request,

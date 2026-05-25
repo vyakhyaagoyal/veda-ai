@@ -30,7 +30,7 @@ const Topbar = () => {
   const router = useRouter();
 
   const pathname = usePathname();
-  const socket = io(process.env.NEXT_PUBLIC_API_URL || "https://veda-ai-production-39b3.up.railway.app/");
+  const socket = io(process.env.NEXT_PUBLIC_API_URL || "https://veda-ai-production-39b3.up.railway.app");
   const { user, logout } = useUserStore();
 
   const pageTitleMap: Record<string, string> = {

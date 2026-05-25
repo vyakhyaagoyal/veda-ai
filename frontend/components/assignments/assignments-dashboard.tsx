@@ -92,28 +92,28 @@ export default function Page() {
 
   return (
     <div
-  className="
-    flex
+      className="
+    w-full
     min-h-screen
-    p-2
-    sm:p-2
     bg-[#F9F9F9]
+    p-2
   "
->
-      <div className="flex-1 flex flex-col min-w-0">
+    >
+      <div className="w-full min-w-0">
         <main
-  className="
-    bg-[#F9F9F9]
+          className="
+  w-full
 
-    p-2
-    sm:p-2
+  bg-[#F9F9F9]
 
-    pb-32
-    md:pb-6
+  p-2
 
-    min-h-full
-  "
->
+  overflow-visible
+
+  pb-40
+  md:pb-8
+"
+        >
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <Loader2 className="animate-spin text-black" />
@@ -132,7 +132,7 @@ export default function Page() {
                   </div>
 
                   <h1
-  className="
+                    className="
     text-[24px]
     sm:text-[28px]
     lg:text-3xl
@@ -140,7 +140,7 @@ export default function Page() {
     tracking-tight
     text-[#2D2D2D]
   "
->
+                  >
                     Assignments
                   </h1>
                 </div>
@@ -154,7 +154,7 @@ export default function Page() {
               <div className="mb-6 space-y-4">
                 {/* SEARCH BAR */}
                 <div
-  className="
+                  className="
     flex
     flex-col
     sm:flex-row
@@ -170,10 +170,10 @@ export default function Page() {
     py-4
     shadow-sm
   "
->
+                >
                   {/* LEFT */}
                   <div
-  className="
+                    className="
     hidden
     sm:flex
     items-center
@@ -181,19 +181,19 @@ export default function Page() {
     text-zinc-500
     font-medium
   "
->
+                  >
                     <Filter size={18} />
                     <span>Filter By</span>
                   </div>
 
                   {/* RIGHT */}
                   <div
-  className="
+                    className="
     relative
     w-full
     sm:max-w-md
   "
->
+                  >
                     <Search
                       size={18}
                       className="
@@ -254,7 +254,7 @@ export default function Page() {
 
                 {/* RESULTS INFO */}
                 <div
-  className="
+                  className="
     flex
     flex-col
     sm:flex-row
@@ -263,7 +263,7 @@ export default function Page() {
     gap-1
     px-1
   "
->
+                >
                   <p className="text-sm text-zinc-500">
                     Showing{" "}
                     <span className="font-semibold text-black">
@@ -282,7 +282,7 @@ export default function Page() {
               </div>
 
               {/* CONTENT */}
-              <div className="pr-2 pb-32">
+              <div className="pr-2 pb-40">
                 {filteredAssignments.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
@@ -297,14 +297,14 @@ export default function Page() {
                   </div>
                 ) : (
                   <div
-  className="
+                    className="
     grid
     grid-cols-1
     md:grid-cols-2
     gap-4
     pb-10
   "
->
+                  >
                     {filteredAssignments.map((assignment) => (
                       <div
                         key={assignment._id}
@@ -333,9 +333,11 @@ export default function Page() {
                         <div className="flex flex-col h-full justify-between">
                           {/* TOP */}
                           <div className="flex items-start justify-between">
-                            <h2 className="text-[22px]
+                            <h2
+                              className="text-[22px]
 sm:text-[26px]
-lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
+lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight"
+                            >
                               {assignment.title || "Untitled Assignment"}
                             </h2>
 
@@ -391,7 +393,7 @@ lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
 
                           {/* BOTTOM */}
                           <div
-  className="
+                            className="
     flex
     flex-col
     sm:flex-row
@@ -401,7 +403,7 @@ lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
     mt-8
     sm:mt-10
   "
->
+                          >
                             <div className="text-sm text-zinc-500">
                               <span className="font-semibold text-black">
                                 Assigned on :
@@ -429,7 +431,7 @@ lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
 
               {/* FAB */}
               <div
-  className="
+                className="
     hidden
     md:block
     fixed
@@ -437,7 +439,7 @@ lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
     left-1/2
     -translate-x-1/2
   "
->
+              >
                 <button
                   onClick={() => router.push("/assignments/create")}
                   className="bg-[#111111] cursor-pointer hover:bg-black text-white px-8 py-3 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-300 hover:scale-[1.03]"

@@ -6,24 +6,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import {
-  Trash2,
-} from "lucide-react";
+import { Trash2 } from "lucide-react";
 
-import {
-  useEffect,
-} from "react";
+import { useEffect } from "react";
 
-import { notificationService
- }
-from "@/services/notification.service";
+import { notificationService } from "@/services/notification.service";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Settings, X, Bell } from "lucide-react";
-import { usePathname }
-from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { navigationItems } from "@/lib/navigation";
@@ -31,20 +24,17 @@ import { useUserStore } from "@/store/user.store";
 
 const SidebarMobile = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [notifications, setNotifications] =
-  useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const user = useUserStore((state) => state.user);
   const pathname = usePathname();
 
   useEffect(() => {
-  fetchNotifications();
-}, []);
+    fetchNotifications();
+  }, []);
 
-const fetchNotifications =
-  async () => {
+  const fetchNotifications = async () => {
     try {
-      const data =
-        await notificationService.getNotifications();
+      const data = await notificationService.getNotifications();
 
       setNotifications(data);
     } catch (error) {
@@ -52,8 +42,7 @@ const fetchNotifications =
     }
   };
 
-  const clearAllNotifications =
-  async () => {
+  const clearAllNotifications = async () => {
     try {
       await notificationService.clearAll();
 
@@ -64,25 +53,22 @@ const fetchNotifications =
   };
 
   useEffect(() => {
-  if (isOpen) {
-    document.body.style.overflow =
-      "hidden";
-  } else {
-    document.body.style.overflow =
-      "auto";
-  }
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-  return () => {
-    document.body.style.overflow =
-      "auto";
-  };
-}, [isOpen]);
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
 
   return (
     <>
       {/* ── Floating Topbar ── */}
       <header
-  className="
+        className="
     md:hidden
     fixed
     top-3
@@ -93,9 +79,9 @@ const fetchNotifications =
     sm:right-4
     z-[120]
   "
->
+      >
         <div
-  className="
+          className="
     bg-white
     rounded-full
     px-3
@@ -110,16 +96,15 @@ const fetchNotifications =
     shadow-sm
     backdrop-blur-xl
   "
->
-
+        >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Image
-  src="/veda-ai-logo.svg"
-  alt="VedaAI Logo"
-  width={34}
-  height={34}
-  className="
+              src="/veda-ai-logo.svg"
+              alt="VedaAI Logo"
+              width={34}
+              height={34}
+              className="
     w-[28px]
     h-[28px]
     sm:w-[34px]
@@ -127,41 +112,36 @@ const fetchNotifications =
     mt-2
     
   "
-/>
-           <span
-  className="
+            />
+            <span
+              className="
     text-[15px]
     sm:text-[17px]
     font-bold
     tracking-tight
     text-[#2D2D2D]
   "
->
+            >
               VedaAI
             </span>
           </Link>
 
           {/* Right controls */}
           <div className="flex items-center gap-2.5">
-
             {/* Bell */}
             {/* Notifications */}
-<DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <button
-      aria-label="Notifications"
-      className="relative p-1"
-    >
-      <Bell
-        size={20}
-        strokeWidth={1.8}
-        className="text-[#2D2D2D]"
-      />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button aria-label="Notifications" className="relative p-1">
+                  <Bell
+                    size={20}
+                    strokeWidth={1.8}
+                    className="text-[#2D2D2D]"
+                  />
 
-      {notifications.length >
-        0 && (
-        <span
-          className="
+                  {notifications.length > 0 && (
+                    <span
+                      className="
             absolute
             top-0.5
             right-0.5
@@ -172,14 +152,14 @@ const fetchNotifications =
             border-[1.5px]
             border-white
           "
-        />
-      )}
-    </button>
-  </DropdownMenuTrigger>
+                    />
+                  )}
+                </button>
+              </DropdownMenuTrigger>
 
-  <DropdownMenuContent
-    align="end"
-    className="
+              <DropdownMenuContent
+                align="end"
+                className="
       w-[92vw]
 max-w-[340px]
       rounded-3xl
@@ -191,10 +171,10 @@ max-w-[340px]
      ml-3
      
     "
-  >
-    {/* Header */}
-    <div
-      className="
+              >
+                {/* Header */}
+                <div
+                  className="
         px-5
         py-4
         border-b
@@ -203,18 +183,13 @@ max-w-[340px]
         items-center
         justify-between
       "
-    >
-      <h3 className="font-semibold text-[15px]">
-        Notifications
-      </h3>
+                >
+                  <h3 className="font-semibold text-[15px]">Notifications</h3>
 
-      {notifications.length >
-        0 && (
-        <button
-          onClick={
-            clearAllNotifications
-          }
-          className="
+                  {notifications.length > 0 && (
+                    <button
+                      onClick={clearAllNotifications}
+                      className="
             text-xs
             text-red-500
             hover:text-red-600
@@ -222,28 +197,24 @@ max-w-[340px]
             items-center
             gap-1
           "
-        >
-          <Trash2 size={12} />
-          Clear All
-        </button>
-      )}
-    </div>
+                    >
+                      <Trash2 size={12} />
+                      Clear All
+                    </button>
+                  )}
+                </div>
 
-    {/* Notifications */}
-    <div className="max-h-[340px] overflow-y-auto">
-      {notifications.length ===
-      0 ? (
-        <div className="px-5 py-10 text-center text-sm text-zinc-400">
-          No notifications yet
-        </div>
-      ) : (
-        notifications.map(
-          (notification) => (
-            <div
-              key={
-                notification._id
-              }
-              className="
+                {/* Notifications */}
+                <div className="max-h-[340px] overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="px-5 py-10 text-center text-sm text-zinc-400">
+                      No notifications yet
+                    </div>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification._id}
+                        className="
                 px-5
                 py-4
                 border-b
@@ -251,25 +222,20 @@ max-w-[340px]
                 hover:bg-zinc-50
                 transition-colors
               "
-            >
-              <p className="text-sm font-medium text-[#2D2D2D]">
-                {
-                  notification.title
-                }
-              </p>
+                      >
+                        <p className="text-sm font-medium text-[#2D2D2D]">
+                          {notification.title}
+                        </p>
 
-              <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
-                {
-                  notification.message
-                }
-              </p>
-            </div>
-          )
-        )
-      )}
-    </div>
-  </DropdownMenuContent>
-</DropdownMenu>
+                        <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+                          {notification.message}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Avatar */}
             <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-200/70 flex-shrink-0">
@@ -327,7 +293,11 @@ pb-[max(24px,env(safe-area-inset-bottom))]
       >
         {/* Drawer Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
+          <Link
+            href="/"
+            className="flex items-center gap-2"
+            onClick={() => setIsOpen(false)}
+          >
             <Image
               src="/veda-ai-logo.svg"
               alt="VedaAI Logo"
@@ -369,8 +339,7 @@ pb-[max(24px,env(safe-area-inset-bottom))]
         {/* Navigation */}
         <nav className="flex-1 space-y-1">
           {navigationItems.map((item) => {
-            const isActive =
-  pathname === item.href;
+            const isActive = pathname === item.href;
 
             return (
               <Link
@@ -381,9 +350,10 @@ pb-[max(24px,env(safe-area-inset-bottom))]
                   flex items-center gap-3 px-3.5 py-2.5 rounded-xl
                   text-[12px]
 sm:text-[13px] transition-all duration-200
-                  ${isActive
-                    ? "bg-[#F3F3F3] text-[#2D2D2D] font-semibold"
-                    : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700"
+                  ${
+                    isActive
+                      ? "bg-[#F3F3F3] text-[#2D2D2D] font-semibold"
+                      : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700"
                   }
                 `}
               >
@@ -429,9 +399,9 @@ sm:text-[13px] transition-all duration-200
       </div>
 
       {/* ── Floating Create Button ── */}
-<Link
-  href="/assignments/create"
-  className="
+      <Link
+        href="/assignments/create"
+        className="
     md:hidden
     fixed
     bottom-[88px]
@@ -439,9 +409,9 @@ sm:text-[13px] transition-all duration-200
     sm:right-5
     z-[70]
   "
->
-  <button
-    className="
+      >
+        <button
+          className="
       w-12
 h-12
 sm:w-14
@@ -454,18 +424,14 @@ sm:h-14
       active:scale-95
       transition-all duration-300
     "
-  >
-    <Plus
-      size={22}
-      strokeWidth={2.2}
-      className="text-[#FF5A2F]"
-    />
-  </button>
-</Link>
+        >
+          <Plus size={22} strokeWidth={2.2} className="text-[#FF5A2F]" />
+        </button>
+      </Link>
 
-{/* ── Bottom Dock ── */}
-<div
-  className="
+      {/* ── Bottom Dock ── */}
+      <div
+        className="
     md:hidden
     fixed
     bottom-3
@@ -477,9 +443,9 @@ sm:h-14
 max-w-[430px]
     px-1
   "
->
-  <div
-    className="
+      >
+        <div
+          className="
   bg-[#111111]
   rounded-[24px]
   sm:rounded-[28px]
@@ -494,63 +460,60 @@ sm:py-3
   border border-white/5
   backdrop-blur-xl
 "
-  >
-    {navigationItems
-      .slice(0, 4)
-      .map((item) => {
-        const isActive =
-          pathname === item.href;
+        >
+          {navigationItems.slice(0, 4).map((item) => {
+            const isActive = pathname === item.href;
 
-        return (
-          <Link
-            key={item.label}
-            href={item.href}
-            onClick={() =>
-              setIsOpen(false)
-            }
-            className="
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="
   flex
   flex-col
   items-center
   justify-center
-  gap-[2px]
+  text-center
+
+  gap-[3px]
+
   flex-1
+  min-w-0
+
   py-1
+
   transition-all
 "
-          >
-            <item.icon
-              size={14}
-              
-              strokeWidth={
-                isActive ? 2.5 : 2
-              }
-              className={
-                isActive
-                  ? "text-white"
-                  : "text-zinc-500"
-              }
-            />
+              >
+                <item.icon
+                  size={14}
+                  strokeWidth={isActive ? 2.5 : 2}
+                  className={isActive ? "text-white" : "text-zinc-500"}
+                />
 
-            <span
-              className={`
-                text-[9px]
-sm:text-[11px]
-                transition-colors
-                ${
-                  isActive
-                    ? "text-white font-medium"
-                    : "text-zinc-500"
-                }
-              `}
-            >
-              {item.label}
-            </span>
-          </Link>
-        );
-      })}
-  </div>
-</div>
+                <span
+                  className={`
+    w-full
+
+    text-center
+    leading-tight
+
+    text-[9px]
+    sm:text-[11px]
+
+    transition-colors
+
+    ${isActive ? "text-white font-medium" : "text-zinc-500"}
+  `}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
 
       {/* ── Spacer so page content clears the topbar ── */}
       {/* <div className="md:hidden h-[96px]" /> */}

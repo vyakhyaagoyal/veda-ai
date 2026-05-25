@@ -9,7 +9,6 @@ import { validateAssignment } from "@/lib/validators/create-assignment.validator
 
 import { Calendar } from "@/components/ui/calendar";
 
-
 import {
   Popover,
   PopoverContent,
@@ -161,21 +160,21 @@ const CreateAssignment = () => {
 
   const handleGenerate = async () => {
     const errors = validateAssignment({
-  dueDate,
-  rows,
-  additionalInfo,
-  uploadedFiles,
-});
+      dueDate,
+      rows,
+      additionalInfo,
+      uploadedFiles,
+    });
 
-   if (errors.length > 0) {
-  setValidationError(errors.join(", "));
+    if (errors.length > 0) {
+      setValidationError(errors.join(", "));
 
-  setTimeout(() => {
-    setValidationError("");
-  }, 3000);
+      setTimeout(() => {
+        setValidationError("");
+      }, 3000);
 
-  return;
-}
+      return;
+    }
 
     try {
       setLoading(true);
@@ -183,10 +182,7 @@ const CreateAssignment = () => {
 
       const formData = new FormData();
 
-      formData.append(
-  "teacherName",
-  "John Doe"
-);
+      formData.append("teacherName", "John Doe");
       formData.append("dueDate", dueDate);
 
       formData.append("additionalInfo", additionalInfo);
@@ -194,11 +190,8 @@ const CreateAssignment = () => {
       formData.append("rows", JSON.stringify(rows));
 
       if (uploadedFiles.length > 0) {
-  formData.append(
-    "file",
-    uploadedFiles[0]
-  );
-}
+        formData.append("file", uploadedFiles[0]);
+      }
 
       const response = await generationService.createAssignment(formData);
 
@@ -206,14 +199,12 @@ const CreateAssignment = () => {
 
       router.push(`/assignments/${response.assignmentId}`);
     } catch (error: any) {
-  console.error(error);
+      console.error(error);
 
-  toast.error(
-    error?.response?.data
-      ?.message ||
-      "Failed to generate assignment"
-  );
-} finally {
+      toast.error(
+        error?.response?.data?.message || "Failed to generate assignment",
+      );
+    } finally {
       setLoading(false);
     }
   };
@@ -230,395 +221,537 @@ const CreateAssignment = () => {
 
   return (
     <>
-    {validationError && (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
-    
-    <div className="bg-black text-white px-8 py-4 rounded-2xl shadow-2xl text-sm font-semibold animate-in fade-in zoom-in duration-200">
-      <div className="space-y-2">
-  {validationError
-    .split(",")
-    .map((error, index) => (
-      <p key={index}>
-        • {error}
-      </p>
-    ))}
-</div>
-    </div>
-
-  </div>
-)}
-
-    <div className="min-h-screen bg-[#F3F4F6]/30 text-[#2D2D2D] p-2 lg:p-2">
-      {/* Header */}
-      <header className="max-w-6xl mx-auto mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          {/* Green Dot */}
-          <div className="w-4 h-4 bg-green-200 rounded-full flex items-center justify-center">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+      {validationError && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+          <div className="bg-black text-white px-8 py-4 rounded-2xl shadow-2xl text-sm font-semibold animate-in fade-in zoom-in duration-200">
+            <div className="space-y-2">
+              {validationError.split(",").map((error, index) => (
+                <p key={index}>• {error}</p>
+              ))}
+            </div>
           </div>
-          <h1 className="text-xl font-bold tracking-tight">
-            Create Assignment
-          </h1>
         </div>
-        <p className="text-gray-400 text-sm mb-6">
-          Set up a new assignment for your students
-        </p>
-      </header>
+      )}
 
-      {/* Progress Bar */}
-      <div className="max-w-4xl mx-auto mb-10">
-        <div className="flex items-center gap-3">
-          {[1, 2, 3, 4].map((item) => (
-            <div
-              key={item}
-              className={`h-1 flex-1 rounded-full transition-all duration-500 ${
-                progress >= item ? "bg-[#2D2D2D]" : "bg-gray-200"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Labels */}
-        <div className="flex justify-between mt-3 text-xs font-medium text-gray-400 px-1">
-          <span className={progress >= 1 ? "text-[#2D2D2D]" : ""}>Details</span>
-
-          <span className={progress >= 2 ? "text-[#2D2D2D]" : ""}>Upload</span>
-
-          <span className={progress >= 3 ? "text-[#2D2D2D]" : ""}>
-            Generating
-          </span>
-
-          <span className={progress >= 4 ? "text-[#2D2D2D]" : ""}>
-            Complete
-          </span>
-        </div>
-      </div>
-
-      {/* Main Form Card */}
-      <main className="max-w-4xl mx-auto bg-[#F3F4F6]/90 rounded-[40px] shadow-sm border-4 border-white p-6 lg:p-10 mb-8">
-        <div className="mb-10">
-          <h2 className="text-2xl font-bold mb-1">Assignment Details</h2>
-          <p className="text-gray-500 text-sm">
-            Basic information about your assignment
+      <div className="min-h-screen bg-[#F3F4F6]/30 text-[#2D2D2D] p-2 lg:p-2">
+        {/* Header */}
+       <header
+  className="
+    max-w-6xl
+    mx-auto
+    mb-6
+    lg:mb-8
+    px-1
+    sm:px-0
+  "
+>
+          <div className="flex items-center gap-3 mb-2">
+            {/* Green Dot */}
+            <div className="w-4 h-4 bg-green-200 rounded-full flex items-center justify-center">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            </div>
+            <h1 className="text-xl font-bold tracking-tight">
+              Create Assignment
+            </h1>
+          </div>
+          <p className="text-gray-400 text-sm mb-6">
+            Set up a new assignment for your students
           </p>
-        </div>
+        </header>
 
-        {/* Upload Zone */}
-        <div
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-
-            const files = Array.from(e.dataTransfer.files);
-
-            if (files.length > 0) {
-              setUploadedFiles((prev) => [...prev, ...files]);
-              setProgress(2);
-            }
-          }}
-          className="border-2 border-dashed border-gray-300 bg-white rounded-[32px] p-7 mb-5 flex flex-col items-center justify-center text-center group hover:border-gray-300 transition-colors cursor-pointer"
-        >
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <CloudUpload className="text-black" size={30} />
+        {/* Progress Bar */}
+        <div className="max-w-4xl mx-auto mb-10">
+          <div className="flex items-center gap-3">
+            {[1, 2, 3, 4].map((item) => (
+              <div
+                key={item}
+                className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                  progress >= item ? "bg-[#2D2D2D]" : "bg-gray-200"
+                }`}
+              />
+            ))}
           </div>
 
-          <p className="text-lg font-semibold mb-1">
-            Choose a file or drag & drop it here
-          </p>
+          {/* Labels */}
+          <div className="flex justify-between mt-3 text-xs font-medium text-gray-400 px-1">
+            <span className={progress >= 1 ? "text-[#2D2D2D]" : ""}>
+              Details
+            </span>
 
-          <p className="text-gray-500 text-light mb-6 uppercase tracking-wider">
-            JPEG, PNG, upto 10MB
-          </p>
+            <span className={progress >= 2 ? "text-[#2D2D2D]" : ""}>
+              Upload
+            </span>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept=".pdf,.txt,.png,.jpg,.jpeg"
-            hidden
-            onChange={(e) => {
-              const files = Array.from(e.target.files || []);
+            <span className={progress >= 3 ? "text-[#2D2D2D]" : ""}>
+              Generating
+            </span>
+
+            <span className={progress >= 4 ? "text-[#2D2D2D]" : ""}>
+              Complete
+            </span>
+          </div>
+        </div>
+
+        {/* Main Form Card */}
+        <main
+  className="
+    max-w-4xl
+    mx-auto
+    bg-[#F3F4F6]/90
+    rounded-[28px]
+    lg:rounded-[40px]
+    shadow-sm
+    border-2
+    lg:border-4
+    border-white
+    p-4
+    sm:p-6
+    lg:p-10
+    mb-8
+  "
+>
+          <div className="mb-10">
+            <h2
+  className="
+    text-[20px]
+    sm:text-[22px]
+    lg:text-2xl
+    font-bold
+    mb-1
+  "
+>Assignment Details</h2>
+            <p className="text-gray-500 text-sm">
+              Basic information about your assignment
+            </p>
+          </div>
+
+          {/* Upload Zone */}
+          <div
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+
+              const files = Array.from(e.dataTransfer.files);
 
               if (files.length > 0) {
                 setUploadedFiles((prev) => [...prev, ...files]);
                 setProgress(2);
               }
             }}
-          />
-
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
+            className="
+  border-2
+  border-dashed
+  border-gray-300
+  bg-white
+  rounded-[24px]
+  lg:rounded-[32px]
+  p-5
+  sm:p-7
+  mb-5
+"
           >
-            {uploadedFiles.length > 0 ? "Browse More" : "Browse Files"}
-          </div>
-        </div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <CloudUpload className="text-black" size={30} />
+            </div>
 
-        <p className="text-center text-gray-500 text-lg font-medium mb-5">
-          Upload images of your preferred document/image
-        </p>
+            <p
+  className="
+    text-[15px]
+    sm:text-[17px]
+    lg:text-lg
+    font-semibold
+    mb-1
+  "
+>
+              Choose a file or drag & drop it here
+            </p>
 
-        {/* Uploaded Files */}
-        {uploadedFiles.length > 0 && (
-          <div className="space-y-3 mb-8">
-            {uploadedFiles.map((file, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl px-5 py-3 mb-2"
-              >
-                <p className="text-sm text-gray-600 font-medium truncate">
-                  {file.name}
-                </p>
+            <p className="
+  text-gray-500
+  text-[11px]
+  sm:text-sm
+  mb-6
+  uppercase
+  tracking-wider
+">
+              JPEG, PNG, upto 10MB
+            </p>
 
-                <button
-                  onClick={() => {
-                    setUploadedFiles((prev) =>
-                      prev.filter((_, i) => i !== index),
-                    );
-                  }}
-                  className="ml-4 text-gray-400 hover:text-red-500 transition-colors"
-                >
-                  <X size={18} className="cursor-pointer" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".pdf,.txt,.png,.jpg,.jpeg"
+              hidden
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
 
-        {/* Due Date */}
-        <div className="mb-12">
-          <label className="block text-sm font-bold mb-3">Due Date</label>
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                className={`w-full flex items-center justify-between border-2 border-gray-200 rounded-full px-6 py-4 bg-white hover:border-gray-300 transition-all ${
-                  dueDate ? "text-black" : "text-gray-400"
-                }`}
-              >
-                <span className="font-medium">
-                  {dueDate
-                    ? format(new Date(dueDate), "PPP")
-                    : "Select due date"}
-                </span>
-
-                <Image
-                  src="/calendar-icon.svg"
-                  alt="Calendar"
-                  height={25}
-                  width={25}
-                />
-              </button>
-            </PopoverTrigger>
-
-            <PopoverContent
-              className="w-auto p-0 rounded-3xl border-none shadow-2xl"
-              align="start"
-            >
-              <Calendar
-                mode="single"
-                selected={dueDate ? new Date(dueDate) : undefined}
-                onSelect={(date) => {
-                  if (date) {
-                    setDueDate(date.toISOString());
-                  }
-                }}
-                disabled={(date) =>
-                  date < new Date(new Date().setHours(0, 0, 0, 0))
+                if (files.length > 0) {
+                  setUploadedFiles((prev) => [...prev, ...files]);
+                  setProgress(2);
                 }
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+              }}
+            />
 
-        {/* Questions Section */}
-        <div className="mb-6">
-          <div className="grid grid-cols-12 gap-4 mb-4 px-2">
-            <div className="col-span-7 font-bold tracking-widest text-black block text-sm mb-3">
-              Question Type
-            </div>
-            <div className="col-span-3 text-sm font-bold tracking-widest text-black text-center">
-              No. of Questions
-            </div>
-            <div className="col-span-2 text-sm font-bold tracking-widest text-black text-center">
-              Marks
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="px-8 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-full transition-all border border-gray-100 cursor-pointer"
+            >
+              {uploadedFiles.length > 0 ? "Browse More" : "Browse Files"}
             </div>
           </div>
 
-          <div className="space-y-3 mb-6">
-            {rows.map((row) => (
-              <div
-                key={row.id}
-                className="grid grid-cols-12 gap-2 items-center"
-              >
-                {/* Type Select */}
-                <div className="col-span-7 flex items-center gap-3">
-                  <div className="relative flex-1">
-                    <div className="relative flex-1">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-full px-6 py-4 focus:outline-none focus:border-gray-300 font-semibold text-sm transition-all">
-                            <span>{row.type}</span>
+          <p className="text-center text-gray-500 text-lg font-medium mb-5">
+            Upload images of your preferred document/image
+          </p>
 
-                            <ChevronDown className="text-black" size={18} />
-                          </button>
-                        </DropdownMenuTrigger>
+          {/* Uploaded Files */}
+          {uploadedFiles.length > 0 && (
+            <div className="space-y-3 mb-8">
+              {uploadedFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl px-5 py-3 mb-2"
+                >
+                  <p className="text-sm text-gray-600 font-medium truncate">
+                    {file.name}
+                  </p>
 
-                        <DropdownMenuContent
-                          align="start"
-                          className="w-62.5 rounded-2xl p-2"
-                        >
-                          {QUESTION_TYPES.map((t) => (
-                            <DropdownMenuItem
-                              key={t}
-                              onClick={() => updateRow(row.id, "type", t)}
-                              className="rounded-xl cursor-pointer py-3 font-medium"
-                            >
-                              {t}
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
                   <button
-                    onClick={() => removeRow(row.id)}
-                    className="p-2 hover:bg-gray-100 rounded-full text-gray-300 hover:text-red-400 transition-colors"
+                    onClick={() => {
+                      setUploadedFiles((prev) =>
+                        prev.filter((_, i) => i !== index),
+                      );
+                    }}
+                    className="ml-4 text-gray-400 hover:text-red-500 transition-colors"
                   >
-                    <X size={20} className="text-black" />
+                    <X size={18} className="cursor-pointer" />
                   </button>
                 </div>
+              ))}
+            </div>
+          )}
 
-                {/* Question Count */}
-                <div className="col-span-3 flex items-center justify-center">
-                  <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-                    <button
-                      onClick={() => adjustCounter(row.id, "count", -1)}
-                      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                    >
-                      —
-                    </button>
-                    <span className="w-5 text-center font-bold text-sm">
-                      {row.count}
-                    </span>
-                    <button
-                      onClick={() => adjustCounter(row.id, "count", 1)}
-                      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
+          {/* Due Date */}
+          <div className="mb-12">
+            <label className="block text-sm font-bold mb-3">Due Date</label>
 
-                {/* Marks Count */}
-                <div className="col-span-2 flex items-center justify-center">
-                  <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-                    <button
-                      onClick={() => adjustCounter(row.id, "marks", -1)}
-                      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                    >
-                      —
-                    </button>
-                    <span className="w-5 text-center font-bold text-sm">
-                      {row.marks}
-                    </span>
-                    <button
-                      onClick={() => adjustCounter(row.id, "marks", 1)}
-                      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  className={`w-full flex items-center justify-between border-2 border-gray-200 rounded-full
+px-4
+sm:px-6
+py-3
+sm:py-4 bg-white hover:border-gray-300 transition-all ${
+                    dueDate ? "text-black" : "text-gray-400"
+                  }`}
+                >
+                  <span className="font-medium">
+                    {dueDate
+                      ? format(new Date(dueDate), "PPP")
+                      : "Select due date"}
+                  </span>
+
+                  <Image
+                    src="/calendar-icon.svg"
+                    alt="Calendar"
+                    height={25}
+                    width={25}
+                  />
+                </button>
+              </PopoverTrigger>
+
+              <PopoverContent
+                className="w-auto p-0 rounded-3xl border-none shadow-2xl"
+                align="start"
+              >
+                <Calendar
+                  mode="single"
+                  selected={dueDate ? new Date(dueDate) : undefined}
+                  onSelect={(date) => {
+                    if (date) {
+                      setDueDate(date.toISOString());
+                    }
+                  }}
+                  disabled={(date) =>
+                    date < new Date(new Date().setHours(0, 0, 0, 0))
+                  }
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
-          <button
-            onClick={addRow}
-            className="flex cursor-pointer items-center gap-2 px-1 text-sm font-bold text-[#2D2D2D] hover:bg-gray-50 rounded-2xl transition-colors"
-          >
-            <div className="w-10 h-10 bg-[#2D2D2D] rounded-full flex items-center justify-center text-white">
-              <Plus size={20} strokeWidth={3} />
+          {/* Questions Section */}
+          <div className="mb-6">
+            <div
+  className="
+    hidden
+    md:grid
+    grid-cols-12
+    gap-4
+    mb-4
+    px-2
+  "
+>
+              <div className="col-span-7 font-bold tracking-widest text-black block text-sm mb-3">
+                Question Type
+              </div>
+              <div className="col-span-3 text-sm font-bold tracking-widest text-black text-center">
+                No. of Questions
+              </div>
+              <div className="col-span-2 text-sm font-bold tracking-widest text-black text-center">
+                Marks
+              </div>
             </div>
-            Add Question Type
-          </button>
-        </div>
 
-        {/* Totals */}
-        <div className="flex flex-col items-end gap-2 mb-8 px-2">
-          <p className="text-lg text-black">
-            Total Questions :{" "}
-            <span className="text-[#2D2D2D] ml-1">{totalQuestions}</span>
-          </p>
-          <p className="text-lg text-black">
-            Total Marks :{" "}
-            <span className="text-[#2D2D2D] ml-1">{totalMarks}</span>
-          </p>
-        </div>
+            <div className="space-y-3 mb-6">
+              {rows.map((row) => (
+                <div
+                  key={row.id}
+                  className="
+  bg-white
+  md:bg-transparent
+  rounded-[24px]
+  md:rounded-none
+  p-4
+  md:p-0
+  border
+  md:border-0
+  border-gray-100
+  grid
+  grid-cols-1
+  md:grid-cols-12
+  gap-4
+  md:gap-2
+  items-center
+"
+                >
+                  {/* Type Select */}
+                  <div className="
+  md:col-span-7
+  flex
+  items-center
+  gap-3
+">
+                    <div className="relative flex-1">
+                      <div className="relative flex-1">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-full px-6 py-4 focus:outline-none focus:border-gray-300 font-semibold text-sm transition-all">
+                              <span>{row.type}</span>
 
-        {/* Additional Info */}
-        <div className="">
-          <label className="block text-md font-bold mb-4">
-            Additional Information (For better output)
-          </label>
-          <div className="relative">
-            <textarea
-              rows={3}
-              placeholder="e.g Generate a question paper for 3 hour exam duration..."
-              value={additionalInfo}
-              onChange={(e) => setAdditionalInfo(e.target.value)}
-              className="w-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-[32px] p-6 focus:outline-none focus:ring-2 focus:ring-[#2D2D2D]/5 font-medium text-gray-600 resize-none"
-            />
+                              <ChevronDown className="text-black" size={18} />
+                            </button>
+                          </DropdownMenuTrigger>
+
+                          <DropdownMenuContent
+                            align="start"
+                            className="w-62.5 rounded-2xl p-2"
+                          >
+                            {QUESTION_TYPES.map((t) => (
+                              <DropdownMenuItem
+                                key={t}
+                                onClick={() => updateRow(row.id, "type", t)}
+                                className="rounded-xl cursor-pointer py-3 font-medium"
+                              >
+                                {t}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => removeRow(row.id)}
+                      className="p-2 hover:bg-gray-100 rounded-full text-gray-300 hover:text-red-400 transition-colors"
+                    >
+                      <X size={20} className="text-black" />
+                    </button>
+                  </div>
+                  <p className="md:hidden text-sm font-semibold text-zinc-500">
+  Questions
+</p>
+
+                  {/* Question Count */}
+                  <div className="
+  md:col-span-3
+  flex
+  items-center
+  justify-between
+  md:justify-center
+">
+                    <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+                      <button
+                        onClick={() => adjustCounter(row.id, "count", -1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        —
+                      </button>
+                      <span className="w-5 text-center font-bold text-sm">
+                        {row.count}
+                      </span>
+                      <button
+                        onClick={() => adjustCounter(row.id, "count", 1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="md:hidden text-sm font-semibold text-zinc-500">
+  Marks
+</p>
+
+                  {/* Marks Count */}
+                  <div className="
+  md:col-span-2
+  flex
+  items-center
+  justify-between
+  md:justify-center
+">
+                    <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+                      <button
+                        onClick={() => adjustCounter(row.id, "marks", -1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        —
+                      </button>
+                      <span className="w-5 text-center font-bold text-sm">
+                        {row.marks}
+                      </span>
+                      <button
+                        onClick={() => adjustCounter(row.id, "marks", 1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <button
-              onClick={startListening}
-              type="button"
-              className={`absolute right-8 bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
-                isListening ? "scale-110 bg-red-50" : ""
-              }`}
+              onClick={addRow}
+              className="flex cursor-pointer items-center gap-2 px-1 text-sm font-bold text-[#2D2D2D] hover:bg-gray-50 rounded-2xl transition-colors"
             >
-              <Mic
-                size={20}
-                className={isListening ? "text-red-500" : "text-black"}
-              />
+              <div className="w-10 h-10 bg-[#2D2D2D] rounded-full flex items-center justify-center text-white">
+                <Plus size={20} strokeWidth={3} />
+              </div>
+              Add Question Type
             </button>
-            {/* {isListening && (
+          </div>
+
+          {/* Totals */}
+          <div className="
+  flex
+  flex-col
+  items-start
+  sm:items-end
+  gap-2
+  mb-8
+  px-2
+">
+            <p className="text-lg text-black">
+              Total Questions :{" "}
+              <span className="text-[#2D2D2D] ml-1">{totalQuestions}</span>
+            </p>
+            <p className="text-lg text-black">
+              Total Marks :{" "}
+              <span className="text-[#2D2D2D] ml-1">{totalMarks}</span>
+            </p>
+          </div>
+
+          {/* Additional Info */}
+          <div className="">
+            <label className="block text-md font-bold mb-4">
+              Additional Information (For better output)
+            </label>
+            <div className="relative">
+              <textarea
+                rows={3}
+                placeholder="e.g Generate a question paper for 3 hour exam duration..."
+                value={additionalInfo}
+                onChange={(e) => setAdditionalInfo(e.target.value)}
+                className="w-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-[24px]
+lg:rounded-[32px]
+p-4
+sm:p-6 focus:outline-none focus:ring-2 focus:ring-[#2D2D2D]/5 font-medium text-gray-600 resize-none"
+              />
+              <button
+                onClick={startListening}
+                type="button"
+                className={`absolute right-4
+sm:right-8
+bottom-4
+sm:bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
+                  isListening ? "scale-110 bg-red-50" : ""
+                }`}
+              >
+                <Mic
+                  size={20}
+                  className={isListening ? "text-red-500" : "text-black"}
+                />
+              </button>
+              {/* {isListening && (
   <p className="text-sm text-red-500 mt-3 font-medium animate-pulse">
     Listening...
   </p>
 )} */}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      {/* Navigation Buttons */}
-      <div className="max-w-5xl mx-auto flex justify-between items-center px-4">
-        <button
-          onClick={() => router.back()}
-          className="flex cursor-pointer items-center gap-3 px-8 py-3.5 bg-white border border-gray-100 rounded-full font-bold text-sm shadow-sm hover:bg-gray-50 transition-all"
-        >
-          <ArrowLeft size={18} />
-          Previous
-        </button>
-        <button
-          onClick={handleGenerate}
-          disabled={loading}
-          className="flex cursor-pointer items-center gap-3 px-8 py-3.5 bg-[#111827] text-white rounded-full font-bold text-sm shadow-lg hover:bg-black transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <>Generating...</>
-          ) : (
-            <>
-              Next
-              <ArrowRight
-                size={18}
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </>
-          )}
-        </button>
+        {/* Navigation Buttons */}
+        <div
+  className="
+    max-w-5xl
+    mx-auto
+    flex
+    items-center
+    justify-between
+    gap-3
+    px-2
+    sm:px-4
+    pb-28
+    md:pb-6
+  "
+>
+          <button
+            onClick={() => router.back()}
+            className="flex cursor-pointer items-center gap-3 px-5
+sm:px-8
+py-3
+sm:py-3.5 bg-white border border-gray-100 rounded-full font-bold text-sm shadow-sm hover:bg-gray-50 transition-all"
+          >
+            <ArrowLeft size={18} />
+            Previous
+          </button>
+          <button
+            onClick={handleGenerate}
+            disabled={loading}
+            className="flex cursor-pointer items-center gap-3 px-5
+sm:px-8
+py-3
+sm:py-3.5 bg-[#111827] text-white rounded-full font-bold text-sm shadow-lg hover:bg-black transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>Generating...</>
+            ) : (
+              <>
+                Next
+                <ArrowRight
+                  size={18}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </>
+            )}
+          </button>
+        </div>
       </div>
-    </div>
     </>
   );
 };

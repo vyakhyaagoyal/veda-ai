@@ -26,11 +26,15 @@ import { useUserStore } from "@/store/user.store";
 import { useState, useEffect } from "react";
 import { notificationService } from "@/services/notification.service";
 
+const socket = io(
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://veda-ai-production-39b3.up.railway.app"
+);
+
 const Topbar = () => {
   const router = useRouter();
 
   const pathname = usePathname();
-  const socket = io(process.env.NEXT_PUBLIC_API_URL || "https://veda-ai-production-39b3.up.railway.app");
   const { user, logout } = useUserStore();
 
   const pageTitleMap: Record<string, string> = {
@@ -158,7 +162,7 @@ const Topbar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-orange-500 border-2 border-white rounded-full" />
+        {/* <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-orange-500 border-2 border-white rounded-full" /> */}
 
         {/* User Dropdown */}
         <DropdownMenu>

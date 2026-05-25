@@ -91,9 +91,28 @@ export default function Page() {
   }, [assignments, search]);
 
   return (
-    <div className="flex min-h-screen p-2 bg-[#F9F9F9]">
+    <div
+  className="
+    flex
+    min-h-screen
+    p-2
+    sm:p-2
+    bg-[#F9F9F9]
+  "
+>
       <div className="flex-1 flex flex-col min-w-0">
-        <main className="flex-1 flex flex-col bg-[#F9F9F9] p-2">
+        <main
+  className="
+    flex-1
+    flex
+    flex-col
+    bg-[#F9F9F9]
+    p-2
+    sm:p-2
+    pb-28
+    md:pb-2
+  "
+>
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <Loader2 className="animate-spin text-black" />
@@ -111,7 +130,16 @@ export default function Page() {
                     <div className="w-2 h-2 bg-green-500 rounded-full" />
                   </div>
 
-                  <h1 className="text-3xl font-bold tracking-tight text-[#2D2D2D]">
+                  <h1
+  className="
+    text-[24px]
+    sm:text-[28px]
+    lg:text-3xl
+    font-bold
+    tracking-tight
+    text-[#2D2D2D]
+  "
+>
                     Assignments
                   </h1>
                 </div>
@@ -124,15 +152,47 @@ export default function Page() {
               {/* SEARCH */}
               <div className="mb-6 space-y-4">
                 {/* SEARCH BAR */}
-                <div className="flex items-center justify-between bg-white border border-zinc-200/60 rounded-2xl px-6 py-4 shadow-sm">
+                <div
+  className="
+    flex
+    flex-col
+    sm:flex-row
+    sm:items-center
+    justify-between
+    gap-4
+    bg-white
+    border
+    border-zinc-200/60
+    rounded-2xl
+    px-4
+    sm:px-6
+    py-4
+    shadow-sm
+  "
+>
                   {/* LEFT */}
-                  <div className="flex items-center gap-2 text-zinc-500 font-medium">
+                  <div
+  className="
+    hidden
+    sm:flex
+    items-center
+    gap-2
+    text-zinc-500
+    font-medium
+  "
+>
                     <Filter size={18} />
                     <span>Filter By</span>
                   </div>
 
                   {/* RIGHT */}
-                  <div className="relative w-full max-w-md">
+                  <div
+  className="
+    relative
+    w-full
+    sm:max-w-md
+  "
+>
                     <Search
                       size={18}
                       className="
@@ -192,7 +252,17 @@ export default function Page() {
                 </div>
 
                 {/* RESULTS INFO */}
-                <div className="flex items-center justify-between px-1">
+                <div
+  className="
+    flex
+    flex-col
+    sm:flex-row
+    sm:items-center
+    justify-between
+    gap-1
+    px-1
+  "
+>
                   <p className="text-sm text-zinc-500">
                     Showing{" "}
                     <span className="font-semibold text-black">
@@ -225,7 +295,15 @@ export default function Page() {
                     </div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4 pb-10">
+                  <div
+  className="
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    gap-4
+    pb-10
+  "
+>
                     {filteredAssignments.map((assignment) => (
                       <div
                         key={assignment._id}
@@ -238,7 +316,8 @@ export default function Page() {
     group
     bg-white
     rounded-[32px]
-    p-6
+    p-5
+    sm:p-6
     border
     border-zinc-200/60
     shadow-sm
@@ -253,7 +332,9 @@ export default function Page() {
                         <div className="flex flex-col h-full justify-between">
                           {/* TOP */}
                           <div className="flex items-start justify-between">
-                            <h2 className="text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
+                            <h2 className="text-[22px]
+sm:text-[26px]
+lg:text-[30px] font-bold tracking-tight text-[#2D2D2D] leading-tight">
                               {assignment.title || "Untitled Assignment"}
                             </h2>
 
@@ -308,7 +389,18 @@ export default function Page() {
                           </div>
 
                           {/* BOTTOM */}
-                          <div className="flex items-center justify-between mt-10">
+                          <div
+  className="
+    flex
+    flex-col
+    sm:flex-row
+    sm:items-center
+    justify-between
+    gap-3
+    mt-8
+    sm:mt-10
+  "
+>
                             <div className="text-sm text-zinc-500">
                               <span className="font-semibold text-black">
                                 Assigned on :
@@ -335,7 +427,16 @@ export default function Page() {
               </div>
 
               {/* FAB */}
-              <div className="fixed bottom-6 left-1/2 -translate-x-1/2">
+              <div
+  className="
+    hidden
+    md:block
+    fixed
+    bottom-6
+    left-1/2
+    -translate-x-1/2
+  "
+>
                 <button
                   onClick={() => router.push("/assignments/create")}
                   className="bg-[#111111] cursor-pointer hover:bg-black text-white px-8 py-3 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-300 hover:scale-[1.03]"

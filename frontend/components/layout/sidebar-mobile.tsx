@@ -198,34 +198,31 @@ const SidebarMobile = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent
-                sideOffset={12}
-                align="center"
-                className="
-    fixed
-    left-1/2
-    top-[78px]
-    -translate-x-1/2
-
-    w-[92vw]
+  sideOffset={10}
+  align="end"
+  avoidCollisions
+  collisionPadding={16}
+  className="
+    w-[calc(100vw-24px)]
     max-w-[360px]
 
-    rounded-[28px]
+    rounded-[26px]
 
     border
     border-zinc-200/70
 
     bg-white
 
-    shadow-[0_20px_60px_rgba(0,0,0,0.18)]
-
     p-0
     overflow-hidden
 
-    z-[200]
+    shadow-[0_20px_60px_rgba(0,0,0,0.18)]
 
     backdrop-blur-xl
+
+    z-[200]
   "
-              >
+>
                 {/* Header */}
                 <div
                   className="
@@ -236,6 +233,7 @@ const SidebarMobile = () => {
         flex
         items-center
         justify-between
+        
       "
                 >
                   <h3 className="font-semibold text-[15px]">Notifications</h3>
@@ -295,12 +293,20 @@ const SidebarMobile = () => {
       "
                       >
                         <div className="flex items-start justify-between gap-3">
-                          <div>
+                          <div className="min-w-0 flex-1">
                             <p className="text-sm font-medium text-[#2D2D2D]">
                               {notification.title}
                             </p>
 
-                            <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+                            <p
+  className="
+    text-xs
+    text-zinc-500
+    mt-1
+    leading-relaxed
+    break-words
+  "
+>
                               {notification.message}
                             </p>
                           </div>
@@ -380,7 +386,7 @@ pb-[max(24px,env(safe-area-inset-bottom))]
         `}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between gap-3 mb-6">
           <Link
             href="/"
             className="flex items-center gap-2"

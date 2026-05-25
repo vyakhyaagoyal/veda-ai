@@ -6,6 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { io } from "socket.io-client";
+
 import { Trash2 } from "lucide-react";
 
 import { useEffect } from "react";
@@ -28,8 +30,27 @@ const SidebarMobile = () => {
   const user = useUserStore((state) => state.user);
   const pathname = usePathname();
 
+  const socket = io(
+    process.env.NEXT_PUBLIC_API_URL ||
+      "https://veda-ai-production-39b3.up.railway.app",
+  );
+
   useEffect(() => {
     fetchNotifications();
+
+    socket.on("generation-complete", () => {
+      fetchNotifications();
+    });
+
+    socket.on("generation-failed", () => {
+      fetchNotifications();
+    });
+
+    return () => {
+      socket.off("generation-complete");
+
+      socket.off("generation-failed");
+    };
   }, []);
 
   const fetchNotifications = async () => {
@@ -37,6 +58,25 @@ const SidebarMobile = () => {
       const data = await notificationService.getNotifications();
 
       setNotifications(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const markAsRead = async (id: string) => {
+    try {
+      await notificationService.markAsRead(id);
+
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification._id === id
+            ? {
+                ...notification,
+                read: true,
+              }
+            : notification,
+        ),
+      );
     } catch (error) {
       console.error(error);
     }
@@ -139,7 +179,7 @@ const SidebarMobile = () => {
                     className="text-[#2D2D2D]"
                   />
 
-                  {notifications.length > 0 && (
+                  {notifications.some((n) => !n.read) && (
                     <span
                       className="
             absolute
@@ -158,19 +198,33 @@ const SidebarMobile = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent
-                align="end"
+                sideOffset={12}
+                align="center"
                 className="
-      w-[92vw]
-max-w-[340px]
-      rounded-3xl
-      border-none
-      shadow-2xl
-      p-0
-      overflow-hidden
-      z-[200]
-     ml-3
-     
-    "
+    fixed
+    left-1/2
+    top-[78px]
+    -translate-x-1/2
+
+    w-[92vw]
+    max-w-[360px]
+
+    rounded-[28px]
+
+    border
+    border-zinc-200/70
+
+    bg-white
+
+    shadow-[0_20px_60px_rgba(0,0,0,0.18)]
+
+    p-0
+    overflow-hidden
+
+    z-[200]
+
+    backdrop-blur-xl
+  "
               >
                 {/* Header */}
                 <div
@@ -188,8 +242,8 @@ max-w-[340px]
 
                   {notifications.length > 0 && (
                     <button
-  onClick={clearAllNotifications}
-  className="
+                      onClick={clearAllNotifications}
+                      className="
     flex
     items-center
     gap-1
@@ -204,7 +258,7 @@ max-w-[340px]
 
     transition-colors
   "
->
+                    >
                       <Trash2 size={12} />
                       Clear All
                     </button>
@@ -219,25 +273,52 @@ max-w-[340px]
                     </div>
                   ) : (
                     notifications.map((notification) => (
-                      <div
+                      <button
                         key={notification._id}
-                        className="
-                px-5
-                py-4
-                border-b
-                border-zinc-100
-                hover:bg-zinc-50
-                transition-colors
-              "
-                      >
-                        <p className="text-sm font-medium text-[#2D2D2D]">
-                          {notification.title}
-                        </p>
+                        onClick={async () => {
+                          await markAsRead(notification._id);
 
-                        <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
-                          {notification.message}
-                        </p>
-                      </div>
+                          window.location.href = `/assignments/${notification.assignmentId}`;
+                        }}
+                        className="
+        w-full
+        text-left
+
+        px-5
+        py-4
+
+        border-b
+        border-zinc-100
+
+        hover:bg-zinc-50
+        transition-colors
+      "
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-medium text-[#2D2D2D]">
+                              {notification.title}
+                            </p>
+
+                            <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+                              {notification.message}
+                            </p>
+                          </div>
+
+                          {!notification.read && (
+                            <div
+                              className="
+              w-2
+              h-2
+              rounded-full
+              bg-[#FF5A2F]
+              mt-2
+              flex-shrink-0
+            "
+                            />
+                          )}
+                        </div>
+                      </button>
                     ))
                   )}
                 </div>

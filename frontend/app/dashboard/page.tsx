@@ -9,7 +9,7 @@ const DashboardDesktop = () => {
         w-full
         min-h-screen
 
-        bg-[#F9F9F9]
+        
 
         antialiased
         text-[#2D2D2D]
@@ -17,6 +17,7 @@ const DashboardDesktop = () => {
         overflow-x-hidden
         overflow-y-auto
       "
+      //bg-[#F9F9F9]
     >
       <div className="w-full min-w-0">
         {/* Content Area */}

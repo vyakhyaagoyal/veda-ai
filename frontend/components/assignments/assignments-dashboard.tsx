@@ -95,16 +95,17 @@ export default function Page() {
       className="
     w-full
     min-h-screen
-    bg-[#F9F9F9]
+    
     p-2
   "
+  //bg-[#F9F9F9]
     >
       <div className="w-full min-w-0">
         <main
           className="
   w-full
 
-  bg-[#F9F9F9]
+  
 
   p-2
 
@@ -113,6 +114,7 @@ export default function Page() {
   pb-40
   md:pb-8
 "
+//bg-[#F9F9F9]
         >
           {loading ? (
             <div className="flex items-center justify-center h-full">

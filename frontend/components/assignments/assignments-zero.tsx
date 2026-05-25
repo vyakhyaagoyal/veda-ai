@@ -20,7 +20,7 @@ const MainContent = ({
     <main
       className="
         flex-1
-        bg-[#F9F9F9]
+        
         flex
         flex-col
         items-center
@@ -31,6 +31,7 @@ const MainContent = ({
         py-16
         min-h-[calc(100vh-80px)]
       "
+      // bg-[#F9F9F9]
     >
       <div
         className="

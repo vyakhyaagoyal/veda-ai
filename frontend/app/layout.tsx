@@ -27,7 +27,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bricolage.className} antialiased bg-[#F9F9F9] text-[#2D2D2D]`}
+        className={`
+  ${bricolage.className}
+
+  antialiased
+  text-[#2D2D2D]
+
+  bg-[#CECECE]
+  lg:bg-[#E2E2E2]
+`}
       >
         <ClickPopEffect />
         <Toaster richColors />

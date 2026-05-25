@@ -139,7 +139,26 @@ const clearAllNotifications =
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="relative p-2 rounded-full hover:bg-zinc-100 transition-colors">
+              <div
+  className="
+    w-9
+    h-9
+
+    rounded-full
+
+    flex
+    items-center
+    justify-center
+
+    bg-[#F4F4F5]
+    hover:bg-[#ECECEC]
+
+    transition-all
+    duration-200
+  "
+>
               <Bell size={22} className="text-zinc-700" />
+              </div>
 
               {notifications.some((n) => !n.read) && (
                 <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-orange-500 border-2 border-white rounded-full" />

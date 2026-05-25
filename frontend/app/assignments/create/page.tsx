@@ -222,7 +222,7 @@ const CreateAssignment = () => {
   return (
     <>
       {validationError && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+        <div className="fixed inset-0 z-[100] bg-opacity-50 flex items-center justify-center pointer-events-none">
           <div className="bg-black text-white px-8 py-4 rounded-2xl shadow-2xl text-sm font-semibold animate-in fade-in zoom-in duration-200">
             <div className="space-y-2">
               {validationError.split(",").map((error, index) => (
@@ -233,7 +233,9 @@ const CreateAssignment = () => {
         </div>
       )}
 
-      <div className="min-h-screen bg-[#F3F4F6]/30 text-[#2D2D2D] p-2 lg:p-2">
+      <div className="min-h-screen text-[#2D2D2D] p-2 lg:p-2"
+      //bg-[#F3F4F6]/30
+      >
         {/* Header */}
         <header
           className="
@@ -245,16 +247,82 @@ const CreateAssignment = () => {
     sm:px-0
   "
         >
-          <div className="flex items-center gap-3 mb-2">
+          <div
+            className="
+    relative
+
+    flex
+    items-center
+    justify-center
+    sm:justify-start
+
+    gap-3
+    mb-2
+  "
+          >
+            {/* Mobile Back Button */}
+            <button
+              onClick={() => router.back()}
+              className="
+      sm:hidden
+
+      absolute
+      left-0
+
+      w-10
+      h-10
+
+      rounded-full
+
+      bg-white
+      border
+      border-zinc-200/70
+
+      flex
+      items-center
+      justify-center
+
+      shadow-sm
+
+      active:scale-95
+      transition-all
+    "
+            >
+              <ArrowLeft size={18} className="text-[#2D2D2D]" />
+            </button>
             {/* Green Dot */}
-            <div className="w-4 h-4 bg-green-200 rounded-full flex items-center justify-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <div
+              className="hidden
+    sm:block w-4 h-4 bg-green-200 rounded-full flex items-center justify-center"
+            >
+              <div
+                className="hidden
+    sm:block w-2 h-2 bg-green-500 rounded-full ml-1 mt-1"
+              ></div>
             </div>
-            <h1 className="text-xl font-bold tracking-tight">
+            <h1
+              className="
+    text-xl
+    font-bold
+    tracking-tight
+
+    text-center
+    sm:text-left
+  "
+            >
               Create Assignment
             </h1>
           </div>
-          <p className="text-gray-400 text-sm mb-6">
+          <p
+            className="
+    hidden
+    sm:block
+
+    text-gray-400
+    text-sm
+    mb-6
+  "
+          >
             Set up a new assignment for your students
           </p>
         </header>
@@ -262,33 +330,14 @@ const CreateAssignment = () => {
         {/* Progress Bar */}
         <div className="max-w-4xl mx-auto mb-10">
           <div className="flex items-center gap-3">
-            {[1, 2, 3, 4].map((item) => (
+            {[1, 2].map((item) => (
               <div
                 key={item}
                 className={`h-1 flex-1 rounded-full transition-all duration-500 ${
-                  progress >= item ? "bg-[#2D2D2D]" : "bg-gray-200"
+                  progress >= item * 2 ? "bg-[#2D2D2D]" : "bg-gray-300"
                 }`}
               />
             ))}
-          </div>
-
-          {/* Labels */}
-          <div className="flex justify-between mt-3 text-xs font-medium text-gray-400 px-1">
-            <span className={progress >= 1 ? "text-[#2D2D2D]" : ""}>
-              Details
-            </span>
-
-            <span className={progress >= 2 ? "text-[#2D2D2D]" : ""}>
-              Upload
-            </span>
-
-            <span className={progress >= 3 ? "text-[#2D2D2D]" : ""}>
-              Generating
-            </span>
-
-            <span className={progress >= 4 ? "text-[#2D2D2D]" : ""}>
-              Complete
-            </span>
           </div>
         </div>
 
@@ -309,6 +358,7 @@ const CreateAssignment = () => {
     lg:p-10
     mb-8
   "
+  //bg-[#F3F4F6]/90
         >
           <div className="mb-10">
             <h2
@@ -458,9 +508,7 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
                   }`}
                 >
                   <span className="font-medium">
-                    {dueDate
-                      ? format(new Date(dueDate), "PPP")
-                      : "Select due date"}
+                    {dueDate ? format(new Date(dueDate), "PPP") : "DD-MM-YYYY"}
                   </span>
 
                   <Image
@@ -496,21 +544,38 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
           <div className="mb-6">
             <div
               className="
-    hidden
-    md:grid
-    grid-cols-12
-    gap-4
+    grid
+    grid-cols-1
+    md:grid-cols-12
+
+    gap-3
+    md:gap-4
+
     mb-4
     px-2
   "
             >
-              <div className="col-span-7 font-bold tracking-widest text-black block text-sm mb-3">
+              <div
+                className="
+    md:col-span-7
+
+    font-bold
+    tracking-widest
+    text-black
+
+    text-[14px]
+    sm:text-sm
+
+    mb-1
+    md:mb-3
+  "
+              >
                 Question Type
               </div>
-              <div className="col-span-3 text-sm font-bold tracking-widest text-black text-center">
+              <div className="hidden sm:block col-span-3 text-sm font-bold tracking-widest text-black text-center">
                 No. of Questions
               </div>
-              <div className="col-span-2 text-sm font-bold tracking-widest text-black text-center">
+              <div className="hidden sm:block col-span-2 text-sm font-bold tracking-widest text-black text-center">
                 Marks
               </div>
             </div>
@@ -522,9 +587,9 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
                   className="
   bg-white
   md:bg-transparent
-  rounded-[24px]
+  rounded-[28px]
   md:rounded-none
-  p-4
+  p-5
   md:p-0
   border
   md:border-0
@@ -550,7 +615,7 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
                       <div className="relative flex-1">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <button className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-full px-6 py-4 focus:outline-none focus:border-gray-300 font-semibold text-sm transition-all">
+                            <button className="w-full flex items-center justify-between bg-white sm:border sm:border-gray-200 rounded-full px-5 py-3.5 focus:outline-none focus:border-gray-300 font-semibold text-[12px] sm:text-sm transition-all">
                               <span>{row.type}</span>
 
                               <ChevronDown className="text-black" size={18} />
@@ -581,161 +646,243 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
                       <X size={20} className="text-black" />
                     </button>
                   </div>
-                  
-                 {/* Mobile Counter Row */}
-<div className="md:hidden flex items-start gap-4">
+
+                  {/* Mobile Counter Card */}
+<div
+  className="
+    md:hidden
+
+    bg-[#F5F5F5]
+
+    rounded-[24px]
+
+    px-4
+    py-4
+
+    grid
+    grid-cols-2
+
+    gap-4
+  "
+>
   {/* Questions */}
-  <div className="flex-1">
-    <p className="text-xs font-semibold text-zinc-500 mb-2">
-      Questions
+  <div>
+    <p
+      className="
+        text-[11.5px]
+        font-semibold
+        text-[#2D2D2D]
+
+        mb-3
+
+        text-center
+      "
+    >
+      No. of Questions
     </p>
 
-    <div className="flex items-center justify-center">
-      <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-        <button
-          onClick={() =>
-            adjustCounter(
-              row.id,
-              "count",
-              -1
-            )
-          }
-          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
-        >
-          —
-        </button>
+    <div
+      className="
+        flex
+        items-center
+        justify-between
 
-        <span className="w-5 text-center font-bold text-sm">
-          {row.count}
-        </span>
+        bg-white
 
-        <button
-          onClick={() =>
-            adjustCounter(
-              row.id,
-              "count",
-              1
-            )
-          }
-          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
-        >
-          +
-        </button>
-      </div>
+        rounded-full
+
+        px-2
+        py-1.5
+      "
+    >
+      <button
+        onClick={() =>
+          adjustCounter(
+            row.id,
+            "count",
+            -1
+          )
+        }
+        className="
+          w-8
+          h-8
+
+          flex
+          items-center
+          justify-center
+
+          text-zinc-500
+        "
+      >
+        —
+      </button>
+
+      <span
+        className="
+          text-[18px]
+          font-bold
+          text-[#2D2D2D]
+        "
+      >
+        {row.count}
+      </span>
+
+      <button
+        onClick={() =>
+          adjustCounter(
+            row.id,
+            "count",
+            1
+          )
+        }
+        className="
+          w-8
+          h-8
+
+          flex
+          items-center
+          justify-center
+
+          text-zinc-500
+        "
+      >
+        +
+      </button>
     </div>
   </div>
 
   {/* Marks */}
-  <div className="flex-1">
-    <p className="text-xs font-semibold text-zinc-500 mb-2">
+  <div>
+    <p
+      className="
+        text-[11.5px]
+        font-semibold
+        text-[#2D2D2D]
+
+        mb-3
+
+        text-center
+      "
+    >
       Marks
     </p>
 
-    <div className="flex items-center justify-center">
-      <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-        <button
-          onClick={() =>
-            adjustCounter(
-              row.id,
-              "marks",
-              -1
-            )
-          }
-          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
-        >
-          —
-        </button>
+    <div
+      className="
+        flex
+        items-center
+        justify-between
 
-        <span className="w-5 text-center font-bold text-sm">
-          {row.marks}
-        </span>
+        bg-white
 
-        <button
-          onClick={() =>
-            adjustCounter(
-              row.id,
-              "marks",
-              1
-            )
-          }
-          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
-        >
-          +
-        </button>
-      </div>
+        rounded-full
+
+        px-2
+        py-1.5
+      "
+    >
+      <button
+        onClick={() =>
+          adjustCounter(
+            row.id,
+            "marks",
+            -1
+          )
+        }
+        className="
+          w-8
+          h-8
+
+          flex
+          items-center
+          justify-center
+
+          text-zinc-500
+        "
+      >
+        —
+      </button>
+
+      <span
+        className="
+          text-[18px]
+          font-bold
+          text-[#2D2D2D]
+        "
+      >
+        {row.marks}
+      </span>
+
+      <button
+        onClick={() =>
+          adjustCounter(
+            row.id,
+            "marks",
+            1
+          )
+        }
+        className="
+          w-8
+          h-8
+
+          flex
+          items-center
+          justify-center
+
+          text-zinc-500
+        "
+      >
+        +
+      </button>
     </div>
   </div>
 </div>
 
-{/* Desktop Question Count */}
-<div className="hidden md:flex md:col-span-3 items-center justify-center">
-  <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-    <button
-      onClick={() =>
-        adjustCounter(
-          row.id,
-          "count",
-          -1
-        )
-      }
-      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-    >
-      —
-    </button>
+                  {/* Desktop Question Count */}
+                  <div className="hidden md:flex md:col-span-3 items-center justify-center">
+                    <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+                      <button
+                        onClick={() => adjustCounter(row.id, "count", -1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        —
+                      </button>
 
-    <span className="w-5 text-center font-bold text-sm">
-      {row.count}
-    </span>
+                      <span className="w-5 text-center font-bold text-sm">
+                        {row.count}
+                      </span>
 
-    <button
-      onClick={() =>
-        adjustCounter(
-          row.id,
-          "count",
-          1
-        )
-      }
-      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-    >
-      +
-    </button>
-  </div>
-</div>
+                      <button
+                        onClick={() => adjustCounter(row.id, "count", 1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
 
-{/* Desktop Marks Count */}
-<div className="hidden md:flex md:col-span-2 items-center justify-center">
-  <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-    <button
-      onClick={() =>
-        adjustCounter(
-          row.id,
-          "marks",
-          -1
-        )
-      }
-      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-    >
-      —
-    </button>
+                  {/* Desktop Marks Count */}
+                  <div className="hidden md:flex md:col-span-2 items-center justify-center">
+                    <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+                      <button
+                        onClick={() => adjustCounter(row.id, "marks", -1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        —
+                      </button>
 
-    <span className="w-5 text-center font-bold text-sm">
-      {row.marks}
-    </span>
+                      <span className="w-5 text-center font-bold text-sm">
+                        {row.marks}
+                      </span>
 
-    <button
-      onClick={() =>
-        adjustCounter(
-          row.id,
-          "marks",
-          1
-        )
-      }
-      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-    >
-      +
-    </button>
-  </div>
-</div>
+                      <button
+                        onClick={() => adjustCounter(row.id, "marks", 1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -756,11 +903,10 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
             className="
   flex
   flex-col
-  items-start
-  sm:items-end
+  items-end
   gap-2
   mb-8
-  px-2
+  pr-1
 "
           >
             <p className="text-lg text-black">
@@ -816,17 +962,24 @@ sm:bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
         {/* Navigation Buttons */}
         <div
           className="
-    max-w-5xl
-    mx-auto
-    flex
-    items-center
-    justify-between
-    gap-3
-    px-2
-    sm:px-4
-    pb-28
-    md:pb-6
-  "
+  max-w-5xl
+  mx-auto
+
+  flex
+  items-center
+
+  justify-center
+  sm:justify-between
+
+  gap-3
+  sm:gap-4
+
+  px-2
+  sm:px-4
+
+  pb-28
+  md:pb-6
+"
         >
           <button
             onClick={() => router.back()}

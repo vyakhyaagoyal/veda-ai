@@ -227,9 +227,8 @@ const QuestionPaper = () => {
               Certainly,{" "}
               {assignment.teacherName ||
                 "Teacher"}
-              ! Here are customized
-              Question Papers for
-              your students.
+              ! Here are customized Question Paper for your CBSE Grade 8 Science classes on the NCERT chapters:
+              
             </p>
 
             <div
@@ -444,7 +443,7 @@ const QuestionPaper = () => {
                 </span>
 
                 <span className="text-xs font-bold">
-                  8th Section:
+                  5th Section:
                 </span>
 
                 <div className="flex-1 min-w-[120px] border-b border-black h-5"></div>

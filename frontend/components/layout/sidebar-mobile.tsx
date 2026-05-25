@@ -123,11 +123,11 @@ const SidebarMobile = () => {
         <div
           className="
     bg-white
-    rounded-full
+    rounded-2xl
     px-3
     sm:px-4
-    py-2
-    sm:py-2.5
+    py-1
+    sm:py-1.5
     flex
     items-center
     justify-between
@@ -138,25 +138,25 @@ const SidebarMobile = () => {
   "
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-1">
             <Image
               src="/veda-ai-logo.svg"
               alt="VedaAI Logo"
-              width={34}
-              height={34}
+              width={36}
+              height={36}
               className="
-    w-[28px]
-    h-[28px]
-    sm:w-[34px]
-    sm:h-[34px]
-    mt-2
+    w-[36px]
+    h-[36px]
+    sm:w-[36px]
+    sm:h-[36px]
+    mt-3
     
   "
             />
             <span
               className="
-    text-[15px]
-    sm:text-[17px]
+    text-[19px]
+    sm:text-[21px]
     font-bold
     tracking-tight
     text-[#2D2D2D]
@@ -168,16 +168,35 @@ const SidebarMobile = () => {
 
           {/* Right controls */}
           <div className="flex items-center gap-2.5">
-            {/* Bell */}
+            
             {/* Notifications */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button aria-label="Notifications" className="relative p-1">
+                  <div
+  className="
+    w-9
+    h-9
+
+    rounded-full
+
+    flex
+    items-center
+    justify-center
+
+    bg-[#F4F4F5]
+    hover:bg-[#ECECEC]
+
+    transition-all
+    duration-200
+  "
+>
                   <Bell
                     size={20}
                     strokeWidth={1.8}
                     className="text-[#2D2D2D]"
                   />
+                  </div>
 
                   {notifications.some((n) => !n.read) && (
                     <span
@@ -348,9 +367,9 @@ const SidebarMobile = () => {
               onClick={() => setIsOpen(true)}
               className="flex flex-col gap-[4.5px] p-1"
             >
-              <span className="block w-[18px] h-[1.5px] bg-[#2D2D2D] rounded-full" />
-              <span className="block w-[18px] h-[1.5px] bg-[#2D2D2D] rounded-full" />
-              <span className="block w-[18px] h-[1.5px] bg-[#2D2D2D] rounded-full" />
+              <span className="block w-[18px] h-[2px] bg-[#2D2D2D] rounded-full" />
+              <span className="block w-[18px] h-[2px] bg-[#2D2D2D] rounded-full" />
+              <span className="block w-[18px] h-[2px] bg-[#2D2D2D] rounded-full" />
             </button>
           </div>
         </div>

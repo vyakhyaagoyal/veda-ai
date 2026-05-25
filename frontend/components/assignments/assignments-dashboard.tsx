@@ -103,14 +103,15 @@ export default function Page() {
       <div className="flex-1 flex flex-col min-w-0">
         <main
   className="
-    flex-1
-    flex
-    flex-col
     bg-[#F9F9F9]
+
     p-2
     sm:p-2
-    pb-28
-    md:pb-2
+
+    pb-32
+    md:pb-6
+
+    min-h-full
   "
 >
           {loading ? (
@@ -281,7 +282,7 @@ export default function Page() {
               </div>
 
               {/* CONTENT */}
-              <div className="flex-1 pr-2">
+              <div className="pr-2 pb-32">
                 {filteredAssignments.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">

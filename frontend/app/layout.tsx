@@ -43,7 +43,13 @@ export default function RootLayout({
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col min-w-0">
+          <div
+  className="
+    flex-1
+    min-w-0
+    min-h-screen
+  "
+>
             {/* Desktop Topbar */}
             <div className="hidden lg:block py-4 px-2">
               <Topbar />

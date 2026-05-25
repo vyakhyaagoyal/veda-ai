@@ -124,6 +124,8 @@ const fetchNotifications =
     h-[28px]
     sm:w-[34px]
     sm:h-[34px]
+    mt-2
+    
   "
 />
            <span
@@ -186,6 +188,8 @@ max-w-[340px]
       p-0
       overflow-hidden
       z-[200]
+     ml-3
+     
     "
   >
     {/* Header */}

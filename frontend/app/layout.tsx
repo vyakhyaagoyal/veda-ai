@@ -50,7 +50,18 @@ export default function RootLayout({
             </div>
 
             {/* Dynamic Page Content */}
-            <main className="flex-1 overflow-y-auto">{children}</main>
+            <main
+  className="
+    flex-1
+    overflow-y-auto
+
+    pt-[96px]
+    lg:pt-0
+
+    pb-[120px]
+    lg:pb-0
+  "
+>{children}</main>
           </div>
         </div>
       </body>

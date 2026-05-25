@@ -189,9 +189,18 @@ teacherName,
     res: Response
   ) => {
     try {
+      const assignmentId =
+        req.params.id;
+
+      // Delete assignment
       await Assignment.findByIdAndDelete(
-        req.params.id
+        assignmentId
       );
+
+      // Delete related notifications
+      await Notification.deleteMany({
+        assignmentId,
+      });
 
       return res.json({
         success: true,

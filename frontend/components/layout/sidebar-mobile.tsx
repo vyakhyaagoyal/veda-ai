@@ -19,7 +19,7 @@ const SidebarMobile = () => {
   return (
     <>
       {/* ── Floating Topbar ── */}
-      <header className="md:hidden fixed top-4 left-4 right-4 z-50">
+      <header className="md:hidden fixed top-4 left-4 right-4 z-[120]">
         <div className="bg-white rounded-full px-3.5 py-2.5 flex items-center justify-between border border-zinc-200/70 shadow-sm">
 
           {/* Logo */}
@@ -77,7 +77,7 @@ const SidebarMobile = () => {
       <div
         onClick={() => setIsOpen(false)}
         className={`
-          md:hidden fixed inset-0 z-50 bg-black/20
+          md:hidden fixed inset-0 z-[130] bg-black/20
           transition-opacity duration-300
           ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `}
@@ -86,7 +86,7 @@ const SidebarMobile = () => {
       {/* ── Drawer Panel ── */}
       <div
         className={`
-          md:hidden fixed top-0 right-0 bottom-0 z-50
+          md:hidden fixed top-0 right-0 bottom-0 z-[140]
           w-[78%] max-w-[300px]
           bg-white flex flex-col p-6
           rounded-l-[32px]
@@ -204,7 +204,7 @@ const SidebarMobile = () => {
     bottom-[88px]
     right-4
     sm:right-5
-    z-[60]
+    z-[70]
   "
 >
   <button
@@ -229,7 +229,6 @@ const SidebarMobile = () => {
 </Link>
 
 {/* ── Bottom Dock ── */}
-{/* ── Bottom Dock ── */}
 <div
   className="
     md:hidden
@@ -238,7 +237,7 @@ const SidebarMobile = () => {
     sm:bottom-4
     left-1/2
     -translate-x-1/2
-    z-50
+    z-[60]
     w-[94%]
     max-w-[420px]
     px-1
@@ -318,7 +317,7 @@ sm:text-[11px]
 </div>
 
       {/* ── Spacer so page content clears the topbar ── */}
-      <div className="md:hidden h-[72px]" />
+      {/* <div className="md:hidden h-[96px]" /> */}
     </>
   );
 };

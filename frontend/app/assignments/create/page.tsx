@@ -235,8 +235,8 @@ const CreateAssignment = () => {
 
       <div className="min-h-screen bg-[#F3F4F6]/30 text-[#2D2D2D] p-2 lg:p-2">
         {/* Header */}
-       <header
-  className="
+        <header
+          className="
     max-w-6xl
     mx-auto
     mb-6
@@ -244,7 +244,7 @@ const CreateAssignment = () => {
     px-1
     sm:px-0
   "
->
+        >
           <div className="flex items-center gap-3 mb-2">
             {/* Green Dot */}
             <div className="w-4 h-4 bg-green-200 rounded-full flex items-center justify-center">
@@ -294,7 +294,7 @@ const CreateAssignment = () => {
 
         {/* Main Form Card */}
         <main
-  className="
+          className="
     max-w-4xl
     mx-auto
     bg-[#F3F4F6]/90
@@ -309,17 +309,19 @@ const CreateAssignment = () => {
     lg:p-10
     mb-8
   "
->
+        >
           <div className="mb-10">
             <h2
-  className="
+              className="
     text-[20px]
     sm:text-[22px]
     lg:text-2xl
     font-bold
     mb-1
   "
->Assignment Details</h2>
+            >
+              Assignment Details
+            </h2>
             <p className="text-gray-500 text-sm">
               Basic information about your assignment
             </p>
@@ -348,6 +350,12 @@ const CreateAssignment = () => {
   p-5
   sm:p-7
   mb-5
+
+  flex
+  flex-col
+  items-center
+  justify-center
+  text-center
 "
           >
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -355,25 +363,27 @@ const CreateAssignment = () => {
             </div>
 
             <p
-  className="
+              className="
     text-[15px]
     sm:text-[17px]
     lg:text-lg
     font-semibold
     mb-1
   "
->
+            >
               Choose a file or drag & drop it here
             </p>
 
-            <p className="
+            <p
+              className="
   text-gray-500
   text-[11px]
   sm:text-sm
   mb-6
   uppercase
   tracking-wider
-">
+"
+            >
               JPEG, PNG, upto 10MB
             </p>
 
@@ -485,7 +495,7 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
           {/* Questions Section */}
           <div className="mb-6">
             <div
-  className="
+              className="
     hidden
     md:grid
     grid-cols-12
@@ -493,7 +503,7 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
     mb-4
     px-2
   "
->
+            >
               <div className="col-span-7 font-bold tracking-widest text-black block text-sm mb-3">
                 Question Type
               </div>
@@ -528,12 +538,14 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
 "
                 >
                   {/* Type Select */}
-                  <div className="
+                  <div
+                    className="
   md:col-span-7
   flex
   items-center
   gap-3
-">
+"
+                  >
                     <div className="relative flex-1">
                       <div className="relative flex-1">
                         <DropdownMenu>
@@ -569,67 +581,161 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
                       <X size={20} className="text-black" />
                     </button>
                   </div>
-                  <p className="md:hidden text-sm font-semibold text-zinc-500">
-  Questions
-</p>
+                  
+                 {/* Mobile Counter Row */}
+<div className="md:hidden flex items-start gap-4">
+  {/* Questions */}
+  <div className="flex-1">
+    <p className="text-xs font-semibold text-zinc-500 mb-2">
+      Questions
+    </p>
 
-                  {/* Question Count */}
-                  <div className="
-  md:col-span-3
-  flex
-  items-center
-  justify-between
-  md:justify-center
-">
-                    <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-                      <button
-                        onClick={() => adjustCounter(row.id, "count", -1)}
-                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                      >
-                        —
-                      </button>
-                      <span className="w-5 text-center font-bold text-sm">
-                        {row.count}
-                      </span>
-                      <button
-                        onClick={() => adjustCounter(row.id, "count", 1)}
-                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+    <div className="flex items-center justify-center">
+      <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+        <button
+          onClick={() =>
+            adjustCounter(
+              row.id,
+              "count",
+              -1
+            )
+          }
+          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
+        >
+          —
+        </button>
 
-                  <p className="md:hidden text-sm font-semibold text-zinc-500">
-  Marks
-</p>
+        <span className="w-5 text-center font-bold text-sm">
+          {row.count}
+        </span>
 
-                  {/* Marks Count */}
-                  <div className="
-  md:col-span-2
-  flex
-  items-center
-  justify-between
-  md:justify-center
-">
-                    <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
-                      <button
-                        onClick={() => adjustCounter(row.id, "marks", -1)}
-                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                      >
-                        —
-                      </button>
-                      <span className="w-5 text-center font-bold text-sm">
-                        {row.marks}
-                      </span>
-                      <button
-                        onClick={() => adjustCounter(row.id, "marks", 1)}
-                        className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+        <button
+          onClick={() =>
+            adjustCounter(
+              row.id,
+              "count",
+              1
+            )
+          }
+          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {/* Marks */}
+  <div className="flex-1">
+    <p className="text-xs font-semibold text-zinc-500 mb-2">
+      Marks
+    </p>
+
+    <div className="flex items-center justify-center">
+      <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+        <button
+          onClick={() =>
+            adjustCounter(
+              row.id,
+              "marks",
+              -1
+            )
+          }
+          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
+        >
+          —
+        </button>
+
+        <span className="w-5 text-center font-bold text-sm">
+          {row.marks}
+        </span>
+
+        <button
+          onClick={() =>
+            adjustCounter(
+              row.id,
+              "marks",
+              1
+            )
+          }
+          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-600"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* Desktop Question Count */}
+<div className="hidden md:flex md:col-span-3 items-center justify-center">
+  <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+    <button
+      onClick={() =>
+        adjustCounter(
+          row.id,
+          "count",
+          -1
+        )
+      }
+      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+    >
+      —
+    </button>
+
+    <span className="w-5 text-center font-bold text-sm">
+      {row.count}
+    </span>
+
+    <button
+      onClick={() =>
+        adjustCounter(
+          row.id,
+          "count",
+          1
+        )
+      }
+      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+    >
+      +
+    </button>
+  </div>
+</div>
+
+{/* Desktop Marks Count */}
+<div className="hidden md:flex md:col-span-2 items-center justify-center">
+  <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full p-1">
+    <button
+      onClick={() =>
+        adjustCounter(
+          row.id,
+          "marks",
+          -1
+        )
+      }
+      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+    >
+      —
+    </button>
+
+    <span className="w-5 text-center font-bold text-sm">
+      {row.marks}
+    </span>
+
+    <button
+      onClick={() =>
+        adjustCounter(
+          row.id,
+          "marks",
+          1
+        )
+      }
+      className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-600"
+    >
+      +
+    </button>
+  </div>
+</div>
                 </div>
               ))}
             </div>
@@ -646,7 +752,8 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
           </div>
 
           {/* Totals */}
-          <div className="
+          <div
+            className="
   flex
   flex-col
   items-start
@@ -654,7 +761,8 @@ sm:py-4 bg-white hover:border-gray-300 transition-all ${
   gap-2
   mb-8
   px-2
-">
+"
+          >
             <p className="text-lg text-black">
               Total Questions :{" "}
               <span className="text-[#2D2D2D] ml-1">{totalQuestions}</span>
@@ -707,7 +815,7 @@ sm:bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
 
         {/* Navigation Buttons */}
         <div
-  className="
+          className="
     max-w-5xl
     mx-auto
     flex
@@ -719,7 +827,7 @@ sm:bottom-8 p-3 bg-white rounded-full border border-gray-100 transition-all ${
     pb-28
     md:pb-6
   "
->
+        >
           <button
             onClick={() => router.back()}
             className="flex cursor-pointer items-center gap-3 px-5

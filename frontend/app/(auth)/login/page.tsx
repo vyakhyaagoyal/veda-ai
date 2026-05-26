@@ -152,8 +152,8 @@ export default function LoginPage() {
 
     <button
       onClick={() => {
-        setEmail("demo@vedaai.com");
-        setPassword("demo123");
+        setEmail("vyakhyagoyal22@gmail.com");
+        setPassword("Vyakhya12.");
       }}
       className="
         w-full
@@ -242,12 +242,12 @@ export default function LoginPage() {
 
   <button
     onClick={async () => {
-      setEmail("demo@vedaai.com");
-      setPassword("demo123");
+      setEmail("vyakhyagoyal22@gmail.com");
+      setPassword("Vyakhya12.");
 
       await authService.login({
-        email: "demo@vedaai.com",
-        password: "demo123",
+        email: "vyakhyagoyal22@gmail.com",
+        password: "Vyakhya12.",
       });
 
       router.push("/");

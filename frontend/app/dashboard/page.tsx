@@ -8,12 +8,8 @@ const DashboardDesktop = () => {
       className="
         w-full
         min-h-screen
-
-        
-
         antialiased
         text-[#2D2D2D]
-
         overflow-x-hidden
         overflow-y-auto
       "

@@ -1,4 +1,4 @@
-# VedaAI – AI Powered Assignment & Question Paper Generator
+# VedaAI – AI Grading and intelligence Platform for Educational Institutions
 
 ## 🚀 Overview
 
@@ -11,7 +11,7 @@ Teachers can:
 * Generate structured assessments using AI
 * Download papers as PDFs
 * Regenerate papers instantly
-* Receive real-time generation updates
+* Receive real-time generation updates in notification bar
 
 The platform is designed with a modern, premium UI and real-time architecture suitable for production-scale educational tools.
 
@@ -19,9 +19,9 @@ The platform is designed with a modern, premium UI and real-time architecture su
 
 ## 🌐 Live Demo
 
-Frontend: [https://your-vercel-url.vercel.app](https://veda-ai-murex-seven.vercel.app/)
+Frontend: [https://veda-ai-murex-seven.vercel.app](https://veda-ai-murex-seven.vercel.app)
 
-Backend API: [https://your-railway-url.up.railway.app](https://veda-ai-production-39b3.up.railway.app/)
+Backend API: [https://veda-ai-production-39b3.up.railway.app](https://veda-ai-production-39b3.up.railway.app)
 
 ---
 

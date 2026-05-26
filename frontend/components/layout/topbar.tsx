@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { io } from "socket.io-client";
 import { useRouter, usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   DropdownMenu,
@@ -25,6 +26,7 @@ import {
 import { useUserStore } from "@/store/user.store";
 import { useState, useEffect } from "react";
 import { notificationService } from "@/services/notification.service";
+import { useAuthStore } from "@/store/auth.store";
 
 const socket = io(
   process.env.NEXT_PUBLIC_API_URL ||
@@ -35,7 +37,7 @@ const Topbar = () => {
   const router = useRouter();
 
   const pathname = usePathname();
-  const { user, logout } = useUserStore();
+  const { user } = useUserStore();
 
   const pageTitleMap: Record<string, string> = {
     "/assignments": "Assignment",
@@ -47,6 +49,22 @@ const Topbar = () => {
   const pageTitle = pageTitleMap[pathname] || "Dashboard";
 
   const [notifications, setNotifications] = useState<any[]>([]);
+
+  const logout =
+  useAuthStore(
+    (state) => state.logout
+  );
+  
+  const handleLogout =
+  async () => {
+    await logout();
+
+    toast.success(
+      "Logged out"
+    );
+
+    router.push("/login");
+  };
 
   useEffect(() => {
     fetchNotifications();
@@ -303,7 +321,11 @@ const clearAllNotifications =
               className="rounded-xl cursor-pointer py-3 text-red-500 focus:text-red-500"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Log Out
+              <button
+  onClick={handleLogout}
+>
+  Logout
+</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

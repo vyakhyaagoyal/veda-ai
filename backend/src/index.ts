@@ -16,6 +16,12 @@ import notificationRoutes
 
 import "./workers/generation.worker";
 
+import authRoutes
+  from "./routes/auth.routes";
+
+  import cookieParser
+  from "cookie-parser";
+
 connectDB();
 
 const app = express();
@@ -35,6 +41,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/assignments", assignmentRoutes);
 
@@ -42,6 +49,11 @@ app.use("/assignments", assignmentRoutes);
 app.use(
   "/notifications",
   notificationRoutes
+);
+
+app.use(
+  "/auth",
+  authRoutes
 );
 
 server.listen(process.env.PORT, () => {

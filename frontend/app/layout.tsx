@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
-
 import "./globals.css";
-
-import Sidebar from "@/components/layout/sidebar";
-import Topbar from "@/components//layout/topbar";
 import { Toaster } from "sonner";
 import ClickPopEffect from "@/components/global/click-pop-effect";
-import SidebarMobile from "@/components/layout/sidebar-mobile";
+import AuthProvider from "@/components/global/auth-provider";
+import LayoutWrapper from "@/components/global/layout-wrapper";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -28,61 +25,20 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`
-  ${bricolage.className}
-
-  antialiased
-  text-[#2D2D2D]
-
-  bg-[#CECECE]
-  lg:bg-[#E2E2E2]
-`}
+    ${bricolage.className}
+    antialiased
+    text-[#2D2D2D]
+    bg-[#CECECE]
+    lg:bg-[#E2E2E2]
+  `}
       >
         <ClickPopEffect />
+
         <Toaster richColors />
-        <div className="flex min-h-screen overflow-x-hidden">
-          {/* Desktop Sidebar */}
-          <div className="hidden lg:block p-4">
-            <Sidebar />
-          </div>
 
-          {/* Mobile Sidebar */}
-          <div className="lg:hidden">
-            <SidebarMobile />
-          </div>
-
-          {/* Main Content */}
-          <div
-  className="
-    flex-1
-    min-w-0
-    min-h-screen
-  "
->
-            {/* Desktop Topbar */}
-            <div className="hidden lg:block py-4 px-2">
-              <Topbar />
-            </div>
-
-            {/* Dynamic Page Content */}
-            <main
-  className="
-    flex-1
-
-    overflow-y-auto
-    overflow-x-hidden
-
-    pt-[96px]
-    lg:pt-0
-
-    pb-[120px]
-    lg:pb-0
-
-    min-h-screen
-  "
->
-  {children}</main>
-          </div>
-        </div>
+        <AuthProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </AuthProvider>
       </body>
     </html>
   );

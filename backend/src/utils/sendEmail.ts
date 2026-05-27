@@ -10,9 +10,18 @@ export const sendOTPEmail =
     otp: string
   ) => {
     try {
+
+      console.log(
+  "sendOTPEmail called"
+);
+
+console.log(email);
+console.log(otp);
+
+      const data=
       await resend.emails.send({
         from:
-          "VedaAI <onboarding@resend.dev>",
+          "VedaAI <noreply@vedaai.tech>",
 
         to: email,
 
@@ -39,6 +48,8 @@ export const sendOTPEmail =
           </div>
         `,
       });
+
+      console.log(data);
 
       console.log(
         "OTP sent successfully"

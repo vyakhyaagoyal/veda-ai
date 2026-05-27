@@ -12,12 +12,20 @@ import {
 import { upload }
   from "../middlewares/upload";
 
+import {
+  handleMulterError,
+} from "../middlewares/multer-error.middleware";
+
 const router =
   express.Router();
 
 router.post(
   "/create",
+
   upload.single("file"),
+
+  handleMulterError,
+
   createAssignment
 );
 

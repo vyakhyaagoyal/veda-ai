@@ -21,7 +21,7 @@ console.log(otp);
       const data=
       await resend.emails.send({
         from:
-          "VedaAI <noreply@vedaai.tech>",
+          "VedaAI <onboarding@resend.dev>",
 
         to: email,
 

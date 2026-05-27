@@ -22,6 +22,9 @@ ${row.count}
 
 Marks Per Question:
 ${row.marks}
+
+Total Marks:
+${row.count * row.marks}
 `
     )
     .join("\n");
@@ -89,30 +92,25 @@ Then generate separate sections accordingly.
 - generate only true or false questions
 
 20. If section type is MCQ:
-- generate 4 options and one correct answer
+- generate exactly 4 options
+- include correct answer
+- keep options concise
 
-21. If section type is 
-- Short questions
-- diagram/graph based questions
-- numerical problems
-- essay type questions:
-- generate fill in the blank style questions only
-
-22. If section type is Short questions:
+21. If section type is Short questions:
 - generate concise descriptive answers
 
-23. If section type is diagram/graph based questions:
+22. If section type is diagram/graph based questions:
 - generate questions that require interpreting or creating diagrams/graphs
 
-24. If section type is numerical problems:
+23. If section type is numerical problems:
 - generate questions that require mathematical calculations
 
-25. If section type is essay type questions:
+24. If section type is essay type questions:
 - generate questions that require detailed written responses
 
-26. Respect the exact question type selected by teacher.
+25. Respect the exact question type selected by teacher.
 
-27. Generate appropriate instructions for each section.
+26. Generate appropriate instructions for each section.
 
 Examples:
 - Attempt all questions
@@ -123,13 +121,16 @@ Examples:
 - subject
 - chapter
 - topic
-- class level
 
-29. Create section titles sequentially:
-Section A
-Section B
-Section C
-based on the number of question types.
+29. Create section titles sequentially like:
+- Section A - True/False
+- Section B - MCQ
+- Section C - Numerical Problems
+
+30. JSON response must be syntactically valid and parsable.
+
+31. Answers should be concise, factually correct, and directly related to the generated question.
+
 DO NOT return markdown.
 DO NOT wrap response in triple backticks.
 

@@ -195,8 +195,8 @@ const QuestionPaper = () => {
     );
   }
 
-  const totalMarks =
-  assignment.questionTypes?.reduce(
+      const totalMarks =
+  assignment.rows?.reduce(
     (
       total: number,
       q: any
@@ -413,17 +413,8 @@ const timeAllowed =
               </div>
 
               <div className="font-bold text-sm">
-                Maximum Marks: {
-  assignment.questionTypes?.reduce(
-    (
-      total: number,
-      q: any
-    ) =>
-      total +
-      q.count * q.marks,
-    0
-  )
-}
+            
+  Maximum Marks: {totalMarks}
               </div>
             </div>
 
@@ -496,18 +487,33 @@ const timeAllowed =
 
                     <div className="text-center mb-8 sm:mb-10">
                       <div className="inline-block">
-                        <h4
-                          className="
-                            text-[22px]
-                            sm:text-[28px]
-                            font-black
-                            tracking-tight
-                          "
-                        >
-                          {
-                            section.title
-                          }
-                        </h4>
+                        <div className="text-center">
+  <h4
+    className="
+      text-[22px]
+      sm:text-[28px]
+      font-black
+      tracking-tight
+    "
+  >
+    {section.title}
+  </h4>
+
+  <p
+    className="
+      text-sm
+      sm:text-base
+
+      text-gray-500
+
+      mt-2
+
+      font-medium
+    "
+  >
+    {section.type}
+  </p>
+</div>
                       </div>
                     </div>
 
@@ -640,7 +646,7 @@ const timeAllowed =
                         "
                       >
                         <span className="font-light text-sm sm:text-base text-black">
-                          {globalQuestionIndex++}
+                          {idx + 1}
                           .
                         </span>
 

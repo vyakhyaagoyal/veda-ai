@@ -3,6 +3,29 @@ export const buildPrompt = (
   additionalInfo: string,
   sourceContent: string
 ) => {
+  const formattedRows =
+  rows
+    .map(
+      (
+        row,
+        index
+      ) => `
+Section ${String.fromCharCode(
+  65 + index
+)}
+
+Question Type:
+${row.type}
+
+Number of Questions:
+${row.count}
+
+Marks Per Question:
+${row.marks}
+`
+    )
+    .join("\n");
+
   return `
 You are an expert school teacher and assessment designer.
 
@@ -12,44 +35,101 @@ Your task is to generate a professional school-level question paper based ONLY o
 IMPORTANT RULES
 ==============================
 
-1. Create proper exam sections like:
-- Section A
-- Section B
-- Section C
+1. Create sections dynamically based on the question configuration provided.
 
-2. Every question MUST include:
+2. Every question type should become its own section.
+
+3. If teacher selects:
+- True/False
+- MCQ
+- Short questions
+- diagram/graph based questions
+- numerical problems
+- essay type questions
+
+Then generate separate sections accordingly.
+
+4. The number of questions and marks MUST exactly match the provided configuration.
+
+5. Every question MUST include:
 - question
 - difficulty
 - marks
 
-3. Difficulty must ONLY be:
+6. Difficulty must ONLY be:
 - easy
 - medium
 - hard
 
-4. Generate questions ONLY from the uploaded study material.
+7. Generate questions ONLY from the uploaded study material.
 
-5. Avoid duplicate questions.
+8. Avoid duplicate questions.
 
-6. Ignore OCR noise, random symbols, formatting issues, or unreadable text.
+9. Ignore OCR noise, random symbols, formatting issues, or unreadable text.
 
-7. Keep questions educational, realistic, and school appropriate.
+10. Keep questions educational, realistic, and school appropriate.
 
-8. Questions should feel like real CBSE/ICSE school assessments.
+11. Questions should feel like real CBSE/ICSE school assessments.
 
-9. Follow the teacher instructions carefully.
+12. Follow the teacher instructions carefully.
 
-10. Return ONLY valid JSON.
+13. Return ONLY valid JSON.
 
-11. Generate a short professional assignment title based on the study material.
+14. Generate a short professional assignment title based on the study material.
 
-12. Every question must include a short answer key.
+15. Every question must include a short answer key.
 
-13. Questions must directly reference concepts, terminology, definitions, and examples from the uploaded material.
+16. Questions must directly reference concepts, terminology, definitions, and examples from the uploaded material.
 
-14. Do NOT generate generic questions unrelated to the uploaded content.
+17. Do NOT generate generic questions unrelated to the uploaded content.
 
-15. Prefer topic-specific terminology from the uploaded material.
+18. Prefer topic-specific terminology from the uploaded material.
+
+19. If section type is True/False:
+- generate only true or false questions
+
+20. If section type is MCQ:
+- generate 4 options and one correct answer
+
+21. If section type is 
+- Short questions
+- diagram/graph based questions
+- numerical problems
+- essay type questions:
+- generate fill in the blank style questions only
+
+22. If section type is Short questions:
+- generate concise descriptive answers
+
+23. If section type is diagram/graph based questions:
+- generate questions that require interpreting or creating diagrams/graphs
+
+24. If section type is numerical problems:
+- generate questions that require mathematical calculations
+
+25. If section type is essay type questions:
+- generate questions that require detailed written responses
+
+26. Respect the exact question type selected by teacher.
+
+27. Generate appropriate instructions for each section.
+
+Examples:
+- Attempt all questions
+- Attempt any 2 out of 3 questions
+- All questions are compulsory
+
+28. Generate a professional assignment title based on:
+- subject
+- chapter
+- topic
+- class level
+
+29. Create section titles sequentially:
+Section A
+Section B
+Section C
+based on the number of question types.
 DO NOT return markdown.
 DO NOT wrap response in triple backticks.
 
@@ -63,7 +143,7 @@ ${additionalInfo || "No additional instructions provided."}
 QUESTION CONFIGURATION
 ==============================
 
-${JSON.stringify(rows, null, 2)}
+${formattedRows}
 
 ==============================
 UPLOADED STUDY MATERIAL CONTENT
@@ -76,18 +156,29 @@ OUTPUT FORMAT
 ==============================
 
 {
-"title": "Quiz on Photosynthesis",
+  "title": "Photosynthesis Assessment",
+
   "sections": [
     {
       "title": "Section A",
-      "instruction": "Attempt all questions",
+
+      "type": "True/False",
+
+      "instruction":
+        "Attempt all questions.",
+
       "questions": [
         {
-          "question": "What is photosynthesis?",
-          "answer": "Process by which green plants make food using sunlight.",
-          "difficulty": "easy",
-          "marks": 2
-}
+          "question":
+            "Plants prepare food using sunlight.",
+
+          "answer":
+            "True",
+
+          "difficulty":
+            "easy",
+
+          "marks": 1
         }
       ]
     }

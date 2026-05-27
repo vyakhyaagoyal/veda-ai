@@ -195,6 +195,26 @@ const QuestionPaper = () => {
     );
   }
 
+  const totalMarks =
+  assignment.questionTypes?.reduce(
+    (
+      total: number,
+      q: any
+    ) =>
+      total +
+      q.count * q.marks,
+    0
+  ) || 0;
+
+const timeAllowed =
+  totalMarks <= 20
+    ? "45 Minutes"
+    : totalMarks <= 50
+    ? "1.5 Hours"
+    : "3 Hours";
+
+    let globalQuestionIndex = 1;
+
   return (
     <div className="min-h-screen bg-[#F3F4F6]/50 text-[#2D2D2D] pb-32 md:pb-10">
       <div className="w-full max-w-[1600px] mx-auto">
@@ -227,7 +247,7 @@ const QuestionPaper = () => {
               Certainly,{" "}
               {assignment.teacherName ||
                 "Teacher"}
-              ! Here are customized Question Paper for your CBSE Grade 8 Science classes on the NCERT chapters:
+              ! Here are customized Question Paper for your CBSE Grade 5 {assignment.subject || "Subject"} classes on the NCERT chapters:
               
             </p>
 
@@ -389,12 +409,21 @@ const QuestionPaper = () => {
               "
             >
               <div className="font-bold text-sm">
-                Time Allowed: 45
-                minutes
+                Time Allowed: {timeAllowed}
               </div>
 
               <div className="font-bold text-sm">
-                Maximum Marks: 20
+                Maximum Marks: {
+  assignment.questionTypes?.reduce(
+    (
+      total: number,
+      q: any
+    ) =>
+      total +
+      q.count * q.marks,
+    0
+  )
+}
               </div>
             </div>
 
@@ -519,8 +548,7 @@ const QuestionPaper = () => {
                                 min-w-[22px]
                               "
                             >
-                              {idx +
-                                1}
+                              {globalQuestionIndex++}
                               .
                             </span>
 
@@ -612,8 +640,7 @@ const QuestionPaper = () => {
                         "
                       >
                         <span className="font-light text-sm sm:text-base text-black">
-                          {idx +
-                            1}
+                          {globalQuestionIndex++}
                           .
                         </span>
 

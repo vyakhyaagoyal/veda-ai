@@ -73,6 +73,7 @@ const QuestionPaper = () => {
           );
 
         setAssignment(data);
+        console.log(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -196,13 +197,13 @@ const QuestionPaper = () => {
   }
 
       const totalMarks =
-  assignment.rows?.reduce(
+  assignment?.questionConfig?.reduce(
     (
       total: number,
-      q: any
+      row: any
     ) =>
       total +
-      q.count * q.marks,
+      row.count * row.marks,
     0
   ) || 0;
 
@@ -216,7 +217,7 @@ const timeAllowed =
     let globalQuestionIndex = 1;
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6]/50 text-[#2D2D2D] pb-32 md:pb-10">
+    <div className="min-h-screen text-[#2D2D2D] pb-32 md:pb-10">
       <div className="w-full max-w-[1600px] mx-auto">
         <main className="w-full py-3 sm:py-4 px-2 sm:px-4">
           {/* Banner */}
@@ -580,6 +581,32 @@ const timeAllowed =
                                   q.question
                                 }
 
+{
+  q.diagram && (
+    <div
+      className="
+        mt-4
+        p-4
+        rounded-2xl
+        border
+        border-dashed
+        border-gray-300
+        bg-gray-50
+      "
+    >
+      <p
+        className="
+          text-sm
+          text-gray-500
+          italic
+        "
+      >
+        Diagram:
+        {q.diagram}
+      </p>
+    </div>
+  )
+}
                                 <span className="ml-1 font-light whitespace-nowrap">
                                   [
                                   {

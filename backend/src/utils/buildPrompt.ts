@@ -131,6 +131,27 @@ Examples:
 
 31. Answers should be concise, factually correct, and directly related to the generated question.
 
+32. If a question requires visual understanding,
+generate a suitable diagram description.
+
+33. Diagram-based questions should include a "diagram" field.
+
+34. The diagram field should contain a concise visual description suitable for image generation.
+
+35. For science subjects:
+- generate labelled biological diagrams
+- apparatus diagrams
+- circuit diagrams
+
+36. For mathematics:
+- generate geometry figures
+- coordinate graphs
+- bar charts
+- pie charts
+
+37. For geography:
+- generate maps and labelled illustrations
+
 DO NOT return markdown.
 DO NOT wrap response in triple backticks.
 
@@ -180,7 +201,22 @@ OUTPUT FORMAT
             "easy",
 
           "marks": 1
-        }
+        },
+        {
+  "question":
+    "Draw and label a plant cell.",
+
+  "diagram":
+    "A labelled plant cell showing nucleus, vacuole, chloroplast, and cell wall.",
+
+  "answer":
+    "Plant cell diagram with labels.",
+
+  "difficulty":
+    "medium",
+
+  "marks": 5
+}
       ]
     }
   ]

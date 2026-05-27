@@ -54,28 +54,31 @@ export const signup =
             10 * 60 * 1000
         );
 
-      const user =
-        await User.create({
-          firstName,
-          lastName,
-          email,
-          password:
-            hashedPassword,
-          otp,
-          otpExpiry,
-        });
-
+      // SEND EMAIL FIRST
       await sendOTPEmail(
         email,
         otp
       );
 
-      res.status(201).json({
+      // CREATE USER ONLY AFTER EMAIL SUCCESS
+      await User.create({
+        firstName,
+        lastName,
+        email,
+        password:
+          hashedPassword,
+        otp,
+        otpExpiry,
+      });
+
+      return res.status(201).json({
         message:
           "OTP sent successfully",
       });
     } catch (error) {
-      res.status(500).json({
+      console.log(error);
+
+      return res.status(500).json({
         message:
           "Signup failed",
       });

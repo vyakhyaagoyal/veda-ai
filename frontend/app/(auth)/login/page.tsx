@@ -61,6 +61,7 @@ export default function LoginPage() {
             alt="VedaAI Logo"
             width={40}
             height={40}
+            className="w-auto h-auto"
           />
 
           <h1
@@ -106,6 +107,7 @@ export default function LoginPage() {
       <AuthInput
         label="Password"
         type="password"
+        autoComplete="current-password"
         placeholder="Enter password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}

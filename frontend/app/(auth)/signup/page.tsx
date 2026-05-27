@@ -159,6 +159,7 @@ export default function SignupPage() {
       <AuthInput
         label="Password"
         type="password"
+        autoComplete="new-password"
         placeholder="Create password"
         value={form.password}
         onChange={(e) =>

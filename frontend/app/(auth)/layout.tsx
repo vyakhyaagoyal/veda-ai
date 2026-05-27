@@ -81,7 +81,7 @@ export default function AuthLayout({
           {/* Branding */}
           <div>
             <div className="flex items-center gap-4 mb-10">
-              <Image src="/veda-ai-logo-cropped.svg" alt="VedaAI Logo" width={40} height={40} />
+              <Image src="/veda-ai-logo-cropped.svg" alt="VedaAI Logo" width={40} height={40} className="w-auto h-auto"/>
 
               <h1 className="text-4xl font-bold tracking-tight">
                 VedaAI

@@ -57,6 +57,11 @@ export default function SignupPage() {
 
   return (
     <div>
+      <form
+  onSubmit={(e) => {
+    e.preventDefault();
+  }}
+>
       {/* Mobile Logo */}
       <div className="lg:hidden mb-10">
         <div className="flex items-center gap-3">
@@ -212,6 +217,7 @@ export default function SignupPage() {
           Sign In
         </Link>
       </p>
+      </form>
     </div>
   );
 }

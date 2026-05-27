@@ -23,21 +23,20 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-import { useUserStore } from "@/store/user.store";
 import { useState, useEffect } from "react";
 import { notificationService } from "@/services/notification.service";
 import { useAuthStore } from "@/store/auth.store";
 
 const socket = io(
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://veda-ai-production-39b3.up.railway.app"
+    "https://veda-ai-production-39b3.up.railway.app",
 );
 
 const Topbar = () => {
   const router = useRouter();
 
   const pathname = usePathname();
-  const { user } = useUserStore();
+  const user = useAuthStore((state) => state.user);
 
   const pageTitleMap: Record<string, string> = {
     "/assignments": "Assignment",
@@ -50,18 +49,12 @@ const Topbar = () => {
 
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  const logout =
-  useAuthStore(
-    (state) => state.logout
-  );
-  
-  const handleLogout =
-  async () => {
+  const logout = useAuthStore((state) => state.logout);
+
+  const handleLogout = async () => {
     await logout();
 
-    toast.success(
-      "Logged out"
-    );
+    toast.success("Logged out");
 
     router.push("/login");
   };
@@ -80,31 +73,26 @@ const Topbar = () => {
     }
   };
 
-  const markAsRead = async (
-  id: string
-) => {
-  try {
-    await notificationService.markAsRead(
-      id
-    );
+  const markAsRead = async (id: string) => {
+    try {
+      await notificationService.markAsRead(id);
 
-    setNotifications((prev) =>
-      prev.map((notification) =>
-        notification._id === id
-          ? {
-              ...notification,
-              read: true,
-            }
-          : notification
-      )
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification._id === id
+            ? {
+                ...notification,
+                read: true,
+              }
+            : notification,
+        ),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-const clearAllNotifications =
-  async () => {
+  const clearAllNotifications = async () => {
     try {
       await notificationService.clearAll();
 
@@ -158,7 +146,7 @@ const clearAllNotifications =
           <DropdownMenuTrigger asChild>
             <button className="relative p-2 rounded-full hover:bg-zinc-100 transition-colors">
               <div
-  className="
+                className="
     w-9
     h-9
 
@@ -174,8 +162,8 @@ const clearAllNotifications =
     transition-all
     duration-200
   "
->
-              <Bell size={22} className="text-zinc-700" />
+              >
+                <Bell size={22} className="text-zinc-700" />
               </div>
 
               {notifications.some((n) => !n.read) && (
@@ -186,7 +174,7 @@ const clearAllNotifications =
 
           <DropdownMenuContent align="end" className="w-96 rounded-2xl p-2">
             <div
-  className="
+              className="
     px-4
     py-3
     border-b
@@ -195,28 +183,24 @@ const clearAllNotifications =
     items-center
     justify-between
   "
->
-  <h3 className="font-semibold">
-    Notifications
-  </h3>
+            >
+              <h3 className="font-semibold">Notifications</h3>
 
-  {notifications.length > 0 && (
-    <button
-      onClick={
-        clearAllNotifications
-      }
-      className="
+              {notifications.length > 0 && (
+                <button
+                  onClick={clearAllNotifications}
+                  className="
         text-xs
         font-medium
         text-red-500
         hover:text-red-600
         transition-colors
       "
-    >
-      Clear All
-    </button>
-  )}
-</div>
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
 
             <div className="max-h-[400px] overflow-y-auto">
               {notifications.length === 0 ? (
@@ -228,14 +212,10 @@ const clearAllNotifications =
                   <button
                     key={notification._id}
                     onClick={async () => {
-  await markAsRead(
-    notification._id
-  );
+                      await markAsRead(notification._id);
 
-  router.push(
-    `/assignments/${notification.assignmentId}`
-  );
-}}
+                      router.push(`/assignments/${notification.assignmentId}`);
+                    }}
                     className="
                 w-full
                 text-left
@@ -286,7 +266,7 @@ const clearAllNotifications =
 
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-[#2D2D2D] text-[15px]">
-                  {user?.name}
+                  {user?.firstName} {user?.lastName}
                 </span>
 
                 <ChevronDown size={18} className="text-zinc-400" />
@@ -296,9 +276,11 @@ const clearAllNotifications =
 
           <DropdownMenuContent align="end" className="w-64 rounded-2xl p-2">
             <div className="px-3 py-2">
-              <h4 className="font-semibold text-sm">{user?.name}</h4>
+              <h4 className="font-semibold text-sm">
+                {user?.firstName} {user?.lastName}
+              </h4>
 
-              <p className="text-xs text-zinc-500">{user?.role}</p>
+              <p className="text-xs text-zinc-500">{user?.email}</p>
             </div>
 
             <DropdownMenuSeparator />
@@ -321,11 +303,7 @@ const clearAllNotifications =
               className="rounded-xl cursor-pointer py-3 text-red-500 focus:text-red-500"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              <button
-  onClick={handleLogout}
->
-  Logout
-</button>
+              <button onClick={handleLogout}>Logout</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -6,9 +6,13 @@ export const initSocket =
   (server: any) => {
     io = new Server(server, {
       cors: {
-        origin:
-          process.env.CLIENT_URL,
-      },
+        origin: [
+      "http://localhost:3000",
+
+      "https://veda-ai-murex-seven.vercel.app",
+    ],
+    credentials: true,
+  },
     });
 
     io.on(

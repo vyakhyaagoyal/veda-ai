@@ -4,70 +4,64 @@ import { useState } from "react";
 
 import Link from "next/link";
 import { toast } from "sonner";
-import { useRouter }
-  from "next/navigation";
+import { useRouter } from "next/navigation";
 
-import AuthInput
-  from "@/components/auth/auth-input";
+import AuthInput from "@/components/auth/auth-input";
 
-import { authService }
-  from "@/services/auth.service";
+import { authService } from "@/services/auth.service";
 
-import { useAuthStore }
-  from "@/store/auth.store";
+import { useAuthStore } from "@/store/auth.store";
 
-  import Image from "next/image";
+import Image from "next/image";
 
 export default function LoginPage() {
-  const router =
-    useRouter();
+  const router = useRouter();
 
-  const setUser =
-    useAuthStore(
-      (state) => state.setUser
-    );
+  const setUser = useAuthStore((state) => state.setUser);
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin =
-    async () => {
-      try {
-        setLoading(true);
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
 
-        const response =
-          await authService.login({
-            email,
-            password,
-          });
+      const response = await authService.login({
+        email,
+        password,
+      });
 
-        setUser(response.user);
+      setUser(response.user);
 
-        toast.success(
-  "Welcome back!"
-);
-        router.push("/");
-      } catch (error) {
-        toast.error(
-  "Invalid credentials"
-);
-      } finally {
-        setLoading(false);
-      }
-    };
+      toast.success("Welcome back!");
+      router.push("/");
+    } catch (error) {
+      toast.error("Invalid credentials");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
+      <form
+  onSubmit={(e) => {
+    e.preventDefault();
+    handleLogin();
+  }}
+>
       {/* Mobile Logo */}
       <div className="lg:hidden mb-10">
         <div className="flex items-center gap-3">
-          <Image src="/veda-ai-logo-cropped.svg" alt="VedaAI Logo" width={40} height={40} />
+          <Image
+            src="/veda-ai-logo-cropped.svg"
+            alt="VedaAI Logo"
+            width={40}
+            height={40}
+          />
 
           <h1
             className="
@@ -106,9 +100,7 @@ export default function LoginPage() {
         type="email"
         placeholder="you@school.com"
         value={email}
-        onChange={(e) =>
-          setEmail(e.target.value)
-        }
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <AuthInput
@@ -116,15 +108,11 @@ export default function LoginPage() {
         type="password"
         placeholder="Enter password"
         value={password}
-        onChange={(e) =>
-          setPassword(
-            e.target.value
-          )
-        }
+        onChange={(e) => setPassword(e.target.value)}
       />
 
       <div
-  className="
+        className="
     mb-6
 
     rounded-3xl
@@ -136,26 +124,25 @@ export default function LoginPage() {
 
     p-5
   "
->
-  <p
-    className="
+      >
+        <p
+          className="
       text-sm
       font-semibold
       text-orange-950
       mb-3
     "
-  >
-    Demo Credentials
-  </p>
+        >
+          Demo Credentials
+        </p>
 
-  <div className="space-y-2">
-
-    <button
-      onClick={() => {
-        setEmail("vyakhyagoyal22@gmail.com");
-        setPassword("Vyakhya12.");
-      }}
-      className="
+        <div className="space-y-2">
+          <button
+            onClick={() => {
+              setEmail("vyakhyagoyal22@gmail.com");
+              setPassword("Vyakhya12.");
+            }}
+            className="
         w-full
 
         text-left
@@ -175,25 +162,21 @@ export default function LoginPage() {
 
         transition-all
       "
-    >
-      <p className="font-semibold text-sm">
-        Teacher Demo
-      </p>
+          >
+            <p className="font-semibold text-sm">Teacher Demo</p>
 
-      <p className="text-xs text-zinc-500 mt-1">
-        demo@vedaai.com
-      </p>
-    </button>
-
-  </div>
-</div>
+            <p className="text-xs text-zinc-500 mt-1">
+              vyakhyagoyal22@gmail.com
+            </p>
+          </button>
+        </div>
+      </div>
 
       <div className="space-y-3">
-
-  <button
-    onClick={handleLogin}
-    disabled={loading}
-    className="
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="
       w-full
       h-14
       rounded-full
@@ -208,18 +191,18 @@ export default function LoginPage() {
       shadow-[0_10px_30px_rgba(0,0,0,0.15)]
       disabled:opacity-50
     "
-  >
-    {loading ? (
-  <div
-    className="
+        >
+          {loading ? (
+            <div
+              className="
       flex
       items-center
       justify-center
       gap-3
     "
-  >
-    <div
-      className="
+            >
+              <div
+                className="
         w-5
         h-5
 
@@ -231,16 +214,15 @@ export default function LoginPage() {
 
         animate-spin
       "
-    />
+              />
+              Signing In...
+            </div>
+          ) : (
+            "Sign In"
+          )}
+        </button>
 
-    Signing In...
-  </div>
-) : (
-  "Sign In"
-)}
-  </button>
-
-  <button
+        {/* <button
     onClick={async () => {
       setEmail("vyakhyagoyal22@gmail.com");
       setPassword("Vyakhya12.");
@@ -264,9 +246,8 @@ export default function LoginPage() {
     "
   >
     Explore Demo
-  </button>
-
-</div>
+  </button> */}
+      </div>
 
       <p
         className="
@@ -276,7 +257,6 @@ export default function LoginPage() {
         "
       >
         Don&apos;t have an account?{" "}
-
         <Link
           href="/signup"
           className="
@@ -287,6 +267,7 @@ export default function LoginPage() {
           Sign Up
         </Link>
       </p>
+      </form>
     </div>
   );
 }

@@ -8,7 +8,11 @@ export const sendOTPEmail =
     try {
       const transporter =
         nodemailer.createTransport({
-          service: "gmail",
+          host: "smtp.gmail.com",
+
+          port: 587,
+
+          secure: false,
 
           auth: {
             user:
@@ -21,7 +25,7 @@ export const sendOTPEmail =
 
       await transporter.sendMail({
         from:
-          process.env.EMAIL_USER,
+          `"VedaAI" <${process.env.EMAIL_USER}>`,
 
         to: email,
 
@@ -29,10 +33,15 @@ export const sendOTPEmail =
           "VedaAI Verification Code",
 
         html: `
-          <div style="font-family:sans-serif;padding:20px">
-            <h2>Verify your VedaAI account</h2>
+          <div style="
+            font-family: sans-serif;
+            padding: 20px;
+          ">
+            <h2>
+              Verify your VedaAI account
+            </h2>
 
-            <p>Your OTP code is:</p>
+            <p>Your OTP is:</p>
 
             <h1>${otp}</h1>
 

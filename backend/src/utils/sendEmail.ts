@@ -1,4 +1,8 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(
+  process.env.RESEND_API_KEY
+);
 
 export const sendOTPEmail =
   async (
@@ -6,26 +10,9 @@ export const sendOTPEmail =
     otp: string
   ) => {
     try {
-      const transporter =
-        nodemailer.createTransport({
-          host: "smtp.gmail.com",
-
-          port: 587,
-
-          secure: false,
-
-          auth: {
-            user:
-              process.env.EMAIL_USER,
-
-            pass:
-              process.env.EMAIL_PASS,
-          },
-        });
-
-      await transporter.sendMail({
+      await resend.emails.send({
         from:
-          `"VedaAI" <${process.env.EMAIL_USER}>`,
+          "VedaAI <onboarding@resend.dev>",
 
         to: email,
 
@@ -34,8 +21,8 @@ export const sendOTPEmail =
 
         html: `
           <div style="
-            font-family: sans-serif;
-            padding: 20px;
+            font-family:sans-serif;
+            padding:20px;
           ">
             <h2>
               Verify your VedaAI account
@@ -54,13 +41,10 @@ export const sendOTPEmail =
       });
 
       console.log(
-        "OTP email sent successfully"
+        "OTP sent successfully"
       );
     } catch (error) {
-      console.log(
-        "EMAIL ERROR:",
-        error
-      );
+      console.log(error);
 
       throw error;
     }

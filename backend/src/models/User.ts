@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
 
       city: {
         type: String,
-        default: "India",
+        default: "Bokaro Steel City",
       },
     },
   },

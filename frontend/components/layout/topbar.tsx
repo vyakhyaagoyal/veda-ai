@@ -256,12 +256,21 @@ const Topbar = () => {
             <button className="flex items-center gap-3 pl-5 border-l border-zinc-200 cursor-pointer">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-200">
                 <Image
-                  src="/Avatar.png"
-                  alt="User"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover"
-                />
+                                        src={
+                                          user?.avatar && user.avatar.trim() !== ""
+                                            ? user.avatar
+                                            : "/Avatar.png"
+                                        }
+                                        alt="User"
+                                        width={40}
+                                        height={40}
+                                        unoptimized
+                                        className="
+                    w-full
+                    h-full
+                    object-cover
+                  "
+                                      />
               </div>
 
               <div className="flex items-center gap-2">

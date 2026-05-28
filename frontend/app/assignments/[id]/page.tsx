@@ -139,7 +139,7 @@ const QuestionPaper = () => {
     "generating"
   ) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9F9F9] px-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
         <Loader2 className="animate-spin mb-6 w-8 h-8" />
 
         <h2 className="text-2xl sm:text-3xl font-bold">

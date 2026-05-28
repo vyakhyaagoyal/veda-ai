@@ -90,12 +90,21 @@ const Sidebar = () => {
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full overflow-hidden">
               <Image
-                src={user?.avatar || "/Avatar.png"}
-                alt="School"
-                width={48}
-                height={48}
-                className="w-full h-full object-cover"
-              />
+                                      src={
+                                        user?.avatar && user.avatar.trim() !== ""
+                                          ? user.avatar
+                                          : "/Avatar.png"
+                                      }
+                                      alt="User"
+                                      width={40}
+                                      height={40}
+                                      unoptimized
+                                      className="
+                  w-full
+                  h-full
+                  object-cover
+                "
+                                    />
             </div>
 
             <div>

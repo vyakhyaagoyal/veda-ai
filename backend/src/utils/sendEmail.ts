@@ -5,7 +5,7 @@ const transporter =
     host:
       "smtp-relay.brevo.com",
 
-    port: 587,
+    port: 2525,
 
     secure: false,
 
@@ -15,6 +15,16 @@ const transporter =
 
       pass:
         process.env.EMAIL_PASS,
+    },
+
+    connectionTimeout: 30000,
+
+    greetingTimeout: 30000,
+
+    socketTimeout: 30000,
+
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 

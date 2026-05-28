@@ -124,6 +124,7 @@ toast.success(
       <div className="grid grid-cols-2 gap-4">
         <AuthInput
           label="First Name"
+          autoComplete="given-name"
           placeholder="John"
           value={form.firstName}
           onChange={(e) =>
@@ -137,6 +138,7 @@ toast.success(
 
         <AuthInput
           label="Last Name"
+          autoComplete="family-name"
           placeholder="Doe"
           value={form.lastName}
           onChange={(e) =>
@@ -152,6 +154,7 @@ toast.success(
       <AuthInput
         label="Email"
         type="email"
+        autoComplete="email"
         placeholder="you@school.com"
         value={form.email}
         onChange={(e) =>

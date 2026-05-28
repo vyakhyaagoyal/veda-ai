@@ -26,24 +26,33 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await authService.login({
+    const response =
+      await authService.login({
         email,
         password,
       });
 
-      setUser(response.user);
+    console.log(response);
 
-      toast.success("Welcome back!");
-      router.push("/");
-    } catch (error) {
-      toast.error("Invalid credentials");
-    } finally {
-      setLoading(false);
-    }
-  };
+    localStorage.setItem(
+      "token",
+      response.token
+    );
+
+    setUser(response.user);
+
+    toast.success("Welcome back!");
+
+    router.push("/");
+  } catch (error) {
+    toast.error("Invalid credentials");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div>

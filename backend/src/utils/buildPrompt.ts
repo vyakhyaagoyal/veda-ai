@@ -152,6 +152,8 @@ generate a suitable diagram description.
 37. For geography:
 - generate maps and labelled illustrations
 
+38. The title should not contain class name. example: standard XII
+
 DO NOT return markdown.
 DO NOT wrap response in triple backticks.
 

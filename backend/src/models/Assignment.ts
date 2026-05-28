@@ -68,22 +68,34 @@ instruction: {
 const AssignmentSchema =
   new Schema(
     {
+
+      userId: {
+        type:
+          mongoose.Schema.Types.ObjectId,
+
+        ref: "User",
+
+        required: true,
+      },
+
       teacherName: {
-  type: String,
-  default: "Teacher",
-},
+        type: String,
+        default: "Teacher",
+      },
+
       title: String,
+
       dueDate: String,
 
       additionalInfo: String,
 
       uploadedFileUrl: String,
+
       sourceContent: String,
-      
 
       questionConfig: [
-  QuestionConfigSchema,
-],
+        QuestionConfigSchema,
+      ],
 
       status: {
         type: String,
@@ -101,14 +113,14 @@ const AssignmentSchema =
       failureReason: String,
 
       generatedPaper: {
-  type: {
-    sections: [
-      SectionSchema,
-    ],
-  },
+        type: {
+          sections: [
+            SectionSchema,
+          ],
+        },
 
-  default: undefined,
-},
+        default: undefined,
+      },
     },
     {
       timestamps: true,

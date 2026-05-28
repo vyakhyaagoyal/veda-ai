@@ -16,12 +16,16 @@ import {
   handleMulterError,
 } from "../middlewares/multer-error.middleware";
 
+import {
+  protect,
+} from "../middlewares/auth.middleware";
+
 const router =
   express.Router();
 
 router.post(
   "/create",
-
+  protect,
   upload.single("file"),
 
   handleMulterError,
@@ -29,29 +33,44 @@ router.post(
   createAssignment
 );
 
-router.post(
-  "/:id/regenerate",
-  regenerateAssignment
-);
-
 router.get(
   "/",
+
+  protect,
+
   getAssignments
 );
 
 router.get(
   "/:id",
+
+  protect,
+
   getAssignmentById
 );
 
 router.get(
   "/:id/pdf",
+
+  protect,
+
   downloadPDF
 );
 
 router.delete(
   "/:id",
+
+  protect,
+
   deleteAssignment
+);
+
+router.post(
+  "/:id/regenerate",
+
+  protect,
+
+  regenerateAssignment
 );
 
 export default router;

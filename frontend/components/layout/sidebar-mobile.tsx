@@ -6,7 +6,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+
 import { io } from "socket.io-client";
+
+import {
+  LogOut,
+} from "lucide-react";
 
 import { Trash2 } from "lucide-react";
 
@@ -18,40 +23,70 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Settings, X, Bell } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { navigationItems } from "@/lib/navigation";
-import { useUserStore } from "@/store/user.store";
+import { useAuthStore } from "@/store/auth.store";
 
 const SidebarMobile = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<any[]>([]);
-  const user = useUserStore((state) => state.user);
   const pathname = usePathname();
+  const [
+  openUserMenu,
+  setOpenUserMenu,
+] = useState(false);
 
-  const socket = io(
-    process.env.NEXT_PUBLIC_API_URL ||
-      "https://veda-ai-production-39b3.up.railway.app",
-  );
+const router =
+  useRouter();
+
+const {
+  user,
+  logout,
+} = useAuthStore();
 
   useEffect(() => {
-    fetchNotifications();
+  const socket = io(
+    process.env.NEXT_PUBLIC_API_URL ||
+      "https://veda-ai-production-39b3.up.railway.app"
+  );
 
-    socket.on("generation-complete", () => {
-      fetchNotifications();
-    });
+  socket.on(
+    "generation-complete",
+    fetchNotifications
+  );
 
-    socket.on("generation-failed", () => {
-      fetchNotifications();
-    });
+  socket.on(
+    "generation-failed",
+    fetchNotifications
+  );
 
-    return () => {
-      socket.off("generation-complete");
+  return () => {
+    socket.disconnect();
+  };
+}, []);
 
-      socket.off("generation-failed");
+useEffect(() => {
+  const handleClickOutside =
+    () => {
+      setOpenUserMenu(false);
     };
-  }, []);
+
+  if (openUserMenu) {
+    document.addEventListener(
+      "click",
+      handleClickOutside
+    );
+  }
+
+  return () => {
+    document.removeEventListener(
+      "click",
+      handleClickOutside
+    );
+  };
+}, [openUserMenu]);
 
   const fetchNotifications = async () => {
     try {
@@ -196,6 +231,167 @@ const SidebarMobile = () => {
                     strokeWidth={1.8}
                     className="text-[#2D2D2D]"
                   />
+                  {/* User Avatar Dropdown */}
+<div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenUserMenu(
+        !openUserMenu
+      )
+    }}
+    className="
+      w-10
+      h-10
+
+      rounded-full
+      overflow-hidden
+
+      border
+      border-zinc-200
+
+      cursor-pointer
+    "
+  >
+    <Image
+      src={
+        user?.avatar ||
+        "/Avatar.png"
+      }
+      alt="User"
+      width={40}
+      height={40}
+      className="
+        w-full
+        h-full
+        object-cover
+      "
+    />
+  </button>
+
+  {openUserMenu && (
+    <div
+      className="
+        absolute
+        right-0
+        top-14
+
+        w-64
+
+        bg-white
+
+        rounded-3xl
+
+        shadow-[0_10px_40px_rgba(0,0,0,0.12)]
+
+        border
+        border-zinc-100
+
+        p-3
+
+        z-[200]
+      "
+    >
+      {/* User Info */}
+      <div
+        className="
+          flex
+          items-center
+          gap-3
+
+          p-3
+
+          rounded-2xl
+
+          bg-zinc-50
+
+          mb-2
+        "
+      >
+        <div
+          className="
+            w-12
+            h-12
+
+            rounded-full
+            overflow-hidden
+          "
+        >
+          <Image
+            src={
+              user?.avatar ||
+              "/Avatar.png"
+            }
+            alt="User"
+            width={48}
+            height={48}
+            className="
+              w-full
+              h-full
+              object-cover
+            "
+          />
+        </div>
+
+        <div>
+          <p
+            className="
+              font-semibold
+              text-sm
+            "
+          >
+            {user?.firstName}{" "}
+            {user?.lastName}
+          </p>
+
+          <p
+            className="
+              text-xs
+              text-zinc-500
+              break-all
+            "
+          >
+            {user?.email}
+          </p>
+        </div>
+      </div>
+
+      {/* Logout */}
+      <button
+        onClick={async () => {
+          await logout();
+setOpenUserMenu(false);
+          router.push(
+            "/login"
+          );
+        }}
+        className="
+          w-full
+
+          flex
+          items-center
+          gap-3
+
+          px-4
+          py-3
+
+          rounded-2xl
+
+          hover:bg-zinc-100
+
+          transition-all
+
+          text-sm
+          font-medium
+        "
+      >
+        <LogOut size={18} />
+
+        Logout
+      </button>
+    </div>
+  )}
+</div>
                   </div>
 
                   {notifications.some((n) => !n.read) && (
@@ -351,7 +547,7 @@ const SidebarMobile = () => {
             </DropdownMenu>
 
             {/* Avatar */}
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-200/70 flex-shrink-0">
+            {/* <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-200/70 flex-shrink-0">
               <Image
                 src={user?.avatar || "/Avatar.png"}
                 alt="User avatar"
@@ -359,7 +555,168 @@ const SidebarMobile = () => {
                 height={32}
                 className="w-full h-full object-cover"
               />
-            </div>
+            </div> */}
+            <div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenUserMenu(
+        !openUserMenu
+      )
+    }}
+    className="
+      w-10
+      h-10
+
+      rounded-full
+      overflow-hidden
+
+      border
+      border-zinc-200
+
+      cursor-pointer
+    "
+  >
+    <Image
+      src={
+        user?.avatar ||
+        "/Avatar.png"
+      }
+      alt="User"
+      width={40}
+      height={40}
+      className="
+        w-full
+        h-full
+        object-cover
+      "
+    />
+  </button>
+
+  {openUserMenu && (
+    <div
+      className="
+        absolute
+        right-0
+        top-14
+
+        w-64
+
+        bg-white
+
+        rounded-3xl
+
+        shadow-[0_10px_40px_rgba(0,0,0,0.12)]
+
+        border
+        border-zinc-100
+
+        p-3
+
+        z-50
+      "
+    >
+      {/* User Info */}
+      <div
+        className="
+          flex
+          items-center
+          gap-3
+
+          p-3
+
+          rounded-2xl
+
+          bg-zinc-50
+
+          mb-2
+        "
+      >
+        <div
+          className="
+            w-12
+            h-12
+
+            rounded-full
+            overflow-hidden
+          "
+        >
+          <Image
+            src={
+              user?.avatar ||
+              "/Avatar.png"
+            }
+            alt="User"
+            width={48}
+            height={48}
+            className="
+              w-full
+              h-full
+              object-cover
+            "
+          />
+        </div>
+
+        <div>
+          <p
+            className="
+              font-semibold
+              text-sm
+            "
+          >
+            {user?.firstName}{" "}
+            {user?.lastName}
+          </p>
+
+          <p
+            className="
+              text-xs
+              text-zinc-500
+            "
+          >
+            {user?.email}
+          </p>
+        </div>
+      </div>
+
+      {/* Logout */}
+      <button
+        onClick={async () => {
+          await logout();
+
+          router.push(
+            "/login"
+          );
+        }}
+        className="
+          w-full
+
+          flex
+          items-center
+          gap-3
+
+          px-4
+          py-3
+
+          rounded-2xl
+
+          hover:bg-zinc-100
+
+          transition-all
+
+          text-sm
+          font-medium
+        "
+      >
+        <LogOut
+          size={18}
+        />
+
+        Logout
+      </button>
+    </div>
+  )}
+</div>
 
             {/* Hamburger */}
             <button

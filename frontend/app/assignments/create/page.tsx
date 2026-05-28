@@ -10,6 +10,10 @@ import { validateAssignment } from "@/lib/validators/create-assignment.validator
 import { Calendar } from "@/components/ui/calendar";
 
 import {
+  useAuthStore,
+} from "@/store/auth.store";
+
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -182,7 +186,6 @@ const CreateAssignment = () => {
 
       const formData = new FormData();
 
-      formData.append("teacherName", "John Doe");
       formData.append("dueDate", dueDate);
 
       formData.append("additionalInfo", additionalInfo);
@@ -193,7 +196,8 @@ const CreateAssignment = () => {
         formData.append("file", uploadedFiles[0]);
       }
 
-      const response = await generationService.createAssignment(formData);
+      const response = await generationService.createAssignment( {...formData,
+    });
 
       setProgress(4);
 

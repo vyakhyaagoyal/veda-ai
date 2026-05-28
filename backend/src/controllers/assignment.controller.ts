@@ -16,16 +16,25 @@ import { generationQueue }
   import { Notification }
   from "../models/Notification";
 
+  import {
+  AuthRequest,
+} from "../middlewares/auth.middleware";
+
+import { User }
+  from "../models/User";
+
   export const downloadPDF =
   async (
-    req: Request,
+    req: AuthRequest,
     res: Response
   ) => {
     try {
       const assignment =
-        await Assignment.findById(
-          req.params.id
-        );
+        await Assignment.findOne({
+  _id: req.params.id,
+
+  userId: req.userId,
+});
 
       if (
         !assignment ||
@@ -56,7 +65,7 @@ import { generationQueue }
 export const createAssignment =
 
   async (
-    req: Request,
+    req: AuthRequest,
     res: Response
   ) => {
     try {
@@ -65,7 +74,6 @@ export const createAssignment =
   dueDate,
   additionalInfo,
   rows,
-  teacherName,
 } = req.body;
 
 console.log(req.file);
@@ -95,9 +103,17 @@ console.log(req.file);
     });
 }
 
+const user =
+  await User.findById(
+    req.userId
+  );
+
+const teacherName =
+  `${user?.firstName} ${user?.lastName}`;
+
       const assignment =
   await Assignment.create({
-    
+    userId: req.userId,
     dueDate,
 teacherName,
     additionalInfo,
@@ -112,6 +128,7 @@ teacherName,
     uploadedFileUrl:
   req.file?.originalname || "",
   });
+  
   await Notification.create({
   title:
     "Assignment Created",
@@ -218,14 +235,16 @@ teacherName,
 
   export const regenerateAssignment =
   async (
-    req: Request,
+    req: AuthRequest,
     res: Response
   ) => {
     try {
       const assignment =
-        await Assignment.findById(
-          req.params.id
-        );
+        await Assignment.findOne({
+  _id: req.params.id,
+
+  userId: req.userId,
+});
 
       if (!assignment) {
         return res
@@ -287,13 +306,15 @@ export const getAssignments =
 
 export const getAssignmentById =
   async (
-    req: Request,
+    req: AuthRequest,
     res: Response
   ) => {
     const assignment =
-  await Assignment.findById(
-    req.params.id
-  );
+  await Assignment.findOne({
+  _id: req.params.id,
+
+  userId: req.userId,
+});
 
 if (!assignment) {
   return res

@@ -15,8 +15,9 @@ export default function LayoutWrapper({
   const pathname = usePathname();
 
   const isAuthPage =
-    pathname === "/login" ||
-    pathname === "/signup";
+  pathname === "/login" ||
+  pathname === "/signup" ||
+  pathname === "/verify-otp";
 
   if (isAuthPage) {
     return (

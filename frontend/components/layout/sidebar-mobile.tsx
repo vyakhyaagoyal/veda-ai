@@ -683,7 +683,7 @@ setOpenUserMenu(false);
       <button
         onClick={async () => {
           await logout();
-
+setOpenUserMenu(false);
           router.push(
             "/login"
           );

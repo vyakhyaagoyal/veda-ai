@@ -155,6 +155,7 @@ export const verifyOTP =
           "Account verified",
 
         user,
+        token,
       });
     } catch (error) {
       res.status(500).json({
@@ -258,6 +259,7 @@ export const login =
 
       res.json({
         user,
+        token,
       });
     } catch (error) {
       res.status(500).json({

@@ -46,6 +46,11 @@ export default function VerifyOTPPage() {
             }
           );
 
+        localStorage.setItem(
+          "token",
+          response.token
+        );
+
         setUser(response.user);
 
         router.push("/");
@@ -85,6 +90,7 @@ export default function VerifyOTPPage() {
           setOtp(e.target.value)
         }
         placeholder="Enter OTP"
+        autoComplete="one-time-code"
         className="
           w-full
           h-16

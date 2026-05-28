@@ -108,6 +108,7 @@ export default function LoginPage() {
       <AuthInput
         label="Email"
         type="email"
+        autoComplete="email"
         placeholder="you@school.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}

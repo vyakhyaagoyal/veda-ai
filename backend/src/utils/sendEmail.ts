@@ -1,62 +1,61 @@
 import nodemailer from "nodemailer";
 
+const transporter =
+  nodemailer.createTransport({
+    host:
+      "smtp-relay.brevo.com",
+
+    port: 587,
+
+    secure: false,
+
+    auth: {
+      user:
+        process.env.EMAIL_USER,
+
+      pass:
+        process.env.EMAIL_PASS,
+    },
+  });
+
 export const sendOTPEmail =
   async (
     email: string,
     otp: string
   ) => {
     try {
-      const transporter =
-        nodemailer.createTransport({
-          host:
-            "smtp-relay.brevo.com",
+      const info =
+        await transporter.sendMail({
+          from:
+            '"VedaAI" <vyakhyagoyal22@gmail.com>',
 
-          port: 587,
+          to: email,
 
-          secure: false,
+          subject:
+            "VedaAI Verification Code",
 
-          auth: {
-            user:
-              process.env.EMAIL_USER,
+          html: `
+            <div style="
+              font-family:sans-serif;
+              padding:20px;
+            ">
+              <h2>
+                Verify your VedaAI account
+              </h2>
 
-            pass:
-              process.env.EMAIL_PASS,
-          },
+              <p>Your OTP is:</p>
+
+              <h1>${otp}</h1>
+
+              <p>
+                This OTP expires in
+                10 minutes.
+              </p>
+            </div>
+          `,
         });
 
-      await transporter.sendMail({
-        from:
-          `"VedaAI" <${process.env.EMAIL_USER}>`,
-
-        to: email,
-
-        subject:
-          "VedaAI Verification Code",
-
-        html: `
-          <div style="
-            font-family:sans-serif;
-            padding:20px;
-          ">
-            <h2>
-              Verify your VedaAI account
-            </h2>
-
-            <p>Your OTP is:</p>
-
-            <h1>${otp}</h1>
-
-            <p>
-              This OTP expires in
-              10 minutes.
-            </p>
-          </div>
-        `,
-      });
-
-      console.log(
-        "OTP email sent successfully"
-      );
+      console.log(info);
     } catch (error) {
       console.log(
         "EMAIL ERROR:",

@@ -44,11 +44,16 @@ export default function SignupPage() {
           form.email
         );
 
-
+toast.success(
+  "OTP sent successfully"
+);
         router.push(
           "/verify-otp"
         );
       } catch (error) {
+        toast.error(
+  "Failed to send OTP"
+);
         console.log(error);
       } finally {
         setLoading(false);
@@ -58,8 +63,10 @@ export default function SignupPage() {
   return (
     <div>
       <form
-  onSubmit={(e) => {
+  onSubmit={async (e) => {
     e.preventDefault();
+
+    await handleSignup();
   }}
 >
       {/* Mobile Logo */}
@@ -172,7 +179,7 @@ export default function SignupPage() {
       />
 
       <button
-        onClick={handleSignup}
+        type="submit"
         disabled={loading}
         className="
           w-full

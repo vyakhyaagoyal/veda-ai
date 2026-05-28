@@ -1,11 +1,12 @@
-import axios from "@/lib/axios";
+import api from "@/lib/api";
+// import axios from "@/lib/axios";
 
 export const generationService = {
   async createAssignment(
     formData: FormData
   ) {
     const response =
-      await axios.post(
+      await api.post(
         "/assignments/create",
         formData,
         {

@@ -1,9 +1,10 @@
-import axios from "@/lib/axios";
+import api from "@/lib/api";
+// import axios from "@/lib/axios";
 
 export const notificationService = {
   async getNotifications() {
     const response =
-      await axios.get(
+      await api.get(
         "/notifications"
       );
 
@@ -13,14 +14,14 @@ export const notificationService = {
   async markAsRead(
     id: string
   ) {
-    await axios.patch(
+    await api.patch(
       `/notifications/${id}/read`
     );
   },
 
   async clearAll() {
     const response =
-      await axios.delete(
+      await api.delete(
         "/notifications/clear-all"
       );
 

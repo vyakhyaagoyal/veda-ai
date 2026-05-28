@@ -1,9 +1,10 @@
-import axios from "@/lib/axios";
+import api from "@/lib/api";
+// import axios from "@/lib/axios";
 
 export const paperService = {
   async getAssignment(id: string) {
     const response =
-      await axios.get(
+      await api.get(
         `/assignments/${id}`
       );
 
@@ -13,7 +14,7 @@ export const paperService = {
   async regeneratePaper(
     id: string
   ) {
-    return axios.post(
+    return api.post(
       `/assignments/${id}/regenerate`
     );
   },

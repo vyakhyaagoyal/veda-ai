@@ -1,9 +1,10 @@
-import axios from "@/lib/axios";
+import api from "@/lib/api";
+// import axios from "@/lib/axios";
 
 export const authService = {
   signup: async (data: any) => {
     const response =
-      await axios.post(
+      await api.post(
         "/auth/signup",
         data
       );
@@ -13,7 +14,7 @@ export const authService = {
 
   getMe: async () => {
   const response =
-    await axios.get(
+    await api.get(
       "/auth/me"
     );
 
@@ -22,7 +23,7 @@ export const authService = {
 
 logout: async () => {
   const response =
-    await axios.post(
+    await api.post(
       "/auth/logout"
     );
 
@@ -31,7 +32,7 @@ logout: async () => {
 
 verifyOTP: async (data: any) => {
   const response =
-    await axios.post(
+    await api.post(
       "/auth/verify-otp",
       data
     );
@@ -41,7 +42,7 @@ verifyOTP: async (data: any) => {
 
   login: async (data: any) => {
     const response =
-      await axios.post(
+      await api.post(
         "/auth/login",
         data
       );

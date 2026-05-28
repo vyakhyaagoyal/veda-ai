@@ -1,5 +1,5 @@
-import api from "@/lib/axios";
-import axios from "@/lib/axios";
+import api from "@/lib/api";
+// import axios from "@/lib/axios";
 
 export const assignmentService = {
   async getAssignments() {
@@ -13,7 +13,7 @@ export const assignmentService = {
   id: string
 ) => {
   const response =
-    await axios.delete(
+    await api.delete(
       `/assignments/${id}`
     );
 

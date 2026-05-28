@@ -1,32 +1,4 @@
-import nodemailer from "nodemailer";
-
-const transporter =
-  nodemailer.createTransport({
-    host:
-      "smtp-relay.brevo.com",
-
-    port: 2525,
-
-    secure: false,
-
-    auth: {
-      user:
-        process.env.EMAIL_USER,
-
-      pass:
-        process.env.EMAIL_PASS,
-    },
-
-    connectionTimeout: 30000,
-
-    greetingTimeout: 30000,
-
-    socketTimeout: 30000,
-
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
+import axios from "axios";
 
 export const sendOTPEmail =
   async (
@@ -34,42 +6,69 @@ export const sendOTPEmail =
     otp: string
   ) => {
     try {
-      const info =
-        await transporter.sendMail({
-          from:
-            '"VedaAI" <vyakhyagoyal22@gmail.com>',
+      const response =
+        await axios.post(
+          "https://api.brevo.com/v3/smtp/email",
+          {
+            sender: {
+              name: "VedaAI",
+              email:
+                "vyakhyagoyal22@gmail.com",
+            },
 
-          to: email,
+            to: [
+              {
+                email,
+              },
+            ],
 
-          subject:
-            "VedaAI Verification Code",
+            subject:
+              "VedaAI Verification Code",
 
-          html: `
-            <div style="
-              font-family:sans-serif;
-              padding:20px;
-            ">
-              <h2>
-                Verify your VedaAI account
-              </h2>
+            htmlContent: `
+              <div style="
+                font-family:sans-serif;
+                padding:20px;
+              ">
+                <h2>
+                  Verify your VedaAI account
+                </h2>
 
-              <p>Your OTP is:</p>
+                <p>Your OTP is:</p>
 
-              <h1>${otp}</h1>
+                <h1>${otp}</h1>
 
-              <p>
-                This OTP expires in
-                10 minutes.
-              </p>
-            </div>
-          `,
-        });
+                <p>
+                  This OTP expires in
+                  10 minutes.
+                </p>
+              </div>
+            `,
+          },
+          {
+            headers: {
+              accept:
+                "application/json",
 
-      console.log(info);
-    } catch (error) {
+              "api-key":
+                process.env
+                  .BREVO_API_KEY,
+
+              "content-type":
+                "application/json",
+            },
+          }
+        );
+
+      console.log(
+        "EMAIL SENT:",
+        response.data
+      );
+    } catch (error: any) {
       console.log(
         "EMAIL ERROR:",
-        error
+        error.response?.data ||
+          error.message
       );
 
       throw error;

@@ -1,9 +1,21 @@
 import IORedis from "ioredis";
 
-export const connection = new IORedis({
-  host: process.env.REDIS_HOST,
-  port: Number(process.env.REDIS_PORT),
-  password: process.env.REDIS_PASSWORD,
+const isProduction =
+  process.env.NODE_ENV === "production";
 
-  maxRetriesPerRequest: null,
-});
+export const connection =
+  isProduction
+    ? new IORedis(
+        process.env.REDIS_URL as string,
+        {
+          maxRetriesPerRequest: null,
+        }
+      )
+    : new IORedis({
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+
+        maxRetriesPerRequest: null,
+      });
+
+connection.ping().then(console.log);

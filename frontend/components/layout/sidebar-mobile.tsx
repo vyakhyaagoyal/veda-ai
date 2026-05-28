@@ -6,12 +6,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-
 import { io } from "socket.io-client";
 
-import {
-  LogOut,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { Trash2 } from "lucide-react";
 
@@ -33,60 +30,40 @@ const SidebarMobile = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<any[]>([]);
   const pathname = usePathname();
-  const [
-  openUserMenu,
-  setOpenUserMenu,
-] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
 
-const router =
-  useRouter();
+  const router = useRouter();
 
-const {
-  user,
-  logout,
-} = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   useEffect(() => {
-  const socket = io(
-    process.env.NEXT_PUBLIC_API_URL ||
-      "https://veda-ai-production-39b3.up.railway.app"
-  );
+    const socket = io(
+      process.env.NEXT_PUBLIC_API_URL ||
+        "https://veda-ai-production-39b3.up.railway.app",
+    );
 
-  socket.on(
-    "generation-complete",
-    fetchNotifications
-  );
+    socket.on("generation-complete", fetchNotifications);
 
-  socket.on(
-    "generation-failed",
-    fetchNotifications
-  );
+    socket.on("generation-failed", fetchNotifications);
 
-  return () => {
-    socket.disconnect();
-  };
-}, []);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
-useEffect(() => {
-  const handleClickOutside =
-    () => {
+  useEffect(() => {
+    const handleClickOutside = () => {
       setOpenUserMenu(false);
     };
 
-  if (openUserMenu) {
-    document.addEventListener(
-      "click",
-      handleClickOutside
-    );
-  }
+    if (openUserMenu) {
+      document.addEventListener("click", handleClickOutside);
+    }
 
-  return () => {
-    document.removeEventListener(
-      "click",
-      handleClickOutside
-    );
-  };
-}, [openUserMenu]);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [openUserMenu]);
 
   const fetchNotifications = async () => {
     try {
@@ -203,13 +180,12 @@ useEffect(() => {
 
           {/* Right controls */}
           <div className="flex items-center gap-2.5">
-            
             {/* Notifications */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button aria-label="Notifications" className="relative p-1">
                   <div
-  className="
+                    className="
     w-9
     h-9
 
@@ -225,173 +201,12 @@ useEffect(() => {
     transition-all
     duration-200
   "
->
-                  <Bell
-                    size={20}
-                    strokeWidth={1.8}
-                    className="text-[#2D2D2D]"
-                  />
-                  {/* User Avatar Dropdown */}
-<div className="relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenUserMenu(
-        !openUserMenu
-      )
-    }}
-    className="
-      w-10
-      h-10
-
-      rounded-full
-      overflow-hidden
-
-      border
-      border-zinc-200
-
-      cursor-pointer
-    "
-  >
-    <Image
-      src={
-        user?.avatar ||
-        "/Avatar.png"
-      }
-      alt="User"
-      width={40}
-      height={40}
-      className="
-        w-full
-        h-full
-        object-cover
-      "
-    />
-  </button>
-
-  {openUserMenu && (
-    <div
-      className="
-        absolute
-        right-0
-        top-14
-
-        w-64
-
-        bg-white
-
-        rounded-3xl
-
-        shadow-[0_10px_40px_rgba(0,0,0,0.12)]
-
-        border
-        border-zinc-100
-
-        p-3
-
-        z-[200]
-      "
-    >
-      {/* User Info */}
-      <div
-        className="
-          flex
-          items-center
-          gap-3
-
-          p-3
-
-          rounded-2xl
-
-          bg-zinc-50
-
-          mb-2
-        "
-      >
-        <div
-          className="
-            w-12
-            h-12
-
-            rounded-full
-            overflow-hidden
-          "
-        >
-          <Image
-            src={
-              user?.avatar ||
-              "/Avatar.png"
-            }
-            alt="User"
-            width={48}
-            height={48}
-            className="
-              w-full
-              h-full
-              object-cover
-            "
-          />
-        </div>
-
-        <div>
-          <p
-            className="
-              font-semibold
-              text-sm
-            "
-          >
-            {user?.firstName}{" "}
-            {user?.lastName}
-          </p>
-
-          <p
-            className="
-              text-xs
-              text-zinc-500
-              break-all
-            "
-          >
-            {user?.email}
-          </p>
-        </div>
-      </div>
-
-      {/* Logout */}
-      <button
-        onClick={async () => {
-          await logout();
-setOpenUserMenu(false);
-          router.push(
-            "/login"
-          );
-        }}
-        className="
-          w-full
-
-          flex
-          items-center
-          gap-3
-
-          px-4
-          py-3
-
-          rounded-2xl
-
-          hover:bg-zinc-100
-
-          transition-all
-
-          text-sm
-          font-medium
-        "
-      >
-        <LogOut size={18} />
-
-        Logout
-      </button>
-    </div>
-  )}
-</div>
+                  >
+                    <Bell
+                      size={20}
+                      strokeWidth={1.8}
+                      className="text-[#2D2D2D]"
+                    />
                   </div>
 
                   {notifications.some((n) => !n.read) && (
@@ -413,11 +228,11 @@ setOpenUserMenu(false);
               </DropdownMenuTrigger>
 
               <DropdownMenuContent
-  sideOffset={10}
-  align="end"
-  avoidCollisions
-  collisionPadding={16}
-  className="
+                sideOffset={10}
+                align="end"
+                avoidCollisions
+                collisionPadding={16}
+                className="
     w-[calc(100vw-24px)]
     max-w-[360px]
 
@@ -437,7 +252,7 @@ setOpenUserMenu(false);
 
     z-[200]
   "
->
+              >
                 {/* Header */}
                 <div
                   className="
@@ -514,14 +329,14 @@ setOpenUserMenu(false);
                             </p>
 
                             <p
-  className="
+                              className="
     text-xs
     text-zinc-500
     mt-1
     leading-relaxed
     break-words
   "
->
+                            >
                               {notification.message}
                             </p>
                           </div>
@@ -546,25 +361,13 @@ setOpenUserMenu(false);
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Avatar */}
-            {/* <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-200/70 flex-shrink-0">
-              <Image
-                src={user?.avatar || "/Avatar.png"}
-                alt="User avatar"
-                width={32}
-                height={32}
-                className="w-full h-full object-cover"
-              />
-            </div> */}
-            <div className="relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenUserMenu(
-        !openUserMenu
-      )
-    }}
-    className="
+            <div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenUserMenu(!openUserMenu);
+                }}
+                className="
       w-10
       h-10
 
@@ -576,53 +379,67 @@ setOpenUserMenu(false);
 
       cursor-pointer
     "
+              >
+                <Image
+                  src={
+                    user?.avatar && user.avatar.trim() !== ""
+                      ? user.avatar
+                      : "/Avatar.png"
+                  }
+                  alt="User"
+                  width={40}
+                  height={40}
+                  unoptimized
+                  className="
+    w-full
+    h-full
+    object-cover
+  "
+                />
+              </button>
+
+              {openUserMenu && (
+  <div
+    className="
+      fixed
+
+      top-[60px]
+      left-1/2
+      -translate-x-1/2
+
+      w-[calc(100vw-32px)]
+      max-w-[350px]
+
+      bg-white
+
+      rounded-[31px]
+
+      shadow-[0_20px_60px_rgba(0,0,0,0.16)]
+
+      border
+      border-zinc-200/60
+
+      p-2
+
+      z-[999]
+
+      overflow-hidden
+
+      backdrop-blur-xl
+
+      animate-in
+      fade-in-0
+      zoom-in-95
+      duration-200
+    "
   >
-    <Image
-      src={
-        user?.avatar ||
-        "/Avatar.png"
-      }
-      alt="User"
-      width={40}
-      height={40}
-      className="
-        w-full
-        h-full
-        object-cover
-      "
-    />
-  </button>
-
-  {openUserMenu && (
-    <div
-      className="
-        absolute
-        right-0
-        top-14
-
-        w-64
-
-        bg-white
-
-        rounded-3xl
-
-        shadow-[0_10px_40px_rgba(0,0,0,0.12)]
-
-        border
-        border-zinc-100
-
-        p-3
-
-        z-50
-      "
-    >
-      {/* User Info */}
-      <div
-        className="
+                  {/* User Info */}
+                  <div
+                    className="
           flex
           items-center
           gap-3
-
+min-w-0
           p-3
 
           rounded-2xl
@@ -631,92 +448,96 @@ setOpenUserMenu(false);
 
           mb-2
         "
-      >
-        <div
-          className="
+                  >
+                    <div
+                      className="
             w-12
             h-12
 
             rounded-full
             overflow-hidden
           "
-        >
-          <Image
-            src={
-              user?.avatar ||
-              "/Avatar.png"
-            }
-            alt="User"
-            width={48}
-            height={48}
-            className="
-              w-full
-              h-full
-              object-cover
-            "
-          />
-        </div>
+                    >
+                      <Image
+                        src={
+                          user?.avatar && user.avatar.trim() !== ""
+                            ? user.avatar
+                            : "/Avatar.png"
+                        }
+                        alt="User"
+                        width={40}
+                        height={40}
+                        unoptimized
+                        className="
+    w-full
+    h-full
+    object-cover
+  "
+                      />
+                    </div>
 
-        <div>
-          <p
-            className="
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className="
               font-semibold
               text-sm
+              truncate
             "
-          >
-            {user?.firstName}{" "}
-            {user?.lastName}
-          </p>
+                      >
+                        {user?.firstName} {user?.lastName}
+                      </p>
 
-          <p
-            className="
+                      <p
+                        className="
               text-xs
-              text-zinc-500
+text-zinc-500
+
+break-all
+leading-relaxed
+max-w-full
             "
-          >
-            {user?.email}
-          </p>
-        </div>
-      </div>
+                      >
+                        {user?.email}
+                      </p>
+                    </div>
+                  </div>
 
-      {/* Logout */}
-      <button
-        onClick={async () => {
-          await logout();
-setOpenUserMenu(false);
-          router.push(
-            "/login"
-          );
-        }}
-        className="
-          w-full
+                  {/* Logout */}
+                  <button
+                    onClick={async () => {
+                      await logout();
+                      setOpenUserMenu(false);
+                      router.push("/login");
+                    }}
+                    className="
+  w-full
 
-          flex
-          items-center
-          gap-3
+  flex
+  items-center
+  gap-3
 
-          px-4
-          py-3
+  px-4
+  py-3
 
-          rounded-2xl
+  rounded-2xl
 
-          hover:bg-zinc-100
+  hover:bg-zinc-100
 
-          transition-all
+  transition-all
 
-          text-sm
-          font-medium
-        "
-      >
-        <LogOut
-          size={18}
-        />
-
-        Logout
-      </button>
-    </div>
-  )}
-</div>
+  text-sm
+  font-medium
+text-red-500
+hover:text-red-600
+  active:scale-[0.98]
+"
+                  >
+                    <LogOut size={18} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Hamburger */}
             <button
@@ -850,11 +671,20 @@ sm:text-[13px] transition-all duration-200
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                 <Image
-                  src={user?.avatar || "/Avatar.png"}
-                  alt="School"
+                  src={
+                    user?.avatar && user.avatar.trim() !== ""
+                      ? user.avatar
+                      : "/Avatar.png"
+                  }
+                  alt="User"
                   width={40}
                   height={40}
-                  className="w-full h-full object-cover"
+                  unoptimized
+                  className="
+    w-full
+    h-full
+    object-cover
+  "
                 />
               </div>
               <div>

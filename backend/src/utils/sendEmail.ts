@@ -1,8 +1,4 @@
-import { Resend } from "resend";
-
-const resend = new Resend(
-  process.env.RESEND_API_KEY
-);
+import nodemailer from "nodemailer";
 
 export const sendOTPEmail =
   async (
@@ -10,18 +6,27 @@ export const sendOTPEmail =
     otp: string
   ) => {
     try {
+      const transporter =
+        nodemailer.createTransport({
+          host:
+            "smtp-relay.brevo.com",
 
-      console.log(
-  "sendOTPEmail called"
-);
+          port: 587,
 
-console.log(email);
-console.log(otp);
+          secure: false,
 
-      const data=
-      await resend.emails.send({
+          auth: {
+            user:
+              process.env.EMAIL_USER,
+
+            pass:
+              process.env.EMAIL_PASS,
+          },
+        });
+
+      await transporter.sendMail({
         from:
-          "VedaAI <onboarding@resend.dev>",
+          `"VedaAI" <${process.env.EMAIL_USER}>`,
 
         to: email,
 
@@ -49,13 +54,14 @@ console.log(otp);
         `,
       });
 
-      console.log(data);
-
       console.log(
-        "OTP sent successfully"
+        "OTP email sent successfully"
       );
     } catch (error) {
-      console.log(error);
+      console.log(
+        "EMAIL ERROR:",
+        error
+      );
 
       throw error;
     }

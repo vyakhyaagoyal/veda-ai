@@ -202,12 +202,29 @@ teacherName,
 
   export const deleteAssignment =
   async (
-    req: Request,
+    req: AuthRequest,
     res: Response
   ) => {
     try {
       const assignmentId =
         req.params.id;
+
+      // Verify assignment belongs to user
+      const assignment =
+        await Assignment.findOne({
+          _id: assignmentId,
+          userId: req.userId,
+        });
+
+      if (!assignment) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message:
+              "Assignment not found",
+          });
+      }
 
       // Delete assignment
       await Assignment.findByIdAndDelete(
@@ -289,11 +306,13 @@ teacherName,
 
 export const getAssignments =
   async (
-    req: Request,
+    req: AuthRequest,
     res: Response
   ) => {
     const assignments =
-      await Assignment.find().sort({
+      await Assignment.find({
+        userId: req.userId,
+      }).sort({
         createdAt: -1,
       });
 

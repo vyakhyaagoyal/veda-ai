@@ -217,7 +217,7 @@ const SidebarMobile = () => {
             right-0.5
             w-2
             h-2
-            bg-[#E8441A]
+            bg-orange-500
             rounded-full
             border-[1.5px]
             border-white
@@ -347,7 +347,7 @@ const SidebarMobile = () => {
               w-2
               h-2
               rounded-full
-              bg-[#FF5A2F]
+              bg-orange-500
               mt-2
               flex-shrink-0
             "

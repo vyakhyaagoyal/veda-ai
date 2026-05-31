@@ -28,6 +28,11 @@ marks: {
   type: Number,
   required: true,
 },
+
+diagram: {
+  type: String,
+  default: null,
+},
   });
 
 const SectionSchema =

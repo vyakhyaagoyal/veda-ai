@@ -20,6 +20,12 @@ from "@/services/paper.service";
 import { useGenerationSocket }
 from "@/hooks/useGenerationSocket";
 
+import { toast }
+from "sonner";
+
+import api
+from "@/lib/api";
+
 export interface Question {
   question: string;
 
@@ -104,7 +110,7 @@ const QuestionPaper = () => {
 
   if (loading || !assignment) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F9F9F9] px-4">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <Loader2 className="animate-spin text-black w-7 h-7" />
       </div>
     );
@@ -263,11 +269,53 @@ const timeAllowed =
               {/* PDF */}
 
               <button
-                onClick={() =>
-                  window.open(
-                    `${process.env.NEXT_PUBLIC_API_URL}/assignments/${assignmentId}/pdf`
-                  )
-                }
+                onClick={async () => {
+                  try {
+                    const response =
+                      await api.get(
+                        `/assignments/${assignmentId}/pdf`,
+                        {
+                          responseType:
+                            "blob",
+                        }
+                      );
+
+                    const url =
+                      window.URL.createObjectURL(
+                        response.data
+                      );
+
+                    const link =
+                      document.createElement(
+                        "a"
+                      );
+
+                    link.href = url;
+
+                    link.download =
+                      `${assignment.title || "assignment"}.pdf`;
+
+                    document.body.appendChild(
+                      link
+                    );
+
+                    link.click();
+
+                    document.body.removeChild(
+                      link
+                    );
+
+                    window.URL.revokeObjectURL(
+                      url
+                    );
+                  } catch (error) {
+                    console.error(error);
+
+                    toast.error(
+                      "Failed to download PDF"
+                    );
+                  }
+                }}
                 className="
                   flex
                   items-center
@@ -293,20 +341,36 @@ const timeAllowed =
 
               <button
                 onClick={async () => {
-                  await paperService.regeneratePaper(
-                    assignmentId
-                  );
+                  try {
+                    await paperService.regeneratePaper(
+                      assignmentId
+                    );
 
-                  setAssignment(
-                    (
-                      prev: any
-                    ) => ({
-                      ...prev,
+                    setAssignment(
+                      (
+                        prev: any
+                      ) => ({
+                        ...prev,
 
-                      status:
-                        "queued",
-                    })
-                  );
+                        status:
+                          "queued",
+                      })
+                    );
+
+                    toast.success(
+                      "Paper queued for regeneration"
+                    );
+
+                    setTimeout(() => {
+                      fetchAssignment();
+                    }, 1000);
+                  } catch (error) {
+                    console.error(error);
+
+                    toast.error(
+                      "Failed to regenerate paper"
+                    );
+                  }
                 }}
                 className="
                   flex
